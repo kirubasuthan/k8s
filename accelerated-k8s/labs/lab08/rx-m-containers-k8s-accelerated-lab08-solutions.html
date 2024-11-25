@@ -1,0 +1,599 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>rx-m-containers-k8s-accelerated-lab08-solutions.md</title>
+<meta http-equiv="Content-type" content="text/html;charset=UTF-8">
+
+<style>
+/* https://github.com/microsoft/vscode/blob/master/extensions/markdown-language-features/media/markdown.css */
+/*---------------------------------------------------------------------------------------------
+ *  Copyright (c) Microsoft Corporation. All rights reserved.
+ *  Licensed under the MIT License. See License.txt in the project root for license information.
+ *--------------------------------------------------------------------------------------------*/
+
+body {
+	font-family: var(--vscode-markdown-font-family, -apple-system, BlinkMacSystemFont, "Segoe WPC", "Segoe UI", "Ubuntu", "Droid Sans", sans-serif);
+	font-size: var(--vscode-markdown-font-size, 14px);
+	padding: 0 26px;
+	line-height: var(--vscode-markdown-line-height, 22px);
+	word-wrap: break-word;
+}
+
+#code-csp-warning {
+	position: fixed;
+	top: 0;
+	right: 0;
+	color: white;
+	margin: 16px;
+	text-align: center;
+	font-size: 12px;
+	font-family: sans-serif;
+	background-color:#444444;
+	cursor: pointer;
+	padding: 6px;
+	box-shadow: 1px 1px 1px rgba(0,0,0,.25);
+}
+
+#code-csp-warning:hover {
+	text-decoration: none;
+	background-color:#007acc;
+	box-shadow: 2px 2px 2px rgba(0,0,0,.25);
+}
+
+body.scrollBeyondLastLine {
+	margin-bottom: calc(100vh - 22px);
+}
+
+body.showEditorSelection .code-line {
+	position: relative;
+}
+
+body.showEditorSelection .code-active-line:before,
+body.showEditorSelection .code-line:hover:before {
+	content: "";
+	display: block;
+	position: absolute;
+	top: 0;
+	left: -12px;
+	height: 100%;
+}
+
+body.showEditorSelection li.code-active-line:before,
+body.showEditorSelection li.code-line:hover:before {
+	left: -30px;
+}
+
+.vscode-light.showEditorSelection .code-active-line:before {
+	border-left: 3px solid rgba(0, 0, 0, 0.15);
+}
+
+.vscode-light.showEditorSelection .code-line:hover:before {
+	border-left: 3px solid rgba(0, 0, 0, 0.40);
+}
+
+.vscode-light.showEditorSelection .code-line .code-line:hover:before {
+	border-left: none;
+}
+
+.vscode-dark.showEditorSelection .code-active-line:before {
+	border-left: 3px solid rgba(255, 255, 255, 0.4);
+}
+
+.vscode-dark.showEditorSelection .code-line:hover:before {
+	border-left: 3px solid rgba(255, 255, 255, 0.60);
+}
+
+.vscode-dark.showEditorSelection .code-line .code-line:hover:before {
+	border-left: none;
+}
+
+.vscode-high-contrast.showEditorSelection .code-active-line:before {
+	border-left: 3px solid rgba(255, 160, 0, 0.7);
+}
+
+.vscode-high-contrast.showEditorSelection .code-line:hover:before {
+	border-left: 3px solid rgba(255, 160, 0, 1);
+}
+
+.vscode-high-contrast.showEditorSelection .code-line .code-line:hover:before {
+	border-left: none;
+}
+
+img {
+	max-width: 100%;
+	max-height: 100%;
+}
+
+a {
+	text-decoration: none;
+}
+
+a:hover {
+	text-decoration: underline;
+}
+
+a:focus,
+input:focus,
+select:focus,
+textarea:focus {
+	outline: 1px solid -webkit-focus-ring-color;
+	outline-offset: -1px;
+}
+
+hr {
+	border: 0;
+	height: 2px;
+	border-bottom: 2px solid;
+}
+
+h1 {
+	padding-bottom: 0.3em;
+	line-height: 1.2;
+	border-bottom-width: 1px;
+	border-bottom-style: solid;
+}
+
+h1, h2, h3 {
+	font-weight: normal;
+}
+
+table {
+	border-collapse: collapse;
+}
+
+table > thead > tr > th {
+	text-align: left;
+	border-bottom: 1px solid;
+}
+
+table > thead > tr > th,
+table > thead > tr > td,
+table > tbody > tr > th,
+table > tbody > tr > td {
+	padding: 5px 10px;
+}
+
+table > tbody > tr + tr > td {
+	border-top: 1px solid;
+}
+
+blockquote {
+	margin: 0 7px 0 5px;
+	padding: 0 16px 0 10px;
+	border-left-width: 5px;
+	border-left-style: solid;
+}
+
+code {
+	font-family: Menlo, Monaco, Consolas, "Droid Sans Mono", "Courier New", monospace, "Droid Sans Fallback";
+	font-size: 1em;
+	line-height: 1.357em;
+}
+
+body.wordWrap pre {
+	white-space: pre-wrap;
+}
+
+pre:not(.hljs),
+pre.hljs code > div {
+	padding: 16px;
+	border-radius: 3px;
+	overflow: auto;
+}
+
+pre code {
+	color: var(--vscode-editor-foreground);
+	tab-size: 4;
+}
+
+/** Theming */
+
+.vscode-light pre {
+	background-color: rgba(220, 220, 220, 0.4);
+}
+
+.vscode-dark pre {
+	background-color: rgba(10, 10, 10, 0.4);
+}
+
+.vscode-high-contrast pre {
+	background-color: rgb(0, 0, 0);
+}
+
+.vscode-high-contrast h1 {
+	border-color: rgb(0, 0, 0);
+}
+
+.vscode-light table > thead > tr > th {
+	border-color: rgba(0, 0, 0, 0.69);
+}
+
+.vscode-dark table > thead > tr > th {
+	border-color: rgba(255, 255, 255, 0.69);
+}
+
+.vscode-light h1,
+.vscode-light hr,
+.vscode-light table > tbody > tr + tr > td {
+	border-color: rgba(0, 0, 0, 0.18);
+}
+
+.vscode-dark h1,
+.vscode-dark hr,
+.vscode-dark table > tbody > tr + tr > td {
+	border-color: rgba(255, 255, 255, 0.18);
+}
+
+</style>
+
+<style>
+/* Tomorrow Theme */
+/* http://jmblog.github.com/color-themes-for-google-code-highlightjs */
+/* Original theme - https://github.com/chriskempson/tomorrow-theme */
+
+/* Tomorrow Comment */
+.hljs-comment,
+.hljs-quote {
+	color: #8e908c;
+}
+
+/* Tomorrow Red */
+.hljs-variable,
+.hljs-template-variable,
+.hljs-tag,
+.hljs-name,
+.hljs-selector-id,
+.hljs-selector-class,
+.hljs-regexp,
+.hljs-deletion {
+	color: #c82829;
+}
+
+/* Tomorrow Orange */
+.hljs-number,
+.hljs-built_in,
+.hljs-builtin-name,
+.hljs-literal,
+.hljs-type,
+.hljs-params,
+.hljs-meta,
+.hljs-link {
+	color: #f5871f;
+}
+
+/* Tomorrow Yellow */
+.hljs-attribute {
+	color: #eab700;
+}
+
+/* Tomorrow Green */
+.hljs-string,
+.hljs-symbol,
+.hljs-bullet,
+.hljs-addition {
+	color: #718c00;
+}
+
+/* Tomorrow Blue */
+.hljs-title,
+.hljs-section {
+	color: #4271ae;
+}
+
+/* Tomorrow Purple */
+.hljs-keyword,
+.hljs-selector-tag {
+	color: #8959a8;
+}
+
+.hljs {
+	display: block;
+	overflow-x: auto;
+	color: #4d4d4c;
+	padding: 0.5em;
+}
+
+.hljs-emphasis {
+	font-style: italic;
+}
+
+.hljs-strong {
+	font-weight: bold;
+}
+</style>
+
+<style>
+/*
+ * Markdown PDF CSS
+ */
+
+ body {
+	font-family: -apple-system, BlinkMacSystemFont, "Segoe WPC", "Segoe UI", "Ubuntu", "Droid Sans", sans-serif, "Meiryo";
+	padding: 0 12px;
+}
+
+pre {
+	background-color: #f8f8f8;
+	border: 1px solid #cccccc;
+	border-radius: 3px;
+	overflow-x: auto;
+	white-space: pre-wrap;
+	overflow-wrap: break-word;
+}
+
+pre:not(.hljs) {
+	padding: 23px;
+	line-height: 19px;
+}
+
+blockquote {
+	background: rgba(127, 127, 127, 0.1);
+	border-color: rgba(0, 122, 204, 0.5);
+}
+
+.emoji {
+	height: 1.4em;
+}
+
+code {
+	font-size: 14px;
+	line-height: 19px;
+}
+
+/* for inline code */
+:not(pre):not(.hljs) > code {
+	color: #C9AE75; /* Change the old color so it seems less like an error */
+	font-size: inherit;
+}
+
+/* Page Break : use <div class="page"/> to insert page break
+-------------------------------------------------------- */
+.page {
+	page-break-after: always;
+}
+
+</style>
+
+<script src="https://unpkg.com/mermaid/dist/mermaid.min.js"></script>
+</head>
+<body>
+  <script>
+    mermaid.initialize({
+      startOnLoad: true,
+      theme: document.body.classList.contains('vscode-dark') || document.body.classList.contains('vscode-high-contrast')
+          ? 'dark'
+          : 'default'
+    });
+  </script>
+<p><img src="https://rx-m.com/rxm-cnc.svg" alt="RX-M, llc."></p>
+<h1 id="kubernetes">Kubernetes</h1>
+<h2 id="observability-challenge-solutions">Observability Challenge Solutions</h2>
+<h3 id="21-challenge-kubectl-top">2.1. CHALLENGE: kubectl top</h3>
+<p>Using the <code>kubectl top</code> command and its help text available from <code>-h</code> or <code>--help</code>, try the following operations:</p>
+<ul>
+<li>Retrieve the current CPU and Memory utilization of all control plane components in the <code>kube-system</code> namespace by
+their label</li>
+</ul>
+<p>Discover the control plane labels by getting the pods in the <code>kube-system</code> namespace:</p>
+<pre class="hljs"><code><div>~$ kubectl -n kube-system get po --show-labels
+
+NAME                                      READY   STATUS    RESTARTS      AGE     LABELS
+coredns-76f75df574-9k4tx                  1/1     Running   0             101m    k8s-app=kube-dns,pod-template-hash=76f75df574
+coredns-76f75df574-9p29r                  1/1     Running   0             101m    k8s-app=kube-dns,pod-template-hash=76f75df574
+etcd-ip-172-31-4-161                      1/1     Running   0             101m    component=etcd,tier=control-plane
+kube-apiserver-ip-172-31-4-161            1/1     Running   0             101m    component=kube-apiserver,tier=control-plane
+kube-controller-manager-ip-172-31-4-161   1/1     Running   0             101m    component=kube-controller-manager,tier=control-plane
+kube-proxy-kbdll                          1/1     Running   0             101m    controller-revision-hash=5f6677ccc4,k8s-app=kube-proxy,pod-template-generation=1
+kube-scheduler-ip-172-31-4-161            1/1     Running   0             101m    component=kube-scheduler,tier=control-plane
+metrics-server-c5fbf4cb9-lr2kd            1/1     Running   0             3m10s   k8s-app=metrics-server,pod-template-hash=c5fbf4cb9
+weave-net-x76wg                           2/2     Running   1 (98m ago)   98m     controller-revision-hash=d94c4d6bc,name=weave-net,pod-template-generation=1
+
+~$
+</div></code></pre>
+<p>The control plane components have a common label: <code>tier=control-plane</code>; use it to filter pods</p>
+<pre class="hljs"><code><div>~$ kubectl -n kube-system top pods -l tier=control-plane
+
+NAME                                      CPU(cores)   MEMORY(bytes)
+etcd-ip-172-31-4-161                      21m          42Mi
+kube-apiserver-ip-172-31-4-161            47m          281Mi
+kube-controller-manager-ip-172-31-4-161   15m          50Mi
+kube-scheduler-ip-172-31-4-161            4m           20Mi
+
+~$
+</div></code></pre>
+<ul>
+<li>Sort the output by memory use</li>
+</ul>
+<pre class="hljs"><code><div>~$ kubectl -n kube-system top pods -l tier=control-plane --sort-by memory
+
+NAME                                      CPU(cores)   MEMORY(bytes)
+kube-apiserver-ip-172-31-4-161            51m          281Mi
+kube-controller-manager-ip-172-31-4-161   17m          50Mi
+etcd-ip-172-31-4-161                      22m          42Mi
+kube-scheduler-ip-172-31-4-161            4m           20Mi
+
+~$
+</div></code></pre>
+<ul>
+<li>Which control plane component is currently using the most memory?</li>
+</ul>
+<p>Based on the example, the <code>kube-apiserver</code> pod. It depends on which one is sorted to the top</p>
+<ul>
+<li>Retrieve a listing of resource use of all nodes in your cluster sorted by CPU utilization without printing the column headers</li>
+</ul>
+<pre class="hljs"><code><div>~$ kubectl top nodes --no-headers --sort-by cpu
+
+ip-172-31-4-161   201m   10%   1782Mi   47%
+
+~$
+</div></code></pre>
+<h3 id="31-challenge-hpa-editing">3.1. CHALLENGE: HPA editing</h3>
+<p>Before you clean up, try the following operations:</p>
+<ul>
+<li>Adjust the deployment or HPA so that the <code>web1</code> deployment scales when a pod reaches 50m of CPU:</li>
+</ul>
+<p><strong>Adjusting the deployment and leaving the HPA alone:</strong> Change the cpu request in the web1 deployment to <code>100m</code></p>
+<pre class="hljs"><code><div>~/hpa$ nano target-deploy.yaml &amp;&amp; cat target-deploy.yaml
+</div></code></pre>
+<pre class="hljs"><code><div><span class="hljs-attr">apiVersion:</span> <span class="hljs-string">apps/v1</span>
+<span class="hljs-attr">kind:</span> <span class="hljs-string">Deployment</span>
+<span class="hljs-attr">metadata:</span>
+  <span class="hljs-attr">creationTimestamp:</span> <span class="hljs-literal">null</span>
+  <span class="hljs-attr">labels:</span>
+    <span class="hljs-attr">app:</span> <span class="hljs-string">web1</span>
+  <span class="hljs-attr">name:</span> <span class="hljs-string">web1</span>
+<span class="hljs-attr">spec:</span>
+  <span class="hljs-attr">replicas:</span> <span class="hljs-number">1</span>
+  <span class="hljs-attr">selector:</span>
+    <span class="hljs-attr">matchLabels:</span>
+      <span class="hljs-attr">app:</span> <span class="hljs-string">web1</span>
+  <span class="hljs-attr">strategy:</span> <span class="hljs-string">{}</span>
+  <span class="hljs-attr">template:</span>
+    <span class="hljs-attr">metadata:</span>
+      <span class="hljs-attr">creationTimestamp:</span> <span class="hljs-literal">null</span>
+      <span class="hljs-attr">labels:</span>
+        <span class="hljs-attr">app:</span> <span class="hljs-string">web1</span>
+    <span class="hljs-attr">spec:</span>
+      <span class="hljs-attr">containers:</span>
+      <span class="hljs-bullet">-</span> <span class="hljs-attr">image:</span> <span class="hljs-string">rxmllc/target</span>
+        <span class="hljs-attr">imagePullPolicy:</span> <span class="hljs-string">Never</span>
+        <span class="hljs-attr">name:</span> <span class="hljs-string">target</span>
+        <span class="hljs-attr">resources:</span>
+          <span class="hljs-attr">requests:</span>
+            <span class="hljs-attr">cpu:</span> <span class="hljs-string">"100m"</span>
+</div></code></pre>
+<pre class="hljs"><code><div>~/hpa$ kubectl apply -f target-deploy.yaml
+
+deployment.apps/web1 configured
+
+~/hpa$
+</div></code></pre>
+<p>OR:</p>
+<p><strong>Adjusting the HPA and leaving the deployment alone:</strong> Edit the HPA to scale at 25% CPU:</p>
+<pre class="hljs"><code><div>~/hpa$ kubectl edit hpa web1
+</div></code></pre>
+<pre class="hljs"><code><div><span class="hljs-string">...</span>
+
+<span class="hljs-attr">spec:</span>
+  <span class="hljs-attr">maxReplicas:</span> <span class="hljs-number">5</span>
+  <span class="hljs-attr">metrics:</span>
+  <span class="hljs-bullet">-</span> <span class="hljs-attr">resource:</span>
+      <span class="hljs-attr">name:</span> <span class="hljs-string">cpu</span>
+      <span class="hljs-attr">target:</span>
+        <span class="hljs-attr">averageUtilization:</span> <span class="hljs-number">25</span>
+        <span class="hljs-attr">type:</span> <span class="hljs-string">Utilization</span>
+    <span class="hljs-attr">type:</span> <span class="hljs-string">Resource</span>
+<span class="hljs-attr">status:</span>
+  <span class="hljs-attr">conditions:</span>
+</div></code></pre>
+<pre class="hljs"><code><div>:wq
+
+horizontalpodautoscaler.autoscaling/web1 edited
+
+~/hpa$ kubectl get hpa
+
+NAME   REFERENCE         TARGETS   MINPODS   MAXPODS   REPLICAS   AGE
+web1   Deployment/web1   0%/25%    1         5         1          100m
+
+~/hpa$
+</div></code></pre>
+<ul>
+<li>Ensure the HPA can scale the target deployment up to 3 replicas</li>
+</ul>
+<p>Edit the HPA so its maxReplicas is 3:</p>
+<pre class="hljs"><code><div>~/hpa$ kubectl edit hpa web1
+</div></code></pre>
+<pre class="hljs"><code><div><span class="hljs-attr">spec:</span>
+  <span class="hljs-attr">maxReplicas:</span> <span class="hljs-number">3</span>
+  <span class="hljs-attr">metrics:</span>
+  <span class="hljs-bullet">-</span> <span class="hljs-attr">resource:</span>
+      <span class="hljs-attr">name:</span> <span class="hljs-string">cpu</span>
+      <span class="hljs-attr">target:</span>
+        <span class="hljs-attr">averageUtilization:</span> <span class="hljs-number">25</span>
+        <span class="hljs-attr">type:</span> <span class="hljs-string">Utilization</span>
+    <span class="hljs-attr">type:</span> <span class="hljs-string">Resource</span>
+  <span class="hljs-attr">minReplicas:</span> <span class="hljs-number">1</span>
+  <span class="hljs-attr">scaleTargetRef:</span>
+    <span class="hljs-attr">apiVersion:</span> <span class="hljs-string">apps/v1</span>
+    <span class="hljs-attr">kind:</span> <span class="hljs-string">Deployment</span>
+    <span class="hljs-attr">name:</span> <span class="hljs-string">web1</span>
+
+</div></code></pre>
+<pre class="hljs"><code><div>:wq
+
+horizontalpodautoscaler.autoscaling/web1 edited
+
+~/hpa$ kubectl get hpa
+
+NAME   REFERENCE         TARGETS   MINPODS   MAXPODS   REPLICAS   AGE
+web1   Deployment/web1   0%/25%    1         3         1          23m
+
+~/hpa$
+</div></code></pre>
+<ul>
+<li>Adjust the HPA minimum count to 2 replicas:</li>
+</ul>
+<pre class="hljs"><code><div>~/hpa$ kubectl get pods
+
+NAME                    READY   STATUS    RESTARTS      AGE
+driver                  1/1     Running   1 (12m ago)   15m
+web1-658f9667d6-w4c82   1/1     Running   0             24m
+
+~/hpa$ kubectl get deploy web1
+
+NAME   READY   UP-TO-DATE   AVAILABLE   AGE
+web1   1/1     1            1           24m
+
+~/hpa$ kubectl edit hpa web1
+</div></code></pre>
+<pre class="hljs"><code><div><span class="hljs-string">...</span>
+
+<span class="hljs-attr">spec:</span>
+  <span class="hljs-attr">maxReplicas:</span> <span class="hljs-number">3</span>
+  <span class="hljs-attr">metrics:</span>
+  <span class="hljs-bullet">-</span> <span class="hljs-attr">resource:</span>
+      <span class="hljs-attr">name:</span> <span class="hljs-string">cpu</span>
+      <span class="hljs-attr">target:</span>
+        <span class="hljs-attr">averageUtilization:</span> <span class="hljs-number">25</span>
+        <span class="hljs-attr">type:</span> <span class="hljs-string">Utilization</span>
+    <span class="hljs-attr">type:</span> <span class="hljs-string">Resource</span>
+  <span class="hljs-attr">minReplicas:</span> <span class="hljs-number">2</span>
+  <span class="hljs-attr">scaleTargetRef:</span>
+    <span class="hljs-attr">apiVersion:</span> <span class="hljs-string">apps/v1</span>
+    <span class="hljs-attr">kind:</span> <span class="hljs-string">Deployment</span>
+    <span class="hljs-attr">name:</span> <span class="hljs-string">web1</span>
+</div></code></pre>
+<pre class="hljs"><code><div>:wq
+
+horizontalpodautoscaler.autoscaling/web1 edited
+
+~/hpa$ kubectl get deploy web1 -w
+
+NAME   READY   UP-TO-DATE   AVAILABLE   AGE
+web1   1/1     1            1           24m
+web1   1/2     1            1           25m
+web1   1/2     1            1           25m
+web1   1/2     1            1           25m
+web1   1/2     2            1           25m
+web1   2/2     2            2           25m
+
+^C
+
+~/hpa$ kubectl get pods
+
+NAME                    READY   STATUS    RESTARTS      AGE
+driver                  1/1     Running   1 (13m ago)   17m
+web1-658f9667d6-hjnph   1/1     Running   0             20s
+web1-658f9667d6-w4c82   1/1     Running   0             25m
+
+~/hpa$
+</div></code></pre>
+<ul>
+<li>What happens to the deployment?</li>
+</ul>
+<p>The deployment's replica count is adjusted up to match the HPA, effectively enforcing one-way scaling.</p>
+<br>
+<p><em>Copyright (c) 2023-2024 RX-M LLC, Cloud Native &amp; AI Training and Consulting, all rights reserved</em></p>
+
+</body>
+</html>

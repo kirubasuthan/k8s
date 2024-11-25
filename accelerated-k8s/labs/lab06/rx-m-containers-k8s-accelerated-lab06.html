@@ -1,0 +1,992 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>rx-m-containers-k8s-accelerated-lab06.md</title>
+<meta http-equiv="Content-type" content="text/html;charset=UTF-8">
+
+<style>
+/* https://github.com/microsoft/vscode/blob/master/extensions/markdown-language-features/media/markdown.css */
+/*---------------------------------------------------------------------------------------------
+ *  Copyright (c) Microsoft Corporation. All rights reserved.
+ *  Licensed under the MIT License. See License.txt in the project root for license information.
+ *--------------------------------------------------------------------------------------------*/
+
+body {
+	font-family: var(--vscode-markdown-font-family, -apple-system, BlinkMacSystemFont, "Segoe WPC", "Segoe UI", "Ubuntu", "Droid Sans", sans-serif);
+	font-size: var(--vscode-markdown-font-size, 14px);
+	padding: 0 26px;
+	line-height: var(--vscode-markdown-line-height, 22px);
+	word-wrap: break-word;
+}
+
+#code-csp-warning {
+	position: fixed;
+	top: 0;
+	right: 0;
+	color: white;
+	margin: 16px;
+	text-align: center;
+	font-size: 12px;
+	font-family: sans-serif;
+	background-color:#444444;
+	cursor: pointer;
+	padding: 6px;
+	box-shadow: 1px 1px 1px rgba(0,0,0,.25);
+}
+
+#code-csp-warning:hover {
+	text-decoration: none;
+	background-color:#007acc;
+	box-shadow: 2px 2px 2px rgba(0,0,0,.25);
+}
+
+body.scrollBeyondLastLine {
+	margin-bottom: calc(100vh - 22px);
+}
+
+body.showEditorSelection .code-line {
+	position: relative;
+}
+
+body.showEditorSelection .code-active-line:before,
+body.showEditorSelection .code-line:hover:before {
+	content: "";
+	display: block;
+	position: absolute;
+	top: 0;
+	left: -12px;
+	height: 100%;
+}
+
+body.showEditorSelection li.code-active-line:before,
+body.showEditorSelection li.code-line:hover:before {
+	left: -30px;
+}
+
+.vscode-light.showEditorSelection .code-active-line:before {
+	border-left: 3px solid rgba(0, 0, 0, 0.15);
+}
+
+.vscode-light.showEditorSelection .code-line:hover:before {
+	border-left: 3px solid rgba(0, 0, 0, 0.40);
+}
+
+.vscode-light.showEditorSelection .code-line .code-line:hover:before {
+	border-left: none;
+}
+
+.vscode-dark.showEditorSelection .code-active-line:before {
+	border-left: 3px solid rgba(255, 255, 255, 0.4);
+}
+
+.vscode-dark.showEditorSelection .code-line:hover:before {
+	border-left: 3px solid rgba(255, 255, 255, 0.60);
+}
+
+.vscode-dark.showEditorSelection .code-line .code-line:hover:before {
+	border-left: none;
+}
+
+.vscode-high-contrast.showEditorSelection .code-active-line:before {
+	border-left: 3px solid rgba(255, 160, 0, 0.7);
+}
+
+.vscode-high-contrast.showEditorSelection .code-line:hover:before {
+	border-left: 3px solid rgba(255, 160, 0, 1);
+}
+
+.vscode-high-contrast.showEditorSelection .code-line .code-line:hover:before {
+	border-left: none;
+}
+
+img {
+	max-width: 100%;
+	max-height: 100%;
+}
+
+a {
+	text-decoration: none;
+}
+
+a:hover {
+	text-decoration: underline;
+}
+
+a:focus,
+input:focus,
+select:focus,
+textarea:focus {
+	outline: 1px solid -webkit-focus-ring-color;
+	outline-offset: -1px;
+}
+
+hr {
+	border: 0;
+	height: 2px;
+	border-bottom: 2px solid;
+}
+
+h1 {
+	padding-bottom: 0.3em;
+	line-height: 1.2;
+	border-bottom-width: 1px;
+	border-bottom-style: solid;
+}
+
+h1, h2, h3 {
+	font-weight: normal;
+}
+
+table {
+	border-collapse: collapse;
+}
+
+table > thead > tr > th {
+	text-align: left;
+	border-bottom: 1px solid;
+}
+
+table > thead > tr > th,
+table > thead > tr > td,
+table > tbody > tr > th,
+table > tbody > tr > td {
+	padding: 5px 10px;
+}
+
+table > tbody > tr + tr > td {
+	border-top: 1px solid;
+}
+
+blockquote {
+	margin: 0 7px 0 5px;
+	padding: 0 16px 0 10px;
+	border-left-width: 5px;
+	border-left-style: solid;
+}
+
+code {
+	font-family: Menlo, Monaco, Consolas, "Droid Sans Mono", "Courier New", monospace, "Droid Sans Fallback";
+	font-size: 1em;
+	line-height: 1.357em;
+}
+
+body.wordWrap pre {
+	white-space: pre-wrap;
+}
+
+pre:not(.hljs),
+pre.hljs code > div {
+	padding: 16px;
+	border-radius: 3px;
+	overflow: auto;
+}
+
+pre code {
+	color: var(--vscode-editor-foreground);
+	tab-size: 4;
+}
+
+/** Theming */
+
+.vscode-light pre {
+	background-color: rgba(220, 220, 220, 0.4);
+}
+
+.vscode-dark pre {
+	background-color: rgba(10, 10, 10, 0.4);
+}
+
+.vscode-high-contrast pre {
+	background-color: rgb(0, 0, 0);
+}
+
+.vscode-high-contrast h1 {
+	border-color: rgb(0, 0, 0);
+}
+
+.vscode-light table > thead > tr > th {
+	border-color: rgba(0, 0, 0, 0.69);
+}
+
+.vscode-dark table > thead > tr > th {
+	border-color: rgba(255, 255, 255, 0.69);
+}
+
+.vscode-light h1,
+.vscode-light hr,
+.vscode-light table > tbody > tr + tr > td {
+	border-color: rgba(0, 0, 0, 0.18);
+}
+
+.vscode-dark h1,
+.vscode-dark hr,
+.vscode-dark table > tbody > tr + tr > td {
+	border-color: rgba(255, 255, 255, 0.18);
+}
+
+</style>
+
+<style>
+/* Tomorrow Theme */
+/* http://jmblog.github.com/color-themes-for-google-code-highlightjs */
+/* Original theme - https://github.com/chriskempson/tomorrow-theme */
+
+/* Tomorrow Comment */
+.hljs-comment,
+.hljs-quote {
+	color: #8e908c;
+}
+
+/* Tomorrow Red */
+.hljs-variable,
+.hljs-template-variable,
+.hljs-tag,
+.hljs-name,
+.hljs-selector-id,
+.hljs-selector-class,
+.hljs-regexp,
+.hljs-deletion {
+	color: #c82829;
+}
+
+/* Tomorrow Orange */
+.hljs-number,
+.hljs-built_in,
+.hljs-builtin-name,
+.hljs-literal,
+.hljs-type,
+.hljs-params,
+.hljs-meta,
+.hljs-link {
+	color: #f5871f;
+}
+
+/* Tomorrow Yellow */
+.hljs-attribute {
+	color: #eab700;
+}
+
+/* Tomorrow Green */
+.hljs-string,
+.hljs-symbol,
+.hljs-bullet,
+.hljs-addition {
+	color: #718c00;
+}
+
+/* Tomorrow Blue */
+.hljs-title,
+.hljs-section {
+	color: #4271ae;
+}
+
+/* Tomorrow Purple */
+.hljs-keyword,
+.hljs-selector-tag {
+	color: #8959a8;
+}
+
+.hljs {
+	display: block;
+	overflow-x: auto;
+	color: #4d4d4c;
+	padding: 0.5em;
+}
+
+.hljs-emphasis {
+	font-style: italic;
+}
+
+.hljs-strong {
+	font-weight: bold;
+}
+</style>
+
+<style>
+/*
+ * Markdown PDF CSS
+ */
+
+ body {
+	font-family: -apple-system, BlinkMacSystemFont, "Segoe WPC", "Segoe UI", "Ubuntu", "Droid Sans", sans-serif, "Meiryo";
+	padding: 0 12px;
+}
+
+pre {
+	background-color: #f8f8f8;
+	border: 1px solid #cccccc;
+	border-radius: 3px;
+	overflow-x: auto;
+	white-space: pre-wrap;
+	overflow-wrap: break-word;
+}
+
+pre:not(.hljs) {
+	padding: 23px;
+	line-height: 19px;
+}
+
+blockquote {
+	background: rgba(127, 127, 127, 0.1);
+	border-color: rgba(0, 122, 204, 0.5);
+}
+
+.emoji {
+	height: 1.4em;
+}
+
+code {
+	font-size: 14px;
+	line-height: 19px;
+}
+
+/* for inline code */
+:not(pre):not(.hljs) > code {
+	color: #C9AE75; /* Change the old color so it seems less like an error */
+	font-size: inherit;
+}
+
+/* Page Break : use <div class="page"/> to insert page break
+-------------------------------------------------------- */
+.page {
+	page-break-after: always;
+}
+
+</style>
+
+<script src="https://unpkg.com/mermaid/dist/mermaid.min.js"></script>
+</head>
+<body>
+  <script>
+    mermaid.initialize({
+      startOnLoad: true,
+      theme: document.body.classList.contains('vscode-dark') || document.body.classList.contains('vscode-high-contrast')
+          ? 'dark'
+          : 'default'
+    });
+  </script>
+<p><img src="https://rx-m.com/rxm-cnc.svg" alt="RX-M, llc."></p>
+<h1 id="kubernetes">Kubernetes</h1>
+<h2 id="deployments-replicasets--labels">Deployments, ReplicaSets, &amp; Labels</h2>
+<p>In this lab we will explore the nature of Kubernetes Deployments and ReplicaSets and how to work with them.</p>
+<h4 id="deployments">Deployments</h4>
+<p>A Deployment controller provides declarative updates for pods and ReplicaSets. You describe the desired state in a
+Deployment object, and the Deployment controller will change the actual state to the desired state at a controlled rate
+for you. Typical uses:</p>
+<ul>
+<li>Bring up a ReplicaSet and (indirectly) its pods</li>
+<li>Capture the results and status of an application deployment</li>
+<li>Update an existing deployment to recreate pods with a new app version image (rolling update)</li>
+<li>Roll back to an earlier deployment revision if the current deployment isn’t stable</li>
+<li>Pause and resume a deployment's rollout/rollback</li>
+</ul>
+<h4 id="replicasets">ReplicaSets</h4>
+<p>ReplicaSets (RS) ensure that a specified number of pod &quot;replicas&quot; are running at all times. If there are too many, it
+will delete some. If there are too few, it will start more. Unlike the case where a user directly creates pods, a
+ReplicaSet replaces pods that are deleted or terminated, in cases like node failure or disruptive node maintenance (e.g.
+a kernel upgrade, etc.). A ReplicaSet is recommended even if your application requires only a single pod.</p>
+<p>ReplicaSets can be used independently, however, they are mainly used by Deployment controllers as a mechanism to
+orchestrate pod creation, deletion, updates, and rollbacks. When you use Deployments you do not have to worry about
+managing the ReplicaSets that they create; Deployment controllers own and manage their ReplicaSets.</p>
+<p>A Deployment/ReplicaSet is only appropriate for pods with <em>RestartPolicy = Always</em> (if the RestartPolicy is not set, the
+default value is <em>Always</em>.) A ReplicaSet will refuse to instantiate any pod that has a different restart policy.</p>
+<p>A ReplicaSet will never terminate on its own, but it isn't expected to be as long-lived as services. Services may be
+composed of pods controlled by multiple ReplicaSets, and it is expected that many ReplicaSets may be created and
+destroyed over the lifetime of a service (for instance, to perform an update of pods that run the service). Both
+services themselves and their clients should remain oblivious to the ReplicaSets that maintain the pods of the services.</p>
+<p>In this lab we will create some Deployments/ReplicaSets, trigger a rolling update to understand controller behaviors,
+and examine the one-to-many relationship between Deployments and ReplicaSets.</p>
+<h3 id="1-a-simple-deployment">1. A simple Deployment</h3>
+<p>As a first exploratory step lets create a simple deployment which stands up three nginx pods. Create a config file
+similar to the following to accomplish this task. First create a base manifest file in yaml with the following
+imperative command:</p>
+<pre class="hljs"><code><div>~$ mkdir -p ~/dep ; cd ~/dep
+
+~/dep$
+</div></code></pre>
+<p>Unlike pods, deployments are created using <code>kubectl create deploy</code>.</p>
+<p>Prepare the deployment manifest. If you created it with <code>kubectl create deployment</code>, make the following changes:</p>
+<ul>
+<li>Add the <code>targetenv: demo</code> label to the deployment metadata</li>
+<li>Add the <code>targetenv: demo</code> label to the deployment selector and pod template spec</li>
+<li>Name the container <code>podweb</code></li>
+</ul>
+<pre class="hljs"><code><div>~/dep$ nano mydep.yaml &amp;&amp; cat $_
+</div></code></pre>
+<pre class="hljs"><code><div><span class="hljs-attr">apiVersion:</span> <span class="hljs-string">apps/v1</span>
+<span class="hljs-attr">kind:</span> <span class="hljs-string">Deployment</span>
+<span class="hljs-attr">metadata:</span>
+  <span class="hljs-attr">creationTimestamp:</span> <span class="hljs-literal">null</span>
+  <span class="hljs-attr">labels:</span>
+    <span class="hljs-attr">app:</span> <span class="hljs-string">website</span>
+    <span class="hljs-attr">targetenv:</span> <span class="hljs-string">demo</span>          <span class="hljs-comment"># Add this</span>
+  <span class="hljs-attr">name:</span> <span class="hljs-string">website</span>
+<span class="hljs-attr">spec:</span>
+  <span class="hljs-attr">replicas:</span> <span class="hljs-number">3</span>
+  <span class="hljs-attr">selector:</span>
+    <span class="hljs-attr">matchLabels:</span>
+      <span class="hljs-attr">app:</span> <span class="hljs-string">website</span>
+      <span class="hljs-attr">targetenv:</span> <span class="hljs-string">demo</span>
+  <span class="hljs-attr">strategy:</span> <span class="hljs-string">{}</span>
+  <span class="hljs-attr">template:</span>
+    <span class="hljs-attr">metadata:</span>
+      <span class="hljs-attr">creationTimestamp:</span> <span class="hljs-literal">null</span>
+      <span class="hljs-attr">labels:</span>
+        <span class="hljs-attr">app:</span> <span class="hljs-string">website</span>
+        <span class="hljs-attr">targetenv:</span> <span class="hljs-string">demo</span>      <span class="hljs-comment"># Add this</span>
+    <span class="hljs-attr">spec:</span>
+      <span class="hljs-attr">containers:</span>
+      <span class="hljs-bullet">-</span> <span class="hljs-attr">image:</span> <span class="hljs-string">nginx:1.7.9</span>
+        <span class="hljs-attr">name:</span> <span class="hljs-string">podweb</span>         <span class="hljs-comment"># Change this</span>
+        <span class="hljs-attr">ports:</span>
+        <span class="hljs-bullet">-</span> <span class="hljs-attr">containerPort:</span> <span class="hljs-number">80</span>
+        <span class="hljs-attr">resources:</span> <span class="hljs-string">{}</span>
+<span class="hljs-attr">status:</span> <span class="hljs-string">{}</span>
+</div></code></pre>
+<pre class="hljs"><code><div>~/dep$
+</div></code></pre>
+<p>Now create the Deployment using the <code>kubectl apply</code> subcommand and verify that the Deployment, its ReplicaSet and pods
+are up with the <code>get</code> subcommand:</p>
+<pre class="hljs"><code><div>~/dep$ kubectl apply -f mydep.yaml
+
+deployment.apps/website created
+
+~/dep$
+</div></code></pre>
+<p>List the deployments, replicasets and pods. You can abbreviate certain API objects when calling them, as shown below:</p>
+<pre class="hljs"><code><div>~/dep$ kubectl get deploy,rs,po
+
+NAME                      READY   UP-TO-DATE   AVAILABLE   AGE
+deployment.apps/website   3/3     3            3           33s
+
+NAME                                 DESIRED   CURRENT   READY   AGE
+replicaset.apps/website-74fcfd87c8   3         3         3       33s
+
+NAME                           READY   STATUS    RESTARTS   AGE
+pod/website-74fcfd87c8-5hq7b   1/1     Running   0          33s
+pod/website-74fcfd87c8-fpf67   1/1     Running   0          33s
+pod/website-74fcfd87c8-zm8wz   1/1     Running   0          33s
+
+~/dep$
+</div></code></pre>
+<p>While everything appears to be running we can verify that there are no scheduling cycles or fail/restart activities by
+examining the system events. We have viewed resource specific events in the past using the <code>kubectl describe</code>
+subcommand. This time we’ll use the <code>kubectl get events</code> subcommand to view cluster wide events:</p>
+<pre class="hljs"><code><div>~/dep$ kubectl get events --sort-by=metadata.creationTimestamp | grep website
+
+6s          Normal   SuccessfulCreate    replicaset/website-86895ff58d   Created pod: website-86895ff58d-4h6dz
+6s          Normal   Scheduled           pod/website-86895ff58d-dz9wd    Successfully assigned default/website-86895ff58d-dz9wd to ip-172-31-4-161
+6s          Normal   Scheduled           pod/website-86895ff58d-r7c5m    Successfully assigned default/website-86895ff58d-r7c5m to ip-172-31-4-161
+6s          Normal   Scheduled           pod/website-86895ff58d-4h6dz    Successfully assigned default/website-86895ff58d-4h6dz to ip-172-31-4-161
+6s          Normal   SuccessfulCreate    replicaset/website-86895ff58d   Created pod: website-86895ff58d-r7c5m
+6s          Normal   SuccessfulCreate    replicaset/website-86895ff58d   Created pod: website-86895ff58d-dz9wd
+6s          Normal   ScalingReplicaSet   deployment/website              Scaled up replica set website-86895ff58d to 3
+5s          Normal   Pulling             pod/website-86895ff58d-4h6dz    Pulling image &quot;nginx:1.7.9&quot;
+5s          Normal   Pulling             pod/website-86895ff58d-dz9wd    Pulling image &quot;nginx:1.7.9&quot;
+5s          Normal   Pulling             pod/website-86895ff58d-r7c5m    Pulling image &quot;nginx:1.7.9&quot;
+
+~/dep$
+</div></code></pre>
+<p>Checking the event log occasionally will help you identify normal cluster patterns and make it possible for you to spot
+anomalies more easily when debugging.</p>
+<p>The ReplicaSet began with a scale of 3, causing 3 instances of the pod template to get scheduled. Replica sets ensure
+that some number of instances of the pod template are always running. Try deleting a pod by using the pod displayed on
+the last line of <code>kubectl get pods -o name</code>:</p>
+<pre class="hljs"><code><div>~/dep$ kubectl delete $(kubectl get po -o name -l app=website | tail -1)
+
+pod &quot;website-86895ff58d-r7c5m&quot; deleted
+
+~/dep$ kubectl get po
+
+NAME                       READY   STATUS    RESTARTS   AGE
+website-86895ff58d-4h6dz   1/1     Running   0          57s
+website-86895ff58d-dz9wd   1/1     Running   0          57s
+website-86895ff58d-hw4jf   1/1     Running   0          39s
+
+~/dep$
+</div></code></pre>
+<p>You might ask: &quot;why would Kubernetes let someone delete a pod if it will just restart it?&quot;. There are many reasons you
+might want to delete a pod:</p>
+<ul>
+<li>The pod ran into problems and you want to generate a new replacement</li>
+<li>The current node has problems and you want Kubernetes to reschedule this particular pod somewhere else</li>
+<li>A change was made to another Kubernetes resource the pod relied on, like a configMap or volume mount, which require
+a pod to be recreated to take effect</li>
+</ul>
+<p>To actually terminate our pod permanently we must delete the Deployment which controls the ReplicaSet, which in turn,
+controls the pods.</p>
+<h3 id="2-labels">2. Labels</h3>
+<p>When many resources are running on a cluster it can be advantageous to restrict output to a certain set of resources.
+The Kubernetes labeling system makes this easy. The <code>-l</code> switch can be used with the <code>kubectl get</code> subcommand to filter
+output by label.</p>
+<p>Try listing all pods with the <code>--show-labels</code> options to show the pod labels:</p>
+<pre class="hljs"><code><div>~/dep$ kubectl get po --show-labels
+
+NAME                       READY   STATUS    RESTARTS   AGE   LABELS
+website-74fcfd87c8-5hq7b   1/1     Running   0          74s   app=website,pod-template-hash=74fcfd87c8,targetenv=demo
+website-74fcfd87c8-bf5g6   1/1     Running   0          23s   app=website,pod-template-hash=74fcfd87c8,targetenv=demo
+website-74fcfd87c8-fpf67   1/1     Running   0          74s   app=website,pod-template-hash=74fcfd87c8,targetenv=demo
+
+~/dep$
+</div></code></pre>
+<p>To illustrate how labels work, run pods with the same label keys but different values:</p>
+<pre class="hljs"><code><div>~/dep$ kubectl run cache-pod -l app=cache --image redis
+
+pod/cache-pod created
+
+~/dep$ kubectl run dev-pod -l targetenv=dev --image httpd:2.2
+
+pod/dev-pod created
+
+~/dep$
+</div></code></pre>
+<p>Now try filtering by the &quot;<code>app</code>&quot; label key we assigned to all of our pods in the pod template metadata:</p>
+<pre class="hljs"><code><div>~/dep$ kubectl get po --show-labels -l app
+
+NAME                       READY   STATUS    RESTARTS   AGE   LABELS
+cache-pod                  1/1     Running   0          12s   app=cache
+website-86895ff58d-4h6dz   1/1     Running   0          82s   app=website,pod-template-hash=86895ff58d,targetenv=demo
+website-86895ff58d-dz9wd   1/1     Running   0          82s   app=website,pod-template-hash=86895ff58d,targetenv=demo
+website-86895ff58d-hw4jf   1/1     Running   0          64s   app=website,pod-template-hash=86895ff58d,targetenv=demo
+
+~/dep$
+</div></code></pre>
+<p>Now try the &quot;<code>targetenv</code>&quot; key:</p>
+<pre class="hljs"><code><div>~/dep$ kubectl get po --show-labels -l targetenv
+
+NAME                       READY   STATUS    RESTARTS   AGE    LABELS
+dev-pod                    1/1     Running   0          24s    targetenv=dev
+website-86895ff58d-4h6dz   1/1     Running   0          102s   app=website,pod-template-hash=86895ff58d,targetenv=demo
+website-86895ff58d-dz9wd   1/1     Running   0          102s   app=website,pod-template-hash=86895ff58d,targetenv=demo
+website-86895ff58d-hw4jf   1/1     Running   0          84s    app=website,pod-template-hash=86895ff58d,targetenv=demo
+
+~/dep$
+</div></code></pre>
+<p>You can also filter pods by the label key and a specific value:</p>
+<pre class="hljs"><code><div>~/dep$ kubectl get po -l app=website
+
+NAME                       READY   STATUS    RESTARTS   AGE
+website-86895ff58d-4h6dz   1/1     Running   0          111s
+website-86895ff58d-dz9wd   1/1     Running   0          111s
+website-86895ff58d-hw4jf   1/1     Running   0          93s
+
+~/dep$ kubectl get po -l targetenv=demo
+
+NAME                       READY   STATUS    RESTARTS   AGE
+website-86895ff58d-4h6dz   1/1     Running   0          115s
+website-86895ff58d-dz9wd   1/1     Running   0          115s
+website-86895ff58d-hw4jf   1/1     Running   0          97s
+
+~/dep$
+</div></code></pre>
+<p>Our pod has labels we have added and the Kubernetes infrastructure may add labels as well:</p>
+<pre class="hljs"><code><div>~/dep$ kubectl describe $(kubectl get po -l app=website -o name | head -1) | grep -A2 -i label
+
+Labels:           app=website
+                  pod-template-hash=86895ff58d
+                  targetenv=demo
+
+~/dep$
+</div></code></pre>
+<p>Unfortunately describe doesn't allow for JSON output. Remember though, <code>get</code> does:</p>
+<pre class="hljs"><code><div>~/dep$ kubectl get $(kubectl get po -l app=website -o name | head -1) \
+-o jsonpath='{.metadata.labels}' ; echo
+
+{&quot;app&quot;:&quot;website&quot;,&quot;pod-template-hash&quot;:&quot;86895ff58d&quot;,&quot;targetenv&quot;:&quot;demo&quot;}
+
+~/dep$
+</div></code></pre>
+<p>Delete the pods before continuing:</p>
+<pre class="hljs"><code><div>~/dep$ kubectl delete po cache-pod dev-pod
+
+pod &quot;cache-pod&quot; deleted
+pod &quot;dev-pod&quot; deleted
+
+~/dep$
+</div></code></pre>
+<h3 id="3-checking-status-of-a-deployment">3. Checking status of a Deployment</h3>
+<p>We have seen previously how to check the status of a deployment using <code>kubectl get</code>:</p>
+<pre class="hljs"><code><div>~/dep$ kubectl get deploy
+
+NAME      READY   UP-TO-DATE   AVAILABLE   AGE
+website   3/3     3            3           4m18s
+
+~/dep$
+</div></code></pre>
+<p>Now we take an slightly more application-centric view using <code>kubectl rollout</code>:</p>
+<pre class="hljs"><code><div>~/dep$ kubectl rollout status deployment website
+
+deployment &quot;website&quot; successfully rolled out
+
+~/dep$
+</div></code></pre>
+<p>Rollouts are used to update a given set of Pods, the ones controlled by this Deployment's ReplicaSet. It reports
+success when all the currently deployed Pods match what is expected in the current deployment. In k8s technical terms
+these conditions are all true:</p>
+<ul>
+<li><code>.status.observedGeneration &gt;= .metadata.generation</code></li>
+<li><code>.status.updatedReplicas == .spec.replicas</code></li>
+<li><code>.spec.availableReplicas &gt;= minimum required</code></li>
+</ul>
+<h3 id="4-updating-a-deployment">4. Updating a Deployment</h3>
+<p>We are using <code>nginx:1.7.9</code> in our example, let's update the container named <code>podweb</code> in our deployment to <code>nginx:1.9.1</code>:</p>
+<pre class="hljs"><code><div>~/dep$ kubectl set image deploy website podweb=nginx:1.9.1
+
+deployment.apps/website image updated
+
+~/dep$
+</div></code></pre>
+<p>Imperative commands like <code>kubectl set</code> are useful for making ad-hoc changes to resources. An alternative is to use
+<code>kubectl edit deployment/website</code> and edit the <code>spec.template.spec.containers.image</code> key.</p>
+<p>Check the status of the rollout (if you're not fast you may not see these updates):</p>
+<pre class="hljs"><code><div>~/dep$ kubectl rollout status deployment website
+
+Waiting for deployment &quot;website&quot; rollout to finish: 1 out of 3 new replicas have been updated...
+Waiting for deployment &quot;website&quot; rollout to finish: 1 out of 3 new replicas have been updated...
+Waiting for deployment &quot;website&quot; rollout to finish: 1 out of 3 new replicas have been updated...
+Waiting for deployment &quot;website&quot; rollout to finish: 2 out of 3 new replicas have been updated...
+Waiting for deployment &quot;website&quot; rollout to finish: 2 out of 3 new replicas have been updated...
+Waiting for deployment &quot;website&quot; rollout to finish: 2 out of 3 new replicas have been updated...
+Waiting for deployment &quot;website&quot; rollout to finish: 1 old replicas are pending termination...
+Waiting for deployment &quot;website&quot; rollout to finish: 1 old replicas are pending termination...
+deployment &quot;website&quot; successfully rolled out
+
+~/dep$
+</div></code></pre>
+<p>In a rolling update strategy, pods are gradually replaced with new versions. Check the deployment for any changes:</p>
+<pre class="hljs"><code><div>~/dep$ kubectl get deploy website
+
+NAME      READY   UP-TO-DATE   AVAILABLE   AGE
+website   3/3     3            3           4m1s
+
+~/dep$
+</div></code></pre>
+<p>No obvious changes or replacements made to the deployment. Now look at the Replica Sets &amp; Pods:</p>
+<pre class="hljs"><code><div>~/dep$ kubectl get rs,po
+
+NAME                                 DESIRED   CURRENT   READY   AGE
+replicaset.apps/website-76bc5bdf5d   3         3         3       38s
+replicaset.apps/website-86895ff58d   0         0         0       3m26s
+
+NAME                           READY   STATUS    RESTARTS   AGE
+pod/website-76bc5bdf5d-q9vsz   1/1     Running   0          23s
+pod/website-76bc5bdf5d-x8d2j   1/1     Running   0          22s
+pod/website-76bc5bdf5d-zxz2x   1/1     Running   0          38s
+
+~/dep$
+</div></code></pre>
+<p>All the pods bear different suffixes, and should be seconds old at this point. When a rollout is performed, the original
+ReplicaSet controlling the pods are scaled down to zero, and a new ReplicaSet bearing the new spec (in this case, a new
+container image tag) is created and scaled up to replace it.</p>
+<p>By describing the Deployment we can inspect the events that occurred during the rollout:</p>
+<pre class="hljs"><code><div>~/dep$ kubectl describe deploy website | grep -A 15 Events
+
+Events:
+  Type    Reason             Age    From                   Message
+  ----    ------             ----   ----                   -------
+  Normal  ScalingReplicaSet  3m37s  deployment-controller  Scaled up replica set website-86895ff58d to 3
+  Normal  ScalingReplicaSet  49s    deployment-controller  Scaled up replica set website-76bc5bdf5d to 1
+  Normal  ScalingReplicaSet  34s    deployment-controller  Scaled down replica set website-86895ff58d to 2 from 3
+  Normal  ScalingReplicaSet  34s    deployment-controller  Scaled up replica set website-76bc5bdf5d to 2 from 1
+  Normal  ScalingReplicaSet  33s    deployment-controller  Scaled down replica set website-86895ff58d to 1 from 2
+  Normal  ScalingReplicaSet  33s    deployment-controller  Scaled up replica set website-76bc5bdf5d to 3 from 2
+  Normal  ScalingReplicaSet  32s    deployment-controller  Scaled down replica set website-86895ff58d to 0 from 1
+
+~/dep$
+</div></code></pre>
+<p>Note that the rollout was a smooth transition from one set of Pods controlled by our original ReplicaSet
+to our second set of Pods controlled by a different RS.</p>
+<h3 id="5-manually-rolling-back-a-deployment">5. Manually rolling back a Deployment</h3>
+<p>Let's manually revert back to <code>nginx:1.7.9</code> with <code>kubectl set image</code>:</p>
+<pre class="hljs"><code><div>~/dep$ kubectl set image deploy website podweb=nginx:1.7.9
+
+deployment.apps/website image updated
+
+~/dep$
+</div></code></pre>
+<p>And check the status with <code>kubectl rollout status</code>:</p>
+<pre class="hljs"><code><div>~/dep$ kubectl rollout status deployment website
+
+deployment &quot;website&quot; successfully rolled out
+
+~/dep$
+</div></code></pre>
+<p>And see what happened to the ReplicaSets:</p>
+<pre class="hljs"><code><div>~/dep$ kubectl get rs
+
+NAME                 DESIRED   CURRENT   READY   AGE
+website-76bc5bdf5d   0         0         0       76s
+website-86895ff58d   3         3         3       4m4s
+
+~/dep$
+</div></code></pre>
+<p>Notice which ReplicaSet hash in the pod name is being used. Since you used this image before, no new ReplicaSet is
+created. The nginx:1.9.1 ReplicaSet is scaled down, and the 1.7.9 ReplicaSet is scaled back up.</p>
+<p>Check the pods now (using the <code>-l app=website</code> option to filter your results to just the deployment's pods):</p>
+<pre class="hljs"><code><div>~/dep$ kubectl get po -l app=website
+
+NAME                       READY   STATUS    RESTARTS   AGE
+website-74fcfd87c8-7b4vj   1/1     Running   0          18s
+website-74fcfd87c8-jw8lm   1/1     Running   0          16s
+website-74fcfd87c8-r7cxh   1/1     Running   0          13s
+
+~/dep$
+</div></code></pre>
+<p>Notice which RS hash in the pod name is being used after the rollback.</p>
+<p>Confirm your observations once again in the event log:</p>
+<pre class="hljs"><code><div>~/dep$ kubectl describe deploy website | grep -A 15 Events
+
+Events:
+  Type    Reason             Age                From                   Message
+  ----    ------             ----               ----                   -------
+  Normal  ScalingReplicaSet  4m16s              deployment-controller  Scaled up replica set website-86895ff58d to 3
+  Normal  ScalingReplicaSet  88s                deployment-controller  Scaled up replica set website-76bc5bdf5d to 1
+  Normal  ScalingReplicaSet  73s                deployment-controller  Scaled down replica set website-86895ff58d to 2 from 3
+  Normal  ScalingReplicaSet  73s                deployment-controller  Scaled up replica set website-76bc5bdf5d to 2 from 1
+  Normal  ScalingReplicaSet  72s                deployment-controller  Scaled down replica set website-86895ff58d to 1 from 2
+  Normal  ScalingReplicaSet  72s                deployment-controller  Scaled up replica set website-76bc5bdf5d to 3 from 2
+  Normal  ScalingReplicaSet  71s                deployment-controller  Scaled down replica set website-86895ff58d to 0 from 1
+  Normal  ScalingReplicaSet  19s                deployment-controller  Scaled up replica set website-86895ff58d to 1 from 0
+  Normal  ScalingReplicaSet  18s                deployment-controller  Scaled down replica set website-76bc5bdf5d to 2 from 3
+  Normal  ScalingReplicaSet  16s (x4 over 18s)  deployment-controller  (combined from similar events): Scaled down replica set website-76bc5bdf5d to 0 from 1
+
+~/dep$
+</div></code></pre>
+<p>So when the image in a controller's template changes, the replicasets are merely scaled up or down according to the
+demands of the deployment spec.</p>
+<h3 id="6-checking-rollout-history-of-a-deployment">6. Checking rollout history of a Deployment</h3>
+<p>We can use the <code>rollout history</code> subcommand to see what we have been doing to trigger these rollouts:</p>
+<pre class="hljs"><code><div>~/dep$ kubectl rollout history deploy website
+
+deployment.apps/website
+REVISION  CHANGE-CAUSE
+2         &lt;none&gt;
+3         &lt;none&gt;
+
+~/dep$
+</div></code></pre>
+<p>The rollout history, by default, retains 10 versions of a resource (the default value of <code>revisionHistoryLimit</code> in a
+Deployment spec). You will only get the <code>CHANGE-CAUSE</code> next to a revision if you add an annotation with the
+<code>kubernetes.io/change-cause</code> key. It is a useful tool for performing an immediate rollback of an update, but for more
+significant changes (such as rolling back several previous versions) a proper CI/CD pipeline and version control
+integration is more appropriate.</p>
+<p>To gain insight on what changed in a revision, you can use the <code>--revision</code> flag to inspect a specific revision.</p>
+<p>Take a detailed look at a previous deployment version:</p>
+<pre class="hljs"><code><div>~/dep$ kubectl rollout history deploy website --revision=2
+
+deployment.apps/website with revision #2
+Pod Template:
+  Labels:       app=website
+        pod-template-hash=76bc5bdf5d
+        targetenv=demo
+  Containers:
+   podweb:
+    Image:      nginx:1.9.1
+    Port:       80/TCP
+    Host Port:  0/TCP
+    Environment:        &lt;none&gt;
+    Mounts:     &lt;none&gt;
+  Volumes:      &lt;none&gt;
+
+~/dep$
+</div></code></pre>
+<p>Each rollout history entry has a pod and container spec within it. If a change causes the overall state of a the
+deployment to match one of the previous rollout states, then Kubernetes uses that revision.</p>
+<h3 id="7-rolling-back-to-a-previous-deployment">7. Rolling back to a previous Deployment</h3>
+<p>We previously performed a manual rollback using <code>kubectl set</code>. Another method is to use the <code>kubectl rollout undo</code>
+subcommand, which automatically selects the previous revision present in a resource's rollout history to roll back to.</p>
+<p>Confirm the current version of a container is 1.7.9 by feeding the name of a pod (<code>kubectl get po -l app=website -o name | tail -1</code>) to a second <code>get</code> command that parses the pod's manifest for its image (<code>kubectl get pod/&lt;podname&gt; -o jsonpath='{.spec.containers[].image}</code>):</p>
+<pre class="hljs"><code><div>~/dep$ kubectl get $(kubectl get po -l app=website -o name | tail -1) \
+-o jsonpath='{.spec.containers[].image}' ; echo
+
+nginx:1.7.9
+
+~/dep$
+</div></code></pre>
+<p>Revert to previous version/revision, tracking the rollout status by chaining the <code>kubectl rollout status</code> command:</p>
+<pre class="hljs"><code><div>~/dep$ kubectl rollout undo deploy website &amp;&amp; kubectl rollout status deployment website
+
+deployment.apps/website rolled back
+Waiting for deployment &quot;website&quot; rollout to finish: 1 out of 3 new replicas have been updated...
+Waiting for deployment &quot;website&quot; rollout to finish: 1 out of 3 new replicas have been updated...
+Waiting for deployment &quot;website&quot; rollout to finish: 1 out of 3 new replicas have been updated...
+Waiting for deployment &quot;website&quot; rollout to finish: 2 out of 3 new replicas have been updated...
+Waiting for deployment &quot;website&quot; rollout to finish: 2 out of 3 new replicas have been updated...
+Waiting for deployment &quot;website&quot; rollout to finish: 2 out of 3 new replicas have been updated...
+Waiting for deployment &quot;website&quot; rollout to finish: 1 old replicas are pending termination...
+Waiting for deployment &quot;website&quot; rollout to finish: 1 old replicas are pending termination...
+deployment &quot;website&quot; successfully rolled out
+
+~/dep$
+</div></code></pre>
+<p>You can specify a revision to roll back to using the <code>--to-revision</code> flag. If you use that flag, your command would be:
+<code>kubectl rollout undo deployment/website --to-revision=2</code></p>
+<pre class="hljs"><code><div>~/dep$ kubectl get deploy website
+
+NAME      READY   UP-TO-DATE   AVAILABLE   AGE
+website   3/3     3            3           6m57s
+
+~/dep$
+</div></code></pre>
+<p>Check the events in the website deployment's history:</p>
+<pre class="hljs"><code><div>~/dep$ kubectl describe deploy website | grep -A 15 Events
+
+Events:
+  Type    Reason             Age                 From                   Message
+  ----    ------             ----                ----                   -------
+  Normal  ScalingReplicaSet  5m19s               deployment-controller  Scaled up replica set website-86895ff58d to 3
+  Normal  ScalingReplicaSet  2m31s               deployment-controller  Scaled up replica set website-76bc5bdf5d to 1
+  Normal  ScalingReplicaSet  2m16s               deployment-controller  Scaled down replica set website-86895ff58d to 2 from 3
+  Normal  ScalingReplicaSet  2m16s               deployment-controller  Scaled up replica set website-76bc5bdf5d to 2 from 1
+  Normal  ScalingReplicaSet  2m15s               deployment-controller  Scaled up replica set website-76bc5bdf5d to 3 from 2
+  Normal  ScalingReplicaSet  2m14s               deployment-controller  Scaled down replica set website-86895ff58d to 0 from 1
+  Normal  ScalingReplicaSet  82s                 deployment-controller  Scaled up replica set website-86895ff58d to 1 from 0
+  Normal  ScalingReplicaSet  81s                 deployment-controller  Scaled down replica set website-76bc5bdf5d to 2 from 3
+  Normal  ScalingReplicaSet  9s (x2 over 2m15s)  deployment-controller  Scaled down replica set website-86895ff58d to 1 from 2
+  Normal  ScalingReplicaSet  8s (x9 over 81s)    deployment-controller  (combined from similar events): Scaled down replica set website-86895ff58d to 0 from 1
+
+~/dep$
+</div></code></pre>
+<p>Confirm the container image version has been reverted to 1.9.1:</p>
+<pre class="hljs"><code><div>~/dep$ kubectl get $(kubectl get po -l app=website -o name | tail -1) \
+-o jsonpath='{.spec.containers[].image}' &amp;&amp; echo
+
+nginx:1.9.1
+
+~/dep$
+</div></code></pre>
+<p>The ability to perform rollbacks to a previous version or last known good version is an essential ability that will keep
+your services and applications in top production shape.</p>
+<h3 id="8-pausing-and-resuming-a-deployment">8. Pausing and resuming a Deployment</h3>
+<p>In a larger installation, we may be deploying dozens of pods. We have the option of pausing a rollout, which allows
+multiple versions of a deployment to exist. This enables users to perform rudimentary canary testing by enabling some
+amount of traffic to go to a new pod and observing the behavior. If the behavior is acceptable, the rollout may be
+unpaused and completed.</p>
+<p>Try to pause a rollout. For our small test it is hard to pause in time, so chain the commands to hopefully catch it in
+the act:</p>
+<pre class="hljs"><code><div>~/dep$ kubectl set image deploy website podweb=nginx:1.7.9; kubectl rollout pause deploy website
+
+deployment.apps/website image updated
+deployment.apps/website paused
+
+~/dep$
+</div></code></pre>
+<pre class="hljs"><code><div>~/dep$ kubectl get rs
+
+NAME                 DESIRED   CURRENT   READY   AGE
+website-76bc5bdf5d   3         3         3       2m52s
+website-86895ff58d   1         1         1       5m40s
+
+~/dep$
+</div></code></pre>
+<p>It worked! You can see that the original 1.7.9 replicaSet and the 1.9.1 replicaSets both have pods running, despite
+running the <code>kubectl set</code> command.</p>
+<p>Check the deployment status with <code>kubectl rollout</code>. Since <code>kubectl rollout</code> will watch for the change, you will need to
+back out of the command with CTRL C:</p>
+<pre class="hljs"><code><div>~/dep$ kubectl rollout status deployment website
+
+Waiting for deployment &quot;website&quot; rollout to finish: 1 out of 3 new replicas have been updated...
+
+^C
+
+~/dep$
+</div></code></pre>
+<p>To resume the rollout, you can use the <code>resume</code> subcommand for <code>kubectl rollout</code>:</p>
+<pre class="hljs"><code><div>~/dep$ kubectl rollout resume deploy website &amp;&amp; kubectl rollout status deployment website
+
+deployment.apps/website resumed
+Waiting for deployment &quot;website&quot; rollout to finish: 1 out of 3 new replicas have been updated...
+Waiting for deployment &quot;website&quot; rollout to finish: 2 out of 3 new replicas have been updated...
+Waiting for deployment &quot;website&quot; rollout to finish: 2 out of 3 new replicas have been updated...
+Waiting for deployment &quot;website&quot; rollout to finish: 2 out of 3 new replicas have been updated...
+Waiting for deployment &quot;website&quot; rollout to finish: 1 old replicas are pending termination...
+Waiting for deployment &quot;website&quot; rollout to finish: 1 old replicas are pending termination...
+deployment &quot;website&quot; successfully rolled out
+
+~/dep$
+</div></code></pre>
+<p>Now check the replicaSets to see if they have successfully replaced each other:</p>
+<pre class="hljs"><code><div>~/dep$ kubectl get rs
+
+NAME                 DESIRED   CURRENT   READY   AGE
+website-76bc5bdf5d   0         0         0       3m18s
+website-86895ff58d   3         3         3       6m6s
+
+~/dep$
+</div></code></pre>
+<p>There are no more nginx pods running version 1.9.1, only 1.7.9.</p>
+<p>Delete your deployment:</p>
+<pre class="hljs"><code><div>~/dep$ kubectl delete deploy website
+
+deployment.apps &quot;website&quot; deleted
+
+~/dep$
+</div></code></pre>
+<h3 id="9-clean-up">9. Clean Up</h3>
+<p>Use <code>kubectl get all</code> to view any remaining deployments or pods and make sure to delete all of those remaining
+resources. Only the <code>kubernetes</code> service should remain:</p>
+<pre class="hljs"><code><div>~/dep$ kubectl get all
+
+NAME                 TYPE        CLUSTER-IP   EXTERNAL-IP   PORT(S)   AGE
+service/kubernetes   ClusterIP   10.96.0.1    &lt;none&gt;        443/TCP   143m
+
+~/dep$
+</div></code></pre>
+<h3 id="101-challenge-labels">10.1. CHALLENGE: labels</h3>
+<p>Recreate the website deployment, the cache-pod, and dev-pod resources from earlier in the lab:</p>
+<pre class="hljs"><code><div>~/dep$ cd ~/dep
+
+~/dep$ kubectl apply -f ~/dep/mydep.yaml
+
+deployment.apps/website created
+
+~/dep$ kubectl run cache-pod -l app=cache --image redis
+
+pod/cache-pod created
+
+~/dep$ kubectl run dev-pod -l targetenv=dev --image httpd:2.2
+
+pod/dev-pod created
+
+~/dep$
+</div></code></pre>
+<ul>
+<li>Run a pod named <code>labelpod</code> with the label <code>targetenv=prod</code> and a container from <code>nginx:1.7.9</code></li>
+<li>Enter a command to display all of the pods with either the “demo” or “prod” value for targetenv</li>
+<li>Find all pods other than those with the “demo” or “prod” value for targetenv</li>
+<li>Enter a command to display all of the pods with either the “demo” or “prod” value for targetenv and the app key
+set to website</li>
+<li>Delete the pods you created for this challenge at the end</li>
+</ul>
+<h3 id="102-challenge-deployments">10.2. Challenge: Deployments</h3>
+<ul>
+<li>
+<p>Create a deployment named <code>webserver-special</code></p>
+<ul>
+<li>Ensure the deployment is labeled with <code>app=commerce</code>, <code>vendor=student-tech</code>, <code>component=webserver</code></li>
+<li>The deployment should maintain 3 pods that have the labels <code>component=webserver</code> and <code>server=nginx</code> present</li>
+<li>The containers of pods in the deployment should be created from the <code>nginx:1.20.1</code> image</li>
+</ul>
+</li>
+<li>
+<p>After creating the deployment, modify it so its pods:</p>
+<ul>
+<li>run from the <code>nginx:1.23.2</code> image</li>
+<li>Have the environment variable <code>HTTPD_PROXY=main</code></li>
+<li>Have 5 copies instead of 3</li>
+</ul>
+</li>
+<li>
+<p>What is different about the pods now in <code>kubectl get</code>?</p>
+</li>
+<li>
+<p>Delete the deployment when finished</p>
+</li>
+</ul>
+<br>
+<p>Congratulations you have completed the lab!</p>
+<br>
+<p><em>Copyright (c) 2023-2024 RX-M LLC, Cloud Native &amp; AI Training and Consulting, all rights reserved</em></p>
+
+</body>
+</html>

@@ -1,0 +1,909 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>rx-m-containers-k8s-accelerated-lab01.md</title>
+<meta http-equiv="Content-type" content="text/html;charset=UTF-8">
+
+<style>
+/* https://github.com/microsoft/vscode/blob/master/extensions/markdown-language-features/media/markdown.css */
+/*---------------------------------------------------------------------------------------------
+ *  Copyright (c) Microsoft Corporation. All rights reserved.
+ *  Licensed under the MIT License. See License.txt in the project root for license information.
+ *--------------------------------------------------------------------------------------------*/
+
+body {
+	font-family: var(--vscode-markdown-font-family, -apple-system, BlinkMacSystemFont, "Segoe WPC", "Segoe UI", "Ubuntu", "Droid Sans", sans-serif);
+	font-size: var(--vscode-markdown-font-size, 14px);
+	padding: 0 26px;
+	line-height: var(--vscode-markdown-line-height, 22px);
+	word-wrap: break-word;
+}
+
+#code-csp-warning {
+	position: fixed;
+	top: 0;
+	right: 0;
+	color: white;
+	margin: 16px;
+	text-align: center;
+	font-size: 12px;
+	font-family: sans-serif;
+	background-color:#444444;
+	cursor: pointer;
+	padding: 6px;
+	box-shadow: 1px 1px 1px rgba(0,0,0,.25);
+}
+
+#code-csp-warning:hover {
+	text-decoration: none;
+	background-color:#007acc;
+	box-shadow: 2px 2px 2px rgba(0,0,0,.25);
+}
+
+body.scrollBeyondLastLine {
+	margin-bottom: calc(100vh - 22px);
+}
+
+body.showEditorSelection .code-line {
+	position: relative;
+}
+
+body.showEditorSelection .code-active-line:before,
+body.showEditorSelection .code-line:hover:before {
+	content: "";
+	display: block;
+	position: absolute;
+	top: 0;
+	left: -12px;
+	height: 100%;
+}
+
+body.showEditorSelection li.code-active-line:before,
+body.showEditorSelection li.code-line:hover:before {
+	left: -30px;
+}
+
+.vscode-light.showEditorSelection .code-active-line:before {
+	border-left: 3px solid rgba(0, 0, 0, 0.15);
+}
+
+.vscode-light.showEditorSelection .code-line:hover:before {
+	border-left: 3px solid rgba(0, 0, 0, 0.40);
+}
+
+.vscode-light.showEditorSelection .code-line .code-line:hover:before {
+	border-left: none;
+}
+
+.vscode-dark.showEditorSelection .code-active-line:before {
+	border-left: 3px solid rgba(255, 255, 255, 0.4);
+}
+
+.vscode-dark.showEditorSelection .code-line:hover:before {
+	border-left: 3px solid rgba(255, 255, 255, 0.60);
+}
+
+.vscode-dark.showEditorSelection .code-line .code-line:hover:before {
+	border-left: none;
+}
+
+.vscode-high-contrast.showEditorSelection .code-active-line:before {
+	border-left: 3px solid rgba(255, 160, 0, 0.7);
+}
+
+.vscode-high-contrast.showEditorSelection .code-line:hover:before {
+	border-left: 3px solid rgba(255, 160, 0, 1);
+}
+
+.vscode-high-contrast.showEditorSelection .code-line .code-line:hover:before {
+	border-left: none;
+}
+
+img {
+	max-width: 100%;
+	max-height: 100%;
+}
+
+a {
+	text-decoration: none;
+}
+
+a:hover {
+	text-decoration: underline;
+}
+
+a:focus,
+input:focus,
+select:focus,
+textarea:focus {
+	outline: 1px solid -webkit-focus-ring-color;
+	outline-offset: -1px;
+}
+
+hr {
+	border: 0;
+	height: 2px;
+	border-bottom: 2px solid;
+}
+
+h1 {
+	padding-bottom: 0.3em;
+	line-height: 1.2;
+	border-bottom-width: 1px;
+	border-bottom-style: solid;
+}
+
+h1, h2, h3 {
+	font-weight: normal;
+}
+
+table {
+	border-collapse: collapse;
+}
+
+table > thead > tr > th {
+	text-align: left;
+	border-bottom: 1px solid;
+}
+
+table > thead > tr > th,
+table > thead > tr > td,
+table > tbody > tr > th,
+table > tbody > tr > td {
+	padding: 5px 10px;
+}
+
+table > tbody > tr + tr > td {
+	border-top: 1px solid;
+}
+
+blockquote {
+	margin: 0 7px 0 5px;
+	padding: 0 16px 0 10px;
+	border-left-width: 5px;
+	border-left-style: solid;
+}
+
+code {
+	font-family: Menlo, Monaco, Consolas, "Droid Sans Mono", "Courier New", monospace, "Droid Sans Fallback";
+	font-size: 1em;
+	line-height: 1.357em;
+}
+
+body.wordWrap pre {
+	white-space: pre-wrap;
+}
+
+pre:not(.hljs),
+pre.hljs code > div {
+	padding: 16px;
+	border-radius: 3px;
+	overflow: auto;
+}
+
+pre code {
+	color: var(--vscode-editor-foreground);
+	tab-size: 4;
+}
+
+/** Theming */
+
+.vscode-light pre {
+	background-color: rgba(220, 220, 220, 0.4);
+}
+
+.vscode-dark pre {
+	background-color: rgba(10, 10, 10, 0.4);
+}
+
+.vscode-high-contrast pre {
+	background-color: rgb(0, 0, 0);
+}
+
+.vscode-high-contrast h1 {
+	border-color: rgb(0, 0, 0);
+}
+
+.vscode-light table > thead > tr > th {
+	border-color: rgba(0, 0, 0, 0.69);
+}
+
+.vscode-dark table > thead > tr > th {
+	border-color: rgba(255, 255, 255, 0.69);
+}
+
+.vscode-light h1,
+.vscode-light hr,
+.vscode-light table > tbody > tr + tr > td {
+	border-color: rgba(0, 0, 0, 0.18);
+}
+
+.vscode-dark h1,
+.vscode-dark hr,
+.vscode-dark table > tbody > tr + tr > td {
+	border-color: rgba(255, 255, 255, 0.18);
+}
+
+</style>
+
+<style>
+/* Tomorrow Theme */
+/* http://jmblog.github.com/color-themes-for-google-code-highlightjs */
+/* Original theme - https://github.com/chriskempson/tomorrow-theme */
+
+/* Tomorrow Comment */
+.hljs-comment,
+.hljs-quote {
+	color: #8e908c;
+}
+
+/* Tomorrow Red */
+.hljs-variable,
+.hljs-template-variable,
+.hljs-tag,
+.hljs-name,
+.hljs-selector-id,
+.hljs-selector-class,
+.hljs-regexp,
+.hljs-deletion {
+	color: #c82829;
+}
+
+/* Tomorrow Orange */
+.hljs-number,
+.hljs-built_in,
+.hljs-builtin-name,
+.hljs-literal,
+.hljs-type,
+.hljs-params,
+.hljs-meta,
+.hljs-link {
+	color: #f5871f;
+}
+
+/* Tomorrow Yellow */
+.hljs-attribute {
+	color: #eab700;
+}
+
+/* Tomorrow Green */
+.hljs-string,
+.hljs-symbol,
+.hljs-bullet,
+.hljs-addition {
+	color: #718c00;
+}
+
+/* Tomorrow Blue */
+.hljs-title,
+.hljs-section {
+	color: #4271ae;
+}
+
+/* Tomorrow Purple */
+.hljs-keyword,
+.hljs-selector-tag {
+	color: #8959a8;
+}
+
+.hljs {
+	display: block;
+	overflow-x: auto;
+	color: #4d4d4c;
+	padding: 0.5em;
+}
+
+.hljs-emphasis {
+	font-style: italic;
+}
+
+.hljs-strong {
+	font-weight: bold;
+}
+</style>
+
+<style>
+/*
+ * Markdown PDF CSS
+ */
+
+ body {
+	font-family: -apple-system, BlinkMacSystemFont, "Segoe WPC", "Segoe UI", "Ubuntu", "Droid Sans", sans-serif, "Meiryo";
+	padding: 0 12px;
+}
+
+pre {
+	background-color: #f8f8f8;
+	border: 1px solid #cccccc;
+	border-radius: 3px;
+	overflow-x: auto;
+	white-space: pre-wrap;
+	overflow-wrap: break-word;
+}
+
+pre:not(.hljs) {
+	padding: 23px;
+	line-height: 19px;
+}
+
+blockquote {
+	background: rgba(127, 127, 127, 0.1);
+	border-color: rgba(0, 122, 204, 0.5);
+}
+
+.emoji {
+	height: 1.4em;
+}
+
+code {
+	font-size: 14px;
+	line-height: 19px;
+}
+
+/* for inline code */
+:not(pre):not(.hljs) > code {
+	color: #C9AE75; /* Change the old color so it seems less like an error */
+	font-size: inherit;
+}
+
+/* Page Break : use <div class="page"/> to insert page break
+-------------------------------------------------------- */
+.page {
+	page-break-after: always;
+}
+
+</style>
+
+<script src="https://unpkg.com/mermaid/dist/mermaid.min.js"></script>
+</head>
+<body>
+  <script>
+    mermaid.initialize({
+      startOnLoad: true,
+      theme: document.body.classList.contains('vscode-dark') || document.body.classList.contains('vscode-high-contrast')
+          ? 'dark'
+          : 'default'
+    });
+  </script>
+<p><img src="https://rx-m.com/rxm-cnc.svg" alt="RX-M, llc."></p>
+<h1 id="containers">Containers</h1>
+<h2 id="containers-overview">Containers Overview</h2>
+<p>Container orchestration systems like Kubernetes depend on the underlying container technology of the operating system
+and, in the case of Kubernetes, a pluggable container manager.</p>
+<p>Docker is an open-source software system that automates the deployment of application processes inside software
+containers. Containers abstract an application's operating environment from the underlying operating system. Containers
+use the resource constraints and isolation features of the Linux kernel, such as cgroups and namespaces, allowing many
+diverse containers to run within a single Linux instance without resource contention. Containers eliminate the overhead
+and startup latency of a full virtual machine while preserving most of the isolation benefits. In recent years Windows
+has replicated most of the features found in Linux containers, making Windows a viable platform for container
+technology and a supported Kubernetes worker node OS.</p>
+<p>Docker can package an application and its dependencies into a Container Image, which can then be used to launch
+containerized processes on any compatible system. This enables applications to run reliably across a number of OS
+versions and distributions with various configurations in a range of cloud settings.</p>
+<p>In this lab we will install and test Docker Community Edition on the RX-M cloud supplied virtual machine. The lab VM is
+an Ubuntu server available via an SSH connection. If you need help setting up an ssh client, some instructions can be
+found here: https://github.com/RX-M/classfiles/blob/master/ssh-setup.md</p>
+<p>The Lab system user account is &quot;ubuntu&quot;; this user has full sudo permissions.</p>
+<h3 id="1-connect-to-the-lab-vm">1. Connect to the lab VM</h3>
+<p>You will be assigned an AWS workstation IP address and SSH key to complete the labs in this course.</p>
+<p>To access your instance:</p>
+<p>Open an SSH client in a Terminal on MacOS or Putty/MobaXterm/CMD/PowerShell/GitBash on Windows. Locate your private key
+file (e.g. key.pem). Your key must not be publicly viewable for SSH to work; use the command <code>chmod 400 key.pem</code> if
+needed:</p>
+<pre class="hljs"><code><div>@laptop:~$ chmod 400 \path-to-ssh-key\key.pem
+</div></code></pre>
+<p>Then, connect to your instance using its IP Address, username <code>ubuntu</code> and your SSH key. The <code>-i</code> option tells ssh to
+use the specified identify file (private key). e.g. <code>ssh -i \path-to-ssh-key\key.pem ubuntu@&lt;IP&gt;</code>.</p>
+<pre class="hljs"><code><div>@laptop:~$ ssh -i \path-to-ssh-key\key.pem ubuntu@55.55.55.55
+
+The authenticity of host '55.55.55.55 (55.55.55.55)' can't be established.
+ECDSA key fingerprint is SHA256:PKRtJDb4CvjAq4Hh7qpISyZQdPXw3oc5QcJFRzhRkuQ.
+Are you sure you want to continue connecting (yes/no)? yes
+
+...
+
+~$
+</div></code></pre>
+<p>When your prompt changes to something like <code>ubuntu@ip-172-31-4-159:~$</code> you are connected to the lab VM.</p>
+<h3 id="2-install-docker">2.  Install Docker</h3>
+<p>Docker provides a convenience script to install the latest version of Docker. It is not recommended to use in a
+production environment, however, it is simple and fast for testing and experimentation. Install docker on your
+lab system using the get.docker.com install script:</p>
+<blockquote>
+<p>DO NOT follow the instructions provided by the script's output!</p>
+</blockquote>
+<pre class="hljs"><code><div>~$ wget -qO - https://get.docker.com/ | sh
+
+# Executing docker install script, commit: e5543d473431b782227f8908005543bb4389b8de
++ sudo -E sh -c apt-get update -qq &gt;/dev/null
++ sudo -E sh -c DEBIAN_FRONTEND=noninteractive apt-get install -y -qq apt-transport-https ca-certificates curl &gt;/dev/null
++ sudo -E sh -c install -m 0755 -d /etc/apt/keyrings
++ sudo -E sh -c curl -fsSL &quot;https://download.docker.com/linux/ubuntu/gpg&quot; | gpg --dearmor --yes -o /etc/apt/keyrings/docker.gpg
++ sudo -E sh -c chmod a+r /etc/apt/keyrings/docker.gpg
++ sudo -E sh -c echo &quot;deb [arch=amd64 signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/ubuntu jammy stable&quot; &gt; /etc/apt/sources.list.d/docker.list
++ sudo -E sh -c apt-get update -qq &gt;/dev/null
++ sudo -E sh -c DEBIAN_FRONTEND=noninteractive apt-get install -y -qq docker-ce docker-ce-cli containerd.io docker-compose-plugin docker-ce-rootless-extras docker-buildx-plugin &gt;/dev/null
++ sudo -E sh -c docker version
+Client: Docker Engine - Community
+ Version:           24.0.7
+ API version:       1.43
+ Go version:        go1.20.10
+ Git commit:        afdd53b
+ Built:             Thu Oct 26 09:07:41 2023
+ OS/Arch:           linux/amd64
+ Context:           default
+
+Server: Docker Engine - Community
+ Engine:
+  Version:          24.0.7
+  API version:      1.43 (minimum version 1.12)
+  Go version:       go1.20.10
+  Git commit:       311b9ff
+  Built:            Thu Oct 26 09:07:41 2023
+  OS/Arch:          linux/amd64
+  Experimental:     false
+ containerd:
+  Version:          1.6.27
+  GitCommit:        a1496014c916f9e62104b33d1bb5bd03b0858e59
+ runc:
+  Version:          1.1.11
+  GitCommit:        v1.1.11-0-g4bccb38
+ docker-init:
+  Version:          0.19.0
+  GitCommit:        de40ad0
+
+================================================================================
+
+To run Docker as a non-privileged user, consider setting up the
+Docker daemon in rootless mode for your user:
+
+    dockerd-rootless-setuptool.sh install
+
+Visit https://docs.docker.com/go/rootless/ to learn about rootless mode.
+
+
+To run the Docker daemon as a fully privileged service, but granting non-root
+users access, refer to https://docs.docker.com/go/daemon-access/
+
+WARNING: Access to the remote API on a privileged Docker daemon is equivalent
+         to root access on the host. Refer to the 'Docker daemon attack surface'
+         documentation for details: https://docs.docker.com/go/attack-surface/
+
+================================================================================
+
+~$
+</div></code></pre>
+<p>For our in-class purposes, eliminating the need for <code>sudo</code> execution of the <code>docker</code> command will simplify our practice
+sessions--but setting up docker for rootless access (as the script suggests) would be overly complicated. The easiest
+way to make it possible to connect to the local Docker daemon without <code>sudo</code> is to add our user id to the <em>docker</em>
+group. To add your user to the <em>docker</em> group execute the following command:</p>
+<pre class="hljs"><code><div>~$ sudo usermod -aG docker $(whoami)
+
+~$
+</div></code></pre>
+<p>Even though the <em>docker</em> group was added to your user's group list, your login shell maintains the old groups. After
+updating your user groups you will need to restart your login shell to ensure the changes take effect.</p>
+<p>In the lab system the easiest approach is to logout at the command line:</p>
+<pre class="hljs"><code><div>~$ exit
+
+logout
+Connection to 55.55.55.55 closed.
+
+@laptop:~$
+</div></code></pre>
+<p>Log back in as <em>ubuntu</em> with the SSH key:</p>
+<pre class="hljs"><code><div>@laptop:~$ ssh -i \path-to-ssh-key\key.pem ubuntu@55.55.55.55
+
+...
+
+~$
+</div></code></pre>
+<p>After logging back in, check to see that your user shell session is now a part of the <em>docker</em> group:</p>
+<pre class="hljs"><code><div>~$ id
+
+uid=1000(ubuntu) gid=1000(ubuntu) groups=1000(ubuntu),4(adm),20(dialout),24(cdrom),25(floppy),27(sudo),29(audio),30(dip),44(video),46(plugdev),119(netdev),120(lxd),999(docker)
+
+~$
+</div></code></pre>
+<p>Great. Your current shell, and any new shell sessions, can now use the <code>docker</code> command without sudo.</p>
+<h3 id="3-verify-the-installation">3. Verify the installation</h3>
+<p>Verify that the Docker server (aka. daemon, aka. engine) is running by checking the version of all parts of the Docker
+platform with the <code>docker version</code> subcommand:</p>
+<pre class="hljs"><code><div>~$ docker version
+
+Client: Docker Engine - Community
+ Version:           24.0.7
+ API version:       1.43
+ Go version:        go1.20.10
+ Git commit:        afdd53b
+ Built:             Thu Oct 26 09:07:41 2023
+ OS/Arch:           linux/amd64
+ Context:           default
+
+Server: Docker Engine - Community
+ Engine:
+  Version:          24.0.7
+  API version:      1.43 (minimum version 1.12)
+  Go version:       go1.20.10
+  Git commit:       311b9ff
+  Built:            Thu Oct 26 09:07:41 2023
+  OS/Arch:          linux/amd64
+  Experimental:     false
+ containerd:
+  Version:          1.6.27
+  GitCommit:        a1496014c916f9e62104b33d1bb5bd03b0858e59
+ runc:
+  Version:          1.1.11
+  GitCommit:        v1.1.11-0-g4bccb38
+ docker-init:
+  Version:          0.19.0
+  GitCommit:        de40ad0
+
+~$
+</div></code></pre>
+<p>The client version information is listed first followed by the server version information.</p>
+<p>You can also use the Docker client to retrieve basic platform information from the Docker daemon:</p>
+<pre class="hljs"><code><div>~$ docker system info
+
+Client: Docker Engine - Community
+ Version:    24.0.7
+ Context:    default
+ Debug Mode: false
+ Plugins:
+  buildx: Docker Buildx (Docker Inc.)
+    Version:  v0.11.2
+    Path:     /usr/libexec/docker/cli-plugins/docker-buildx
+  compose: Docker Compose (Docker Inc.)
+    Version:  v2.21.0
+    Path:     /usr/libexec/docker/cli-plugins/docker-compose
+
+Server:
+ Containers: 0
+  Running: 0
+  Paused: 0
+  Stopped: 0
+ Images: 0
+ Server Version: 24.0.7
+ Storage Driver: overlay2
+  Backing Filesystem: extfs
+  Supports d_type: true
+  Using metacopy: false
+  Native Overlay Diff: true
+  userxattr: false
+ Logging Driver: json-file
+ Cgroup Driver: systemd
+ Cgroup Version: 2
+ Plugins:
+  Volume: local
+  Network: bridge host ipvlan macvlan null overlay
+  Log: awslogs fluentd gcplogs gelf journald json-file local logentries splunk syslog
+ Swarm: inactive
+ Runtimes: io.containerd.runc.v2 runc
+ Default Runtime: runc
+ Init Binary: docker-init
+ containerd version: a1496014c916f9e62104b33d1bb5bd03b0858e59
+ runc version: v1.1.11-0-g4bccb38
+ init version: de40ad0
+ Security Options:
+  apparmor
+  seccomp
+   Profile: builtin
+  cgroupns
+ Kernel Version: 6.2.0-1017-aws
+ Operating System: Ubuntu 22.04.3 LTS
+ OSType: linux
+ Architecture: x86_64
+ CPUs: 2
+ Total Memory: 3.769GiB
+ Name: ip-172-31-4-161
+ ID: a0f317cc-1e20-465c-bcad-bdb88ac30860
+ Docker Root Dir: /var/lib/docker
+ Debug Mode: false
+ Experimental: false
+ Insecure Registries:
+  127.0.0.0/8
+ Live Restore Enabled: false
+
+~$
+</div></code></pre>
+<p>Food for thought:</p>
+<ul>
+<li>What version of Docker is your <code>docker</code> command line client?</li>
+<li>How many containers are running on the server?</li>
+<li>What version of Docker is your Docker Engine?</li>
+<li>What is the Logging Driver in use by your Docker Engine?</li>
+<li>What is the Storage Driver in use by your Docker Engine?
+<ul>
+<li>Does the word &quot;Driver&quot; make you think that these components can be substituted?</li>
+</ul>
+</li>
+<li>Is the server in debug mode?</li>
+<li>What is the Docker Engine root directory?</li>
+</ul>
+<h3 id="4-run-a-container">4. Run a container</h3>
+<p>As a final lab step we will run our first container. Use the <code>docker container run</code> command to run the hello image:</p>
+<pre class="hljs"><code><div>~$ docker container run rxmllc/hello
+
+Unable to find image 'rxmllc/hello:latest' locally
+latest: Pulling from rxmllc/hello
+9fb6c798fa41: Pull complete
+3b61febd4aef: Pull complete
+9d99b9777eb0: Pull complete
+d010c8cf75d7: Pull complete
+7fac07fb303e: Pull complete
+5c9b4d01f863: Pull complete
+Digest: sha256:0067dc15bd7573070d5590a0324c3b4e56c5238032023e962e38675443e6a7cb
+Status: Downloaded newer image for rxmllc/hello:latest
+ _________________________________
+/ RX-M - Cloud Native Consulting! \
+\ rx-m.com                        /
+ ---------------------------------
+        \   ^__^
+         \  (oo)\_______
+            (__)\       )\/\
+                ||----w |
+                ||     ||
+
+~$
+</div></code></pre>
+<p>You now have a working Docker installation!</p>
+<p>Food for thought:</p>
+<ul>
+<li>What kind of program created the container output?
+<ul>
+<li>Does it matter?</li>
+</ul>
+</li>
+<li>What operating environment existed inside the container when it ran?
+<ul>
+<li>Does it matter?</li>
+</ul>
+</li>
+<li>Did the Docker engine run the container from a hello image it found locally?</li>
+<li>In the Docker output the &quot;hello&quot; image is listed with a suffix, what is the suffix?
+<ul>
+<li>What do you think this suffix represents?</li>
+</ul>
+</li>
+<li>In the Docker output the &quot;hello&quot; image is listed with a prefix followed by a slash, what is the prefix?
+<ul>
+<li>What do you think this prefix represents?</li>
+</ul>
+</li>
+</ul>
+<h3 id="5-run-a-container-in-the-background">5. Run a container in the background</h3>
+<p>When processes are run in the background they are often referred to as daemons. You can run containers in the background
+as daemons with the <code>docker container run -d</code> command. The <em>-d</em> switch stands for &quot;detached&quot; and runs the container
+detached from your shell’s input and output.</p>
+<p>Imagine we have a service and that its job is to log data to STDOUT every 10 seconds. We can run this service in the
+background with the <code>-d</code> switch. Execute the following Docker command:</p>
+<pre class="hljs"><code><div>~$ docker container run -d --name c1 ubuntu:20.04 \
+/bin/sh -c &quot;while true; do echo 'hello Docker'; sleep 10; done&quot;
+
+Unable to find image 'ubuntu:20.04' locally
+20.04: Pulling from library/ubuntu
+527f5363b98e: Pull complete
+Digest: sha256:f2034e7195f61334e6caff6ecf2e965f92d11e888309065da85ff50c617732b8
+Status: Downloaded newer image for ubuntu:20.04
+ac698b8c2d395e5a1e2871a9eca50fb23bc6a8d05f0f2ecd2efe91a83342e06a
+
+~$
+</div></code></pre>
+<p>Let's break down the command above:</p>
+<ul>
+<li><code>docker</code> - invokes the docker CLI tool which makes API calls to the docker daemon</li>
+<li><code>container run</code> - the docker subcommand that creates and starts a containerized process</li>
+<li><code>-d</code> - run the containerized process &quot;detached&quot; in the background</li>
+<li><code>--name c1</code> - name our container</li>
+<li><code>ubuntu:20.04</code> - the image to use when launching the containerized process (contains the root filesystem for the process)</li>
+<li><code>/bin/sh -c &quot;while true; do echo 'hello Docker'; sleep 10; done&quot;</code> - runs a shell to process a short script</li>
+</ul>
+<p>Thus our containerized shell will simply echo 'hello Docker' every 10 seconds.</p>
+<p>Display the running containers:</p>
+<pre class="hljs"><code><div>~$ docker container ls
+
+CONTAINER ID   IMAGE          COMMAND                  CREATED          STATUS          PORTS     NAMES
+ac698b8c2d39   ubuntu:20.04   &quot;/bin/sh -c 'while t…&quot;   12 seconds ago   Up 10 seconds             c1
+
+~$
+</div></code></pre>
+<p>You should see the new container running in the background.</p>
+<p>The <code>docker container logs</code> subcommand can display the output of a background container. Display the STDOUT log for the
+container you started above by passing the name (<code>c1</code>) of the container:</p>
+<pre class="hljs"><code><div>~$ docker container logs c1
+
+hello Docker
+hello Docker
+hello Docker
+hello Docker
+
+
+~$
+</div></code></pre>
+<h3 id="51-challenge-logs">5.1. CHALLENGE: logs</h3>
+<ul>
+<li>Get help on the <code>docker container logs</code> subcommand</li>
+<li>Display the container log data with timestamps added</li>
+<li>Use the &quot;follow&quot; option to continuously display the log output of the container</li>
+</ul>
+<h3 id="6-nginx-container-as-a-service">6. NGINX container as a service</h3>
+<p>Next let’s run an actual service within a container. Nginx is a popular web server with an available image on Docker
+Hub. Run an Nginx container instance:</p>
+<pre class="hljs"><code><div>~$ docker container run -d --name c2 nginx:1.20
+
+Unable to find image 'nginx:1.20' locally
+1.20: Pulling from library/nginx
+f7ec5a41d630: Pull complete
+d064bcebeb06: Pull complete
+975c0a9d7b94: Pull complete
+1384c783a2a3: Pull complete
+a0f1673d45e1: Pull complete
+fc05b7dad2e3: Pull complete
+Digest: sha256:c1e6c074ac4f7a543d5a55379ba7bb0d331961b9deca1bc5c5902ef0a354a63d
+Status: Downloaded newer image for nginx:1.20
+8fbca366157fd7503205760bb80342797e3ff3bb7e2a0d44fa81b18211743fa2
+
+~$
+</div></code></pre>
+<p>By default, containers run processes using the same kernel as the host. This means that any suitably privileged
+environment (like the host) can still see the processes in the container.</p>
+<p>Use the <code>docker container top</code> subcommand to display the processes running within the container:</p>
+<pre class="hljs"><code><div>~$ docker container top c2
+
+UID                 PID                 PPID                C                   STIME               TTY                 TIME                CMD
+root                9149                9125                0                   00:17               ?                   00:00:00            nginx: master process nginx -g daemon off;
+systemd+            9199                9149                0                   00:17               ?                   00:00:00            nginx: worker process
+systemd+            9200                9149                0                   00:17               ?                   00:00:00            nginx: worker process
+
+~$
+</div></code></pre>
+<p>Using <code>top</code> allows you to see how the host sees the containerized process.</p>
+<p>Imagine you are a BSD Unix fan and prefer an &quot;aux&quot; style <code>ps</code> output to the default <code>top</code> output. You can have <code>top</code>
+display any <code>ps</code> style you like by simply including the <em>ps</em> options after the container ID/Name. For example:</p>
+<pre class="hljs"><code><div>~$ docker container top c2 aux
+
+USER                PID                 %CPU                %MEM                VSZ                 RSS                 TTY                 STAT                START               TIME                COMMAND
+root                9149                0.0                 0.1                 8680                6016                ?                   Ss                  00:17               0:00                nginx: master process nginx -g daemon off;
+systemd+            9199                0.0                 0.0                 9084                2640                ?                   S                   00:17               0:00                nginx: worker process
+systemd+            9200                0.0                 0.0                 9084                2640                ?                   S                   00:17               0:00                nginx: worker process
+
+~$
+</div></code></pre>
+<h3 id="61-challenge-top">6.1. CHALLENGE: top</h3>
+<ul>
+<li>Run the top command with the <code>-t</code> ps switch</li>
+<li>Run the top command with the <code>-w</code> ps switch</li>
+<li>Try your own favorite ps switches with <code>docker container top</code></li>
+<li>Learn more here https://docs.docker.com/engine/reference/commandline/top/</li>
+<li>And even more here <code>man ps</code> (especially when to use '-' or not)</li>
+</ul>
+<h3 id="7-container-exec">7. Container exec</h3>
+<p>The &quot;container&quot; concept is implemented by the Linux kernel using namespaces and cgroups. Many processes can run within
+the isolation/constraints of the same &quot;container&quot;. Notice that the previous Nginx container has no shell running within
+it. This is typical of service/microservice containers. You can still launch a shell within the container to perform
+diagnostics using the <code>docker container exec</code> subcommand.</p>
+<p>Run a new interactive shell within the Nginx container:</p>
+<pre class="hljs"><code><div>~$ docker container exec -it c2 /bin/sh
+
+#
+</div></code></pre>
+<p>This launches a new process inside the container. The primary process will continue to run uninterrupted. This is in
+contrast to <code>docker container attach</code> which gives you control over (and the potential to interrupt) the primary process
+in the container.</p>
+<p>Now list all of the processes running within the container:</p>
+<pre class="hljs"><code><div># ps -ef
+
+/bin/sh: 1: ps: not found
+
+# apt update &amp;&amp; apt install -y procps
+
+...
+
+# ps -ef
+
+UID          PID    PPID  C STIME TTY          TIME CMD
+root           1       0  0 00:17 ?        00:00:00 nginx: master process nginx -g daemon off;
+nginx         31       1  0 00:17 ?        00:00:00 nginx: worker process
+nginx         32       1  0 00:17 ?        00:00:00 nginx: worker process
+root          33       0  0 00:22 pts/0    00:00:00 /bin/sh
+root         388      33  0 00:24 pts/0    00:00:00 ps -ef
+
+#
+</div></code></pre>
+<p>In this listing we can see the two processes launched with the container and the shell we have launched within the
+container along with the <code>ps</code> command running under the shell.</p>
+<p>Also note that the <code>top</code> command run from the host shows the host relative process ids (the main nginx process id was
+3887 in the above example). Within the container the main nginx process has process id 1. This is the manifestation of
+the container’s process namespace. Processes within a container have one id in the container and another id on the host.</p>
+<p>The first process launched within each container is always process id 1 within the container.</p>
+<p>Display the IP addresses within the container:</p>
+<pre class="hljs"><code><div># ip a show
+
+/bin/sh: 9: ip: not found
+
+# apt install -y iproute2
+
+...
+
+# ip a show
+
+1: lo: &lt;LOOPBACK,UP,LOWER_UP&gt; mtu 65536 qdisc noqueue state UNKNOWN group default qlen 1000
+    link/loopback 00:00:00:00:00:00 brd 00:00:00:00:00:00
+    inet 127.0.0.1/8 scope host lo
+       valid_lft forever preferred_lft forever
+8: eth0@if9: &lt;BROADCAST,MULTICAST,UP,LOWER_UP&gt; mtu 1500 qdisc noqueue state UP group default
+    link/ether 02:42:ac:11:00:03 brd ff:ff:ff:ff:ff:ff link-netnsid 0
+    inet 172.17.0.3/16 brd 172.17.255.255 scope global eth0
+       valid_lft forever preferred_lft forever
+
+#
+</div></code></pre>
+<p>Now exit the container:</p>
+<pre class="hljs"><code><div># exit
+
+~$
+</div></code></pre>
+<p>See if you can request the nginx root web page with <code>wget</code>:</p>
+<pre class="hljs"><code><div>~$ wget -qO- 172.17.0.3 | head
+
+&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+&lt;head&gt;
+&lt;title&gt;Welcome to nginx!&lt;/title&gt;
+&lt;style&gt;
+    body {
+        width: 35em;
+        margin: 0 auto;
+        font-family: Tahoma, Verdana, Arial, sans-serif;
+    }
+
+~$
+</div></code></pre>
+<p>Since the process created by <code>exec</code> is not the primary process, it can safely be exited without disrupting the
+container.</p>
+<h3 id="8-challenge-container-runtime-options">8. CHALLENGE: container runtime options</h3>
+<p>Run <code>docker container run --help</code> and explore available options.</p>
+<p>You have probably noticed that Docker gives random names to containers in the pattern of <code>adjective_noun</code>.
+Use the appropriate options with <code>docker container run</code> to run  a container with the following requirements:</p>
+<ul>
+<li>use the nginx:1.19.0 image</li>
+<li>name the container <code>webserver</code></li>
+<li>run the container in the background</li>
+<li>add an environment variable <code>CHALLENGE=containers</code>
+<ul>
+<li>exec into the container and list the environment variable to confirm it worked</li>
+</ul>
+</li>
+</ul>
+<h3 id="9-removing-containers">9. Removing containers</h3>
+<p>Stopped containers will stay on your system perpetually unless deleted. You can delete unneeded containers with the
+<code>docker container rm</code> subcommand. You can also run interactive containers with the <code>--rm</code> switch, which will cause the
+container to self-delete when you exit the container.</p>
+<p>Execute Docker commands to perform the following:</p>
+<ul>
+<li>Display all (<code>-a</code>) of the containers on your system</li>
+<li>Stop the container via <code>docker container stop &lt;cid | cname&gt;</code></li>
+<li>Remove the container via <code>docker container rm &lt;cid | cname&gt;</code></li>
+<li>What is the <code>--force</code> switch used for on <code>rm</code>, what happens?</li>
+<li>One way to remove all running/stopped containers in one go looks like this:</li>
+</ul>
+<pre class="hljs"><code><div>~$ docker container rm $(docker container stop $(docker container ls -qa))
+
+2f9bb12d95a7
+a56fd796940d
+ac698b8c2d39
+899f194f62db
+
+~$ docker container ls -a
+
+CONTAINER ID   IMAGE     COMMAND   CREATED   STATUS    PORTS     NAMES
+
+~$
+</div></code></pre>
+<br>
+<p>Congratulations you have completed the lab!</p>
+<br>
+<p><em>Copyright (c) 2023-2024 RX-M LLC, Cloud Native &amp; AI Training and Consulting, all rights reserved</em></p>
+
+</body>
+</html>

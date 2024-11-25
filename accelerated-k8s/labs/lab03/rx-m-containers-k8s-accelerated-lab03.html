@@ -1,0 +1,1085 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>rx-m-containers-k8s-accelerated-lab03.md</title>
+<meta http-equiv="Content-type" content="text/html;charset=UTF-8">
+
+<style>
+/* https://github.com/microsoft/vscode/blob/master/extensions/markdown-language-features/media/markdown.css */
+/*---------------------------------------------------------------------------------------------
+ *  Copyright (c) Microsoft Corporation. All rights reserved.
+ *  Licensed under the MIT License. See License.txt in the project root for license information.
+ *--------------------------------------------------------------------------------------------*/
+
+body {
+	font-family: var(--vscode-markdown-font-family, -apple-system, BlinkMacSystemFont, "Segoe WPC", "Segoe UI", "Ubuntu", "Droid Sans", sans-serif);
+	font-size: var(--vscode-markdown-font-size, 14px);
+	padding: 0 26px;
+	line-height: var(--vscode-markdown-line-height, 22px);
+	word-wrap: break-word;
+}
+
+#code-csp-warning {
+	position: fixed;
+	top: 0;
+	right: 0;
+	color: white;
+	margin: 16px;
+	text-align: center;
+	font-size: 12px;
+	font-family: sans-serif;
+	background-color:#444444;
+	cursor: pointer;
+	padding: 6px;
+	box-shadow: 1px 1px 1px rgba(0,0,0,.25);
+}
+
+#code-csp-warning:hover {
+	text-decoration: none;
+	background-color:#007acc;
+	box-shadow: 2px 2px 2px rgba(0,0,0,.25);
+}
+
+body.scrollBeyondLastLine {
+	margin-bottom: calc(100vh - 22px);
+}
+
+body.showEditorSelection .code-line {
+	position: relative;
+}
+
+body.showEditorSelection .code-active-line:before,
+body.showEditorSelection .code-line:hover:before {
+	content: "";
+	display: block;
+	position: absolute;
+	top: 0;
+	left: -12px;
+	height: 100%;
+}
+
+body.showEditorSelection li.code-active-line:before,
+body.showEditorSelection li.code-line:hover:before {
+	left: -30px;
+}
+
+.vscode-light.showEditorSelection .code-active-line:before {
+	border-left: 3px solid rgba(0, 0, 0, 0.15);
+}
+
+.vscode-light.showEditorSelection .code-line:hover:before {
+	border-left: 3px solid rgba(0, 0, 0, 0.40);
+}
+
+.vscode-light.showEditorSelection .code-line .code-line:hover:before {
+	border-left: none;
+}
+
+.vscode-dark.showEditorSelection .code-active-line:before {
+	border-left: 3px solid rgba(255, 255, 255, 0.4);
+}
+
+.vscode-dark.showEditorSelection .code-line:hover:before {
+	border-left: 3px solid rgba(255, 255, 255, 0.60);
+}
+
+.vscode-dark.showEditorSelection .code-line .code-line:hover:before {
+	border-left: none;
+}
+
+.vscode-high-contrast.showEditorSelection .code-active-line:before {
+	border-left: 3px solid rgba(255, 160, 0, 0.7);
+}
+
+.vscode-high-contrast.showEditorSelection .code-line:hover:before {
+	border-left: 3px solid rgba(255, 160, 0, 1);
+}
+
+.vscode-high-contrast.showEditorSelection .code-line .code-line:hover:before {
+	border-left: none;
+}
+
+img {
+	max-width: 100%;
+	max-height: 100%;
+}
+
+a {
+	text-decoration: none;
+}
+
+a:hover {
+	text-decoration: underline;
+}
+
+a:focus,
+input:focus,
+select:focus,
+textarea:focus {
+	outline: 1px solid -webkit-focus-ring-color;
+	outline-offset: -1px;
+}
+
+hr {
+	border: 0;
+	height: 2px;
+	border-bottom: 2px solid;
+}
+
+h1 {
+	padding-bottom: 0.3em;
+	line-height: 1.2;
+	border-bottom-width: 1px;
+	border-bottom-style: solid;
+}
+
+h1, h2, h3 {
+	font-weight: normal;
+}
+
+table {
+	border-collapse: collapse;
+}
+
+table > thead > tr > th {
+	text-align: left;
+	border-bottom: 1px solid;
+}
+
+table > thead > tr > th,
+table > thead > tr > td,
+table > tbody > tr > th,
+table > tbody > tr > td {
+	padding: 5px 10px;
+}
+
+table > tbody > tr + tr > td {
+	border-top: 1px solid;
+}
+
+blockquote {
+	margin: 0 7px 0 5px;
+	padding: 0 16px 0 10px;
+	border-left-width: 5px;
+	border-left-style: solid;
+}
+
+code {
+	font-family: Menlo, Monaco, Consolas, "Droid Sans Mono", "Courier New", monospace, "Droid Sans Fallback";
+	font-size: 1em;
+	line-height: 1.357em;
+}
+
+body.wordWrap pre {
+	white-space: pre-wrap;
+}
+
+pre:not(.hljs),
+pre.hljs code > div {
+	padding: 16px;
+	border-radius: 3px;
+	overflow: auto;
+}
+
+pre code {
+	color: var(--vscode-editor-foreground);
+	tab-size: 4;
+}
+
+/** Theming */
+
+.vscode-light pre {
+	background-color: rgba(220, 220, 220, 0.4);
+}
+
+.vscode-dark pre {
+	background-color: rgba(10, 10, 10, 0.4);
+}
+
+.vscode-high-contrast pre {
+	background-color: rgb(0, 0, 0);
+}
+
+.vscode-high-contrast h1 {
+	border-color: rgb(0, 0, 0);
+}
+
+.vscode-light table > thead > tr > th {
+	border-color: rgba(0, 0, 0, 0.69);
+}
+
+.vscode-dark table > thead > tr > th {
+	border-color: rgba(255, 255, 255, 0.69);
+}
+
+.vscode-light h1,
+.vscode-light hr,
+.vscode-light table > tbody > tr + tr > td {
+	border-color: rgba(0, 0, 0, 0.18);
+}
+
+.vscode-dark h1,
+.vscode-dark hr,
+.vscode-dark table > tbody > tr + tr > td {
+	border-color: rgba(255, 255, 255, 0.18);
+}
+
+</style>
+
+<style>
+/* Tomorrow Theme */
+/* http://jmblog.github.com/color-themes-for-google-code-highlightjs */
+/* Original theme - https://github.com/chriskempson/tomorrow-theme */
+
+/* Tomorrow Comment */
+.hljs-comment,
+.hljs-quote {
+	color: #8e908c;
+}
+
+/* Tomorrow Red */
+.hljs-variable,
+.hljs-template-variable,
+.hljs-tag,
+.hljs-name,
+.hljs-selector-id,
+.hljs-selector-class,
+.hljs-regexp,
+.hljs-deletion {
+	color: #c82829;
+}
+
+/* Tomorrow Orange */
+.hljs-number,
+.hljs-built_in,
+.hljs-builtin-name,
+.hljs-literal,
+.hljs-type,
+.hljs-params,
+.hljs-meta,
+.hljs-link {
+	color: #f5871f;
+}
+
+/* Tomorrow Yellow */
+.hljs-attribute {
+	color: #eab700;
+}
+
+/* Tomorrow Green */
+.hljs-string,
+.hljs-symbol,
+.hljs-bullet,
+.hljs-addition {
+	color: #718c00;
+}
+
+/* Tomorrow Blue */
+.hljs-title,
+.hljs-section {
+	color: #4271ae;
+}
+
+/* Tomorrow Purple */
+.hljs-keyword,
+.hljs-selector-tag {
+	color: #8959a8;
+}
+
+.hljs {
+	display: block;
+	overflow-x: auto;
+	color: #4d4d4c;
+	padding: 0.5em;
+}
+
+.hljs-emphasis {
+	font-style: italic;
+}
+
+.hljs-strong {
+	font-weight: bold;
+}
+</style>
+
+<style>
+/*
+ * Markdown PDF CSS
+ */
+
+ body {
+	font-family: -apple-system, BlinkMacSystemFont, "Segoe WPC", "Segoe UI", "Ubuntu", "Droid Sans", sans-serif, "Meiryo";
+	padding: 0 12px;
+}
+
+pre {
+	background-color: #f8f8f8;
+	border: 1px solid #cccccc;
+	border-radius: 3px;
+	overflow-x: auto;
+	white-space: pre-wrap;
+	overflow-wrap: break-word;
+}
+
+pre:not(.hljs) {
+	padding: 23px;
+	line-height: 19px;
+}
+
+blockquote {
+	background: rgba(127, 127, 127, 0.1);
+	border-color: rgba(0, 122, 204, 0.5);
+}
+
+.emoji {
+	height: 1.4em;
+}
+
+code {
+	font-size: 14px;
+	line-height: 19px;
+}
+
+/* for inline code */
+:not(pre):not(.hljs) > code {
+	color: #C9AE75; /* Change the old color so it seems less like an error */
+	font-size: inherit;
+}
+
+/* Page Break : use <div class="page"/> to insert page break
+-------------------------------------------------------- */
+.page {
+	page-break-after: always;
+}
+
+</style>
+
+<script src="https://unpkg.com/mermaid/dist/mermaid.min.js"></script>
+</head>
+<body>
+  <script>
+    mermaid.initialize({
+      startOnLoad: true,
+      theme: document.body.classList.contains('vscode-dark') || document.body.classList.contains('vscode-high-contrast')
+          ? 'dark'
+          : 'default'
+    });
+  </script>
+<p><img src="https://rx-m.com/rxm-cnc.svg" alt="RX-M, llc."></p>
+<h1 id="kubernetes">Kubernetes</h1>
+<h2 id="kubernetes-setup">Kubernetes Setup</h2>
+<p>Kubernetes is an open-source platform for automating deployment, scaling, and operations of application containers
+across clusters of hosts. Kubernetes seeks to foster an ecosystem of components and tools that relieve the burden of
+running applications in public and private clouds and can run on a range of platforms, from your laptop, to VMs on a
+cloud provider, to racks of bare metal servers.</p>
+<p>In this lab we will setup and explore a minimal Kubernetes cluster. Installation has several prerequisites:</p>
+<ul>
+<li><strong>Linux</strong> – The Kubernetes Control Plane that we will set up only supports Linux at the time of writing. The
+Kubernetes binaries are available as standalone archives or through package managers for most major Linux
+distributions (RHEL/CentOS, Ubuntu, etc.). Worker nodes (ones that run regular workloads) can be Linux or Windows.</li>
+<li><strong>Container Runtime</strong> – A Kubernetes cluster only requires the ability to pull images and run containers. Container
+runtimes like <code>containerd</code> or <code>CRI-O</code> are preferred over container engines like Docker or Podman (which include build
+and networking capabilities that Kubernetes does not require). The latest containerd versions are distributed through
+repositories hosted by Docker under the <code>containerd.io</code> package.</li>
+<li><strong>Kubeadm</strong> - The reference installer that provides an easy interface for initializing, expanding, and upgrading a
+Kubernetes cluster. Kubeadm sets up the following for us:
+<ul>
+<li><strong>etcd</strong> – Kubernetes requires a distributed key/value store to manage discovery and cluster metadata; though
+Kubernetes was originally designed to make this function pluggable, etcd is the only practical option.</li>
+<li><strong>Kubernetes Control Plane</strong> – Kubernetes is a microservice-based system and is composed of several services. The
+Kubelet handles container operations for a given node, the API server supports the main cluster API, etc.</li>
+</ul>
+</li>
+</ul>
+<p>This lab will walk you through a basic Kubernetes installation. The model below illustrates the Kubernetes control plane
+and worker node roles, we will run both on a single system.</p>
+<p><img src="./images/01.png" alt="K8s"></p>
+<p><em>NOTE: Kubernetes requires an Open Container Initiative compliant Container Runtime. If you previously installed Docker,
+skip to section 1!</em></p>
+<h3 id="0-install-docker-support">0. Install Docker support</h3>
+<p>Login to your machine using an ssh client:</p>
+<pre class="hljs"><code><div>@laptop:~$ chmod 400 &lt;class SSH Key&gt;.pem
+
+@laptop:~$ ssh -i &lt;class SSH Key&gt;.pem ubuntu@&lt;your VM IP&gt;
+
+Welcome to Ubuntu 22.04.2 LTS (GNU/Linux 5.15.0-1031-aws x86_64)
+
+...
+
+~$
+</div></code></pre>
+<p>Docker provides a convenience script to install the latest version of Docker. While not recommended for production
+environments, it works for quick installs in testing, dev and lab scenarios. Install <code>docker</code> on your lab system using the
+get.docker.com install script.</p>
+<blockquote>
+<p>DO NOT follow the instructions provided by the script's output!</p>
+</blockquote>
+<pre class="hljs"><code><div>~$ wget -qO - https://get.docker.com/ | sh
+
+# Executing docker install script, commit: 0221adedb4bcde0f3d18bddda023544fc56c29d1
+
+...
+
+~$
+</div></code></pre>
+<p>For our in-class purposes, eliminating the need for <code>sudo</code> execution of the <code>docker</code> command will simplify our practice
+sessions--but setting up docker for rootless access (as the script suggests) would be overly complicated. The easiest
+way to make it possible to connect to the local Docker daemon without <code>sudo</code> is to add our user id to the <em>docker</em>
+group. To add your user to the <em>docker</em> group execute the following command:</p>
+<pre class="hljs"><code><div>~$ sudo usermod -aG docker $(whoami)
+
+~$
+</div></code></pre>
+<p>Even though the <em>docker</em> group was added to your user's group list, your login shell maintains the old groups. After
+updating your user groups you will need to restart your login shell to ensure the changes take effect.</p>
+<p>In the lab system the easiest approach is to logout at the command line:</p>
+<pre class="hljs"><code><div>~$ exit
+
+logout
+
+@laptop:~$
+</div></code></pre>
+<p>Now, simply reconnect:</p>
+<pre class="hljs"><code><div>@laptop:~$ ssh -i &lt;class SSH Key&gt;.pem ubuntu@&lt;your VM IP&gt;
+
+...
+
+~$
+</div></code></pre>
+<p>After logging back in, check to see that your user shell session is now a part of the <em>docker</em> group:</p>
+<pre class="hljs"><code><div>~$ id
+
+uid=1000(ubuntu) gid=1000(ubuntu) groups=1000(ubuntu),4(adm),24(cdrom),27(sudo),30(dip),46(plugdev),116(lxd),125(libvirt),998(docker)
+
+~$
+</div></code></pre>
+<p>Great. Your current shell user, and any new shell sessions, can now use the <code>docker</code> command without elevation.</p>
+<h3 id="1-set-up-the-host">1. Set up the host</h3>
+<p>First we need to address a few host-level Kubernetes installation prerequisites.</p>
+<h4 id="1a-swap-vs-memory-limits">1a. Swap (vs memory limits)</h4>
+<blockquote>
+<p>N.B. On most cloud instances this step is not necessary as swap is typically disabled by default</p>
+</blockquote>
+<p>As of K8s 1.8, the kubelet fails if swap is enabled on a node. You can override this requirement using the
+<code>--fail-swap-on=false</code> flag on the Kubelet. However, we can simply turn off swap with <code>sudo swapoff -a</code>:</p>
+<pre class="hljs"><code><div>~$ sudo swapoff -a
+
+~$ sudo cat /proc/swaps
+
+Filename				Type		Size	Used	Priority
+
+~$
+</div></code></pre>
+<p>Comment out any <code>swap</code> volume entry in the file system table file, fstab. If you do not comment out the swap volume the
+swap will re-enable on reboot and the Kubelet will fail to start and the rest of your cluster will not start either.</p>
+<h4 id="1b-prepare-containerd-to-use-the-container-runtime-interface-and-systemd">1b. Prepare containerd to use the container runtime interface and systemd</h4>
+<p>The <code>containerd.io</code> that comes with Docker installs a Docker-appropriate containerd configuration at
+<code>/etc/containerd/config.toml</code>, which we will need to change:</p>
+<pre class="hljs"><code><div>~$ cat /etc/containerd/config.toml
+
+#   Copyright 2018-2022 Docker Inc.
+
+#   Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+#   you may not use this file except in compliance with the License.
+#   You may obtain a copy of the License at
+
+#       http://www.apache.org/licenses/LICENSE-2.0
+
+#   Unless required by applicable law or agreed to in writing, software
+#   distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+#   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+#   See the License for the specific language governing permissions and
+#   limitations under the License.
+
+disabled_plugins = [&quot;cri&quot;]
+
+...
+
+~$
+</div></code></pre>
+<p>The <code>disabled_plugins = [&quot;cri&quot;]</code> line prevents anything using the container runtime interface (like the Kubernetes
+Kubelet or a tool like <code>crictl</code>) from interacting with this instance of containerd. We can opt out of this by
+regenerating a configuration using <code>containerd config default</code>.</p>
+<p>Back up the <code>/etc/containerd/config.toml</code>:</p>
+<pre class="hljs"><code><div>~$ sudo mv /etc/containerd/config.toml /etc/containerd/config.docker
+
+~$
+</div></code></pre>
+<p>Then use <code>containerd config default</code> to populate the default containerd settings (which will effectively remove the
+restriction):</p>
+<pre class="hljs"><code><div>~$ sudo containerd config default | sudo tee /etc/containerd/config.toml
+
+disabled_plugins = []
+imports = []
+oom_score = 0
+plugin_dir = &quot;&quot;
+
+...
+
+~$
+</div></code></pre>
+<p>Before proceeding, you need to also change the cgroup manager.</p>
+<p>By default, the containerd uses <code>cgroupfs</code> to manage the Linux <code>cgroups</code> for container isolation.</p>
+<p>Control groups, or cgroups, are used to constrain resources that are allocated to processes. Using <em>cgroupfs</em> alongside
+<em>systemd</em> means that there will then be two different cgroup managers. A single cgroup manager simplifies the view of
+what resources are being allocated and will by default have a more consistent view of the available and in-use
+resources.</p>
+<p>Modify containerd to use the systemd cgroup management driver:</p>
+<pre class="hljs"><code><div>~$ sudo sed -i -e 's/SystemdCgroup = false/SystemdCgroup = true/' /etc/containerd/config.toml
+
+~$
+</div></code></pre>
+<p>This <code>sed</code> command modifies any strings in the configuration for <code>SystemdCgroup</code>.</p>
+<p>We need to run another <code>sed</code> command to ensure containerd also uses the correct pause container image. Pause containers
+are used by Kubernetes to help enable the &quot;pod sandbox&quot; - the shared isolation used to enable more complex container
+patterns when running containers within Kubernetes.</p>
+<pre class="hljs"><code><div>~$ sudo sed -i -e 's/pause:3.6/pause:3.9/' /etc/containerd/config.toml
+
+~$
+</div></code></pre>
+<p>After changing the configuration, restart the <code>containerd</code> service:</p>
+<pre class="hljs"><code><div>~$ sudo systemctl restart containerd
+
+~$
+</div></code></pre>
+<p>Moving forward, containerd is now open to CRI requests and uses systemd to manage all container cgroups.</p>
+<h3 id="2-install-kubernetes-package-support">2. Install Kubernetes package support</h3>
+<p>With the host prepared, it is time to install the Kubernetes binaries. These are available on most package managers,
+including the Debian <code>apt</code> and RHEL-based <code>yum</code>.</p>
+<p>Add the Google cloud packages repo key so that we can install packages hosted by Google:</p>
+<pre class="hljs"><code><div>~$ curl -fsSL https://pkgs.k8s.io/core:/stable:/v1.29/deb/Release.key | \
+sudo gpg --dearmor -o /etc/apt/keyrings/kubernetes-apt-keyring.gpg
+
+~$
+</div></code></pre>
+<p>Now add a repository list file with an entry for Ubuntu Xenial <code>apt.kubernetes.io</code> packages. The following command
+copies the repo url into the &quot;kubernetes.list&quot; file:</p>
+<pre class="hljs"><code><div>~$ echo 'deb [signed-by=/etc/apt/keyrings/kubernetes-apt-keyring.gpg] https://pkgs.k8s.io/core:/stable:/v1.29/deb/ /' | \
+sudo tee /etc/apt/sources.list.d/kubernetes.list
+
+deb [signed-by=/etc/apt/keyrings/kubernetes-apt-keyring.gpg] https://pkgs.k8s.io/core:/stable:/v1.29/deb/ /
+
+~$
+</div></code></pre>
+<p>Update the package indexes to add the Kubernetes packages from the Kubernetes apt repository:</p>
+<pre class="hljs"><code><div>~$ sudo apt update
+
+...
+
+Get:6 https://prod-cdn.packages.k8s.io/repositories/isv:/kubernetes:/core:/stable:/v1.29/deb  InRelease [1186 B]
+Get:7 https://prod-cdn.packages.k8s.io/repositories/isv:/kubernetes:/core:/stable:/v1.29/deb  Packages [2759 B]
+Fetched 114 kB in 1s (106 kB/s)
+Reading package lists... Done
+Building dependency tree... Done
+Reading state information... Done
+36 packages can be upgraded. Run 'apt list --upgradable' to see them.
+
+~$
+</div></code></pre>
+<p>Notice the new <code>prod-cdn.packages.k8s.io</code> repository above. If you <em>do not see it in your terminal output</em>, you must fix
+the entry in <code>/etc/apt/sources.list.d/kubernetes.list</code> before moving on!</p>
+<p>Now we can install standard Kubernetes packages.</p>
+<h3 id="3-install-kubeadm-and-other-prereq-packages">3. Install kubeadm and other prereq packages</h3>
+<p>The <code>kubeadm</code> tool simplifies the process of installing a Kubernetes cluster. To use <code>kubeadm</code> we will also need the
+<code>kubectl</code> cluster CLI tool and the <code>kubelet</code> node manager. We will also install Kubernetes CNI (Container Network
+Interface) support for multi-host networking.</p>
+<p>Use the <code>apt</code> package manager to install the needed packages for the latest cluster version of Kubernetes:</p>
+<pre class="hljs"><code><div>~$ sudo apt install -y kubeadm
+
+Reading package lists... Done
+Building dependency tree
+Reading state information... Done
+The following additional packages will be installed:
+  conntrack cri-tools ebtables kubectl kubelet kubernetes-cni socat
+Suggested packages:
+  nftables
+The following NEW packages will be installed:
+  conntrack cri-tools ebtables kubeadm kubectl kubelet kubernetes-cni socat
+0 upgraded, 8 newly installed, 0 to remove and 17 not upgraded.
+Need to get 83.7 MB of archives.
+After this operation, 340 MB of additional disk space will be used.
+
+...
+
+~$
+</div></code></pre>
+<p>Kubeadm and Kubelet are now installed and ready to initialize a cluster:</p>
+<h3 id="4-install-and-start-the-kubernetes-control-plane-components">4. Install and start the Kubernetes control plane components</h3>
+<p>Verify kubeadm is properly installed by checking kubeadm's version:</p>
+<pre class="hljs"><code><div>~$ kubeadm version
+
+kubeadm version: &amp;version.Info{Major:&quot;1&quot;, Minor:&quot;29&quot;, GitVersion:&quot;v1.29.0&quot;, GitCommit:&quot;3f7a50f38688eb332e2a1b013678c6435d539ae6&quot;, GitTreeState:&quot;clean&quot;, BuildDate:&quot;2023-12-13T08:50:10Z&quot;, GoVersion:&quot;go1.21.5&quot;, Compiler:&quot;gc&quot;, Platform:&quot;linux/amd64&quot;}
+
+~$
+</div></code></pre>
+<p>With all of the necessary prerequisites installed we can now use <code>kubeadm</code> with the
+<code>--cri-socket=unix:///run/containerd/containerd.sock</code> argument to initialize a cluster with containerd as the container
+runtime:</p>
+<p><em>DO NOT execute any of the additional instructions output after running <code>sudo kubeadm init</code>!</em></p>
+<pre class="hljs"><code><div>~$ sudo kubeadm init --cri-socket=unix:///run/containerd/containerd.sock
+
+[init] Using Kubernetes version: v1.29.0
+[preflight] Running pre-flight checks
+[preflight] Pulling images required for setting up a Kubernetes cluster
+[preflight] This might take a minute or two, depending on the speed of your internet connection
+[preflight] You can also perform this action in beforehand using 'kubeadm config images pull'
+[certs] Using certificateDir folder &quot;/etc/kubernetes/pki&quot;
+[certs] Generating &quot;ca&quot; certificate and key
+[certs] Generating &quot;apiserver&quot; certificate and key
+[certs] apiserver serving cert is signed for DNS names [ip-172-31-17-249 kubernetes kubernetes.default kubernetes.default.svc kubernetes.default.svc.cluster.local] and IPs [10.96.0.1 172.31.17.249]
+[certs] Generating &quot;apiserver-kubelet-client&quot; certificate and key
+[certs] Generating &quot;front-proxy-ca&quot; certificate and key
+[certs] Generating &quot;front-proxy-client&quot; certificate and key
+[certs] Generating &quot;etcd/ca&quot; certificate and key
+[certs] Generating &quot;etcd/server&quot; certificate and key
+[certs] etcd/server serving cert is signed for DNS names [ip-172-31-17-249 localhost] and IPs [172.31.17.249 127.0.0.1 ::1]
+[certs] Generating &quot;etcd/peer&quot; certificate and key
+[certs] etcd/peer serving cert is signed for DNS names [ip-172-31-17-249 localhost] and IPs [172.31.17.249 127.0.0.1 ::1]
+[certs] Generating &quot;etcd/healthcheck-client&quot; certificate and key
+[certs] Generating &quot;apiserver-etcd-client&quot; certificate and key
+[certs] Generating &quot;sa&quot; key and public key
+[kubeconfig] Using kubeconfig folder &quot;/etc/kubernetes&quot;
+[kubeconfig] Writing &quot;admin.conf&quot; kubeconfig file
+[kubeconfig] Writing &quot;super-admin.conf&quot; kubeconfig file
+[kubeconfig] Writing &quot;kubelet.conf&quot; kubeconfig file
+[kubeconfig] Writing &quot;controller-manager.conf&quot; kubeconfig file
+[kubeconfig] Writing &quot;scheduler.conf&quot; kubeconfig file
+[etcd] Creating static Pod manifest for local etcd in &quot;/etc/kubernetes/manifests&quot;
+[control-plane] Using manifest folder &quot;/etc/kubernetes/manifests&quot;
+[control-plane] Creating static Pod manifest for &quot;kube-apiserver&quot;
+[control-plane] Creating static Pod manifest for &quot;kube-controller-manager&quot;
+[control-plane] Creating static Pod manifest for &quot;kube-scheduler&quot;
+[kubelet-start] Writing kubelet environment file with flags to file &quot;/var/lib/kubelet/kubeadm-flags.env&quot;
+[kubelet-start] Writing kubelet configuration to file &quot;/var/lib/kubelet/config.yaml&quot;
+[kubelet-start] Starting the kubelet
+[wait-control-plane] Waiting for the kubelet to boot up the control plane as static Pods from directory &quot;/etc/kubernetes/manifests&quot;. This can take up to 4m0s
+[apiclient] All control plane components are healthy after 9.002925 seconds
+[upload-config] Storing the configuration used in ConfigMap &quot;kubeadm-config&quot; in the &quot;kube-system&quot; Namespace
+[kubelet] Creating a ConfigMap &quot;kubelet-config&quot; in namespace kube-system with the configuration for the kubelets in the cluster
+[upload-certs] Skipping phase. Please see --upload-certs
+[mark-control-plane] Marking the node ip-172-31-17-249 as control-plane by adding the labels: [node-role.kubernetes.io/control-plane node.kubernetes.io/exclude-from-external-load-balancers]
+[mark-control-plane] Marking the node ip-172-31-17-249 as control-plane by adding the taints [node-role.kubernetes.io/control-plane:NoSchedule]
+[bootstrap-token] Using token: 5mxwrv.sgicxs0q5efdd4mo
+[bootstrap-token] Configuring bootstrap tokens, cluster-info ConfigMap, RBAC Roles
+[bootstrap-token] Configured RBAC rules to allow Node Bootstrap tokens to get nodes
+[bootstrap-token] Configured RBAC rules to allow Node Bootstrap tokens to post CSRs in order for nodes to get long term certificate credentials
+[bootstrap-token] Configured RBAC rules to allow the csrapprover controller automatically approve CSRs from a Node Bootstrap Token
+[bootstrap-token] Configured RBAC rules to allow certificate rotation for all node client certificates in the cluster
+[bootstrap-token] Creating the &quot;cluster-info&quot; ConfigMap in the &quot;kube-public&quot; namespace
+[kubelet-finalize] Updating &quot;/etc/kubernetes/kubelet.conf&quot; to point to a rotatable kubelet client certificate and key
+[addons] Applied essential addon: CoreDNS
+[addons] Applied essential addon: kube-proxy
+
+Your Kubernetes control-plane has initialized successfully!
+
+To start using your cluster, you need to run the following as a regular user:
+
+  mkdir -p $HOME/.kube
+  sudo cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
+  sudo chown $(id -u):$(id -g) $HOME/.kube/config
+
+Alternatively, if you are the root user, you can run:
+
+  export KUBECONFIG=/etc/kubernetes/admin.conf
+
+You should now deploy a pod network to the cluster.
+Run &quot;kubectl apply -f [podnetwork].yaml&quot; with one of the options listed at:
+  https://kubernetes.io/docs/concepts/cluster-administration/addons/
+
+Then you can join any number of worker nodes by running the following on each as root:
+
+kubeadm join 172.31.17.249:6443 --token 5mxwrv.sgicxs0q5efdd4mo \
+	--discovery-token-ca-cert-hash sha256:8a5696ac6b7ae9d2828857b362f57bfc4d25bfcf4d46fa61be7d1e45c8a6741c
+
+~$
+</div></code></pre>
+<p>Examine the output from kubeadm but <em>DO NOT follow the suggestions!!</em> We will be performing them during the subsequent
+steps of this lab in guided exercises!</p>
+<h3 id="5-configure-kubectl">5. Configure kubectl</h3>
+<p>The command line tool used to interact with our Kubernetes cluster is <code>kubectl</code>. <code>kubectl</code> makes interacting with the
+cluster from the command line easy by packaging (or generating) Kubernetes specifications from your inputs and
+submitting them to the Kubernetes API Server on your behalf.</p>
+<p>Run the <code>kubectl config view</code> subcommand to display the current client configuration:</p>
+<pre class="hljs"><code><div>~$ kubectl config view
+</div></code></pre>
+<pre class="hljs"><code><div><span class="hljs-attr">apiVersion:</span> <span class="hljs-string">v1</span>
+<span class="hljs-attr">clusters:</span> <span class="hljs-literal">null</span>
+<span class="hljs-attr">contexts:</span> <span class="hljs-literal">null</span>
+<span class="hljs-attr">current-context:</span> <span class="hljs-string">""</span>
+<span class="hljs-attr">kind:</span> <span class="hljs-string">Config</span>
+<span class="hljs-attr">preferences:</span> <span class="hljs-string">{}</span>
+<span class="hljs-attr">users:</span> <span class="hljs-literal">null</span>
+</div></code></pre>
+<pre class="hljs"><code><div>~$
+</div></code></pre>
+<p>As you can see the only value we have configured is the <code>apiVersion</code> which is set to <code>v1</code>, the current Kubernetes API
+version. The <code>kubectl</code> command tries to reach the API server on port 8080 via the localhost loopback without TLS by
+default (which will not work).</p>
+<p>This config is stored in a Kubeconfig file. Kubeconfig files provide credentials for sending API requests to a
+Kubernetes API server. They define API server addresses to send requests to and user authentication information which
+identifies the client (in this case, <code>kubectl</code>).</p>
+<p>Kubeadm creates a kubeconfig file during deployment of the control plane and places it in <code>/etc/kubernetes</code> as
+<code>admin.conf</code>. Copy <code>admin.conf</code> in a new <code>.kube</code> directory under your home directory, and change its owner (<code>chown</code>) to
+your UID/GID:</p>
+<pre class="hljs"><code><div>~$ mkdir -p $HOME/.kube
+
+~$ sudo cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
+
+~$ sudo chown $(id -u):$(id -g) $HOME/.kube/config
+
+~$
+</div></code></pre>
+<p>Verify the kubeconfig we just copied is understood:</p>
+<pre class="hljs"><code><div>~$ kubectl config view
+</div></code></pre>
+<pre class="hljs"><code><div><span class="hljs-attr">apiVersion:</span> <span class="hljs-string">v1</span>
+<span class="hljs-attr">clusters:</span>
+<span class="hljs-bullet">-</span> <span class="hljs-attr">cluster:</span>
+    <span class="hljs-attr">certificate-authority-data:</span> <span class="hljs-string">DATA+OMITTED</span>
+    <span class="hljs-attr">server:</span> <span class="hljs-string">https://172.31.17.249:6443</span>
+  <span class="hljs-attr">name:</span> <span class="hljs-string">kubernetes</span>
+<span class="hljs-attr">contexts:</span>
+<span class="hljs-bullet">-</span> <span class="hljs-attr">context:</span>
+    <span class="hljs-attr">cluster:</span> <span class="hljs-string">kubernetes</span>
+    <span class="hljs-attr">user:</span> <span class="hljs-string">kubernetes-admin</span>
+  <span class="hljs-attr">name:</span> <span class="hljs-string">kubernetes-admin@kubernetes</span>
+<span class="hljs-attr">current-context:</span> <span class="hljs-string">kubernetes-admin@kubernetes</span>
+<span class="hljs-attr">kind:</span> <span class="hljs-string">Config</span>
+<span class="hljs-attr">preferences:</span> <span class="hljs-string">{}</span>
+<span class="hljs-attr">users:</span>
+<span class="hljs-bullet">-</span> <span class="hljs-attr">name:</span> <span class="hljs-string">kubernetes-admin</span>
+  <span class="hljs-attr">user:</span>
+    <span class="hljs-attr">client-certificate-data:</span> <span class="hljs-string">DATA+OMITTED</span>
+    <span class="hljs-attr">client-key-data:</span> <span class="hljs-string">DATA+OMITTED</span>
+</div></code></pre>
+<pre class="hljs"><code><div>~$
+</div></code></pre>
+<p>The combination of an API server address and user is called a context. The default context in this kubeconfig file is
+<code>kubernetes-admin@kubernetes</code>, which is the administrator for the cluster you just initialized:</p>
+<pre class="hljs"><code><div>~$ kubectl config current-context
+
+kubernetes-admin@kubernetes
+
+~$
+</div></code></pre>
+<p>The <code>kubernetes-admin</code> user grants you full control over this cluster. You can now use <code>kubectl</code> to gather information
+about the resources deployed with your Kubernetes cluster, verify that the current context can access the cluster:</p>
+<pre class="hljs"><code><div>~$ kubectl get node
+
+NAME               STATUS     ROLES           AGE    VERSION
+ip-172-31-17-249   NotReady   control-plane   7m3s   v1.29.0
+
+~$
+</div></code></pre>
+<p><code>kubectl</code> can successfully communicate with the API server but it looks like the cluster is not ready for operation just
+yet (note the &quot;<code>NotReady</code>&quot; value under <code>STATUS</code>). The <code>ROLES</code> entries indicate that this node hosts the core Kubernetes
+control plane services like the API Server, Scheduler, and Controller Manager.</p>
+<h3 id="6-taints">6. Taints</h3>
+<p>During the default initialization of the cluster, kubeadm applies a series of reservations to the control plane node
+which ensures that only control plane components (like the API Server, Scheduler, and Controller Manager) run on that
+node. This ensures stability and guarantee resources for them during normal operation. Kubernetes is typically expected
+to run across multiple nodes, with regular user workloads running on other nodes (commonly known was &quot;workers&quot;). For a
+single-node development/learning test case, these reservations need to be removed.</p>
+<p>In Kubernetes terms, the control plane node is &quot;tainted&quot;. A taint consists of a <em>key</em>, an <em>optional value</em>, and an
+<em>effect</em>. The effect must be <em>NoSchedule</em>, <em>PreferNoSchedule</em> or <em>NoExecute</em>.</p>
+<p>Above we used <code>kubectl get node</code> to output the table showing us information about our node but by using the <code>-o</code>
+outputter with the <code>name</code> argument we can just receive the node's name, try it:</p>
+<pre class="hljs"><code><div>~$ kubectl get node -o name
+
+node/ip-172-31-32-172
+
+~$
+</div></code></pre>
+<p>We can nest the above command in a sub-shell and pass it to the <code>kubectl describe</code> subcommand to see details for the
+control plane node, using <code>grep</code> to search for the term <code>taint</code></p>
+<pre class="hljs"><code><div>~$ kubectl describe $(kubectl get node -o name) | grep -i taint -A2
+
+Taints:             node-role.kubernetes.io/control-plane:NoSchedule
+                    node.kubernetes.io/not-ready:NoSchedule
+Unschedulable:      false
+
+~$
+</div></code></pre>
+<p>We will examine the full <code>describe</code> output later but as you can see the master has the
+<code>node-role.kubernetes.io/control-plane</code> taint with the effect <code>NoSchedule</code>. This means the Kubernetes scheduler can not
+place pods on this node. To remove this taint we can use the <code>kubectl taint</code> subcommand.</p>
+<p><em>NOTE:</em> the command below removes (&quot;<code>-</code>&quot;) the taints from all (<code>--all</code>) nodes in the cluster. <em>Do not forget the
+trailing &quot;<code>-</code>&quot; following the taint key &quot;master&quot;! The &quot;<code>-</code>&quot; is what tells Kubernetes to remove the taint!</em></p>
+<pre class="hljs"><code><div>~$ kubectl taint node --all node-role.kubernetes.io/control-plane-
+
+node/ip-172-31-32-172 untainted
+
+~$
+</div></code></pre>
+<blockquote>
+<p>We know what you're thinking and we agree, &quot;taint&quot; is an awful name for this feature and a trailing dash with no space
+is an equally wacky way to remove something.</p>
+</blockquote>
+<p>Check again to see if the taint was removed:</p>
+<pre class="hljs"><code><div>~$ kubectl describe $(kubectl get node -o name) | grep -i taints -A2
+
+Taints:             node.kubernetes.io/not-ready:NoSchedule
+Unschedulable:      false
+Lease:
+
+~$
+</div></code></pre>
+<p>After removing the control plane taints, one more taint (the &quot;<code>not-ready</code>&quot; taint) remains. This indicates that the node
+(or rather, its Kubelet) is not ready to run workloads.</p>
+<p>Since the taint mentions status <code>not-ready</code>, let's grep &quot;<code>ready</code>&quot; status from the node's <code>describe</code> output:</p>
+<pre class="hljs"><code><div>~$ kubectl describe $(kubectl get node -o name) | grep -i ready
+
+Taints:             node.kubernetes.io/not-ready:NoSchedule
+  Ready            False   Mon, 25 Sep 2023 08:27:44 +0000   Mon, 25 Sep 2023 08:27:27 +0000   KubeletNotReady              container runtime network not ready: NetworkReady=false reason:NetworkPluginNotReady message:Network plugin returns error: cni plugin not initialized
+
+~$
+</div></code></pre>
+<p>Our Kubernetes cluster does not have any networking in place. Let's fix that!</p>
+<h3 id="7-enable-networking">7. Enable networking</h3>
+<p>In the previous step, we found out that our control plane node is hung in the <code>not ready</code> status, with the Kubelet
+reporting that the container network plugin is not ready.</p>
+<p>Based on the readiness message from the node, the node expects a CNI plugin for networking but we have not yet supplied
+a CNI plugin. We can easily add the Weave CNI container networking drivers using a POD spec from the Internet:</p>
+<pre class="hljs"><code><div>~$ kubectl apply -f https://github.com/weaveworks/weave/releases/download/v2.8.1/weave-daemonset-k8s-1.11.yaml
+
+serviceaccount/weave-net created
+clusterrole.rbac.authorization.k8s.io/weave-net created
+clusterrolebinding.rbac.authorization.k8s.io/weave-net created
+role.rbac.authorization.k8s.io/weave-net created
+rolebinding.rbac.authorization.k8s.io/weave-net created
+daemonset.apps/weave-net created
+
+~$
+</div></code></pre>
+<p>CNI plugins assign IP addresses to workloads in the cluster. Different CNI plugins will achieve this in different ways.
+The weave-net plugin you installed creates a virtual router process and bridge interface on every host. Pods are
+attached to the bridge interface with a plugin-managed IP address. The virtual routers (running as containers managed by
+a daemonset) communicate with each other to realize the pod network, establishing a protocol handshake and learning
+about the pod network topology.</p>
+<p>The CNI plugin components will now take a few moments (in this test cluster) to start up. Check if there are any more
+taints on our master node and see if it is finally ready:</p>
+<pre class="hljs"><code><div>~$ kubectl describe $(kubectl get node -o name) | grep -i taints
+
+Taints:             &lt;none&gt;
+
+~$ kubectl get node
+
+NAME               STATUS   ROLES           AGE    VERSION
+ip-172-31-17-249   Ready    control-plane   6m     v1.29.0
+
+~$
+</div></code></pre>
+<p>The taint has been cleared from our control plane node, and Kubernetes will now allow pods to run on our single node
+cluster.</p>
+<h3 id="8-kubernetes-applications">8. Kubernetes applications</h3>
+<p>Kubernetes clusters track and manage objects of various &quot;kinds&quot;. Applications make use of four kinds of objects in
+particular:</p>
+<ul>
+<li><strong>Pods</strong> – groups of containers deployed as a unit</li>
+<li><strong>ReplicaSets</strong> – sets of pods defined by a template which the Controller Manager replicates across the cluster</li>
+<li><strong>Deployments</strong> – a rollout strategy for pods and replica sets</li>
+<li><strong>Services</strong> – endpoints used to distribute requests to one of a pod’s replicas</li>
+</ul>
+<p>Thus basic Kubernetes applications consist of pods, which implement the application functionality; ReplicaSets, which
+ensure pods are always available; and Services which expose a dynamic set of pods to clients as a single endpoint.
+Deployments describe how to launch or upgrade a given application (set of pods) at a controlled rate.</p>
+<p>Using <code>kubectl</code> you can create Deployments and Services, monitor cluster components and pods, upgrade Deployments and
+remove resources that are no longer required.</p>
+<p>The <code>kubectl</code> command provides a <code>get</code> subcommand which can be used to get information on any one of the key Kubernetes
+component types: Deployments, Pods, ReplicaSets, and Services. While you can type <code>kubectl get replicasets</code>, that would
+be fairly inhumane so <code>kubectl</code> allows you to use abbreviations like <code>rs</code> for ReplicaSets, <code>deploy</code> for Deployments, and
+even <code>po</code> for Pods!</p>
+<p>If you want to save yourself even more typing you can take advantage of kubectl's tab completion functionality:</p>
+<pre class="hljs"><code><div>~$ source &lt;(kubectl completion bash)
+
+~$
+</div></code></pre>
+<p>Now try kubectl get <tab> <TAB> again. You will receive suggestions from <code>kubectl</code>:</p>
+<pre class="hljs"><code><div>~$ kubectl get # &lt;Press tab twice and do not press enter&gt;
+
+apiservices.apiregistration.k8s.io                            mutatingwebhookconfigurations.admissionregistration.k8s.io
+certificatesigningrequests.certificates.k8s.io                namespaces
+
+...
+
+^C
+
+~$
+</div></code></pre>
+<p>Make sure to <code>Ctrl C</code> to cancel the command.</p>
+<p>That is much better! You can now type &quot;kubectl get ser<TAB>&quot; and it will autocomplete to &quot;kubectl get service&quot;. You can
+make this persist in all of your shell sessions by running: <code>echo &quot;source &lt;(kubectl completion bash)&quot; &gt;&gt; ~/.bashrc</code></p>
+<p>List the currently running services, deployments, replica sets, and pods on your cluster:</p>
+<pre class="hljs"><code><div>~$ kubectl get service,deployments,replicasets,pods
+
+NAME                 TYPE        CLUSTER-IP   EXTERNAL-IP   PORT(S)   AGE
+service/kubernetes   ClusterIP   10.96.0.1    &lt;none&gt;        443/TCP   2m20s
+
+~$
+</div></code></pre>
+<p>The only service running in our cluster is the <em>kubernetes</em> service itself. There are no Deployments, ReplicaSets, or
+Pods yet.</p>
+<p>There are other workloads running on the cluster in other namespaces, which are logical divisions of the
+cluster where resources exist. Namespaces can separate API resources in a cluster on a per-user, per-application,
+per-function, or any other user-defined scheme.</p>
+<p>Do the same for the resources under the <code>kube-system</code> namespace:</p>
+<pre class="hljs"><code><div>~$ kubectl get service,deployments,replicaset,pods --namespace=kube-system
+
+NAME               TYPE        CLUSTER-IP   EXTERNAL-IP   PORT(S)                  AGE
+service/kube-dns   ClusterIP   10.96.0.10   &lt;none&gt;        53/UDP,53/TCP,9153/TCP   2m28s
+
+NAME                      READY   UP-TO-DATE   AVAILABLE   AGE
+deployment.apps/coredns   2/2     2            2           2m28s
+
+NAME                                 DESIRED   CURRENT   READY   AGE
+replicaset.apps/coredns-5dd5756b68   2         2         2       2m23s
+
+NAME                                           READY   STATUS    RESTARTS      AGE
+pod/coredns-5dd5756b68-dkcl8                   1/1     Running   0             2m22s
+pod/coredns-5dd5756b68-x5qpj                   1/1     Running   0             2m22s
+pod/etcd-ip-172-31-32-172                      1/1     Running   0             2m28s
+pod/kube-apiserver-ip-172-31-32-172            1/1     Running   0             2m29s
+pod/kube-controller-manager-ip-172-31-32-172   1/1     Running   0             2m28s
+pod/kube-proxy-rzlfz                           1/1     Running   0             2m22s
+pod/kube-scheduler-ip-172-31-32-172            1/1     Running   0             2m28s
+pod/weave-net-28cfx                            2/2     Running   1 (41s ago)   47s
+
+~$
+</div></code></pre>
+<p>As you can see, the <code>kube-system</code> namespace is a place for Kubernetes system pods like DNS, etcd, etc. Don't mess with
+these -- they are required for your cluster to function!</p>
+<p>We can also view all namespaces with the <code>--all-namespaces</code> or <code>-A</code> flags if we have permission.</p>
+<p>You now have a clean, best-practices driven Kubernetes cluster to experiment with.</p>
+<h3 id="9-run-a-container">9. Run a container</h3>
+<p>Now that we have a cluster (of one) running we can run some containers. Users do not directly deploy containers on
+Kubernetes. Instead, containers are defined in a resource called a pod. Pods are specifications which define a
+collection of one or more containers and their settings. The pod specifications are parsed by their assigned Kubelet,
+which forwards instructions on how to create the containers to their local container runtime.</p>
+<p>With the right permissions we can create a Pod on the fly using kubectl's <code>run</code> subcommand. Try it:</p>
+<pre class="hljs"><code><div>~$ kubectl run web --image docker.io/nginx:latest
+
+pod/web created
+
+~$
+</div></code></pre>
+<p>The <code>run</code> command generates a simple pod specification based on your inputs and submits it to the API server. In this
+case, the pod was named <code>web</code> and is based on the image <code>docker.io/nginx:latest</code>.</p>
+<blockquote>
+<p>N.B. If you do not specify a tag for an image, most container runtimes default to the <code>latest</code> tag. Also, if you
+exclude a registry address (i.e. <code>docker.io/</code>) from the image, most container runtimes usually pull from DockerHub.</p>
+</blockquote>
+<p>Now examine your pod:</p>
+<pre class="hljs"><code><div>~$ kubectl get pod
+
+NAME   READY   STATUS    RESTARTS   AGE
+web    1/1     Running   0          3s
+
+~$
+</div></code></pre>
+<p>If your pod is not yet running, the container runtime on the node is likely pulling the image (<code>STATUS.ContainerCreating</code>)
+for <code>nginx</code> down from DockerHub. Keep checking on your pod until it is running.</p>
+<p>We can verify that our <code>web</code> pod is up and running with curl but we need to get the pod's ip address. You can discover
+the ip address by displaying pod data with the wide output:</p>
+<pre class="hljs"><code><div>~$ kubectl get pod -o wide
+
+NAME   READY   STATUS    RESTARTS   AGE   IP          NODE               NOMINATED NODE   READINESS GATES
+web    1/1     Running   0          79s   10.32.0.4   ip-172-31-32-172   &lt;none&gt;           &lt;none&gt;
+
+~$
+</div></code></pre>
+<p>This IP address was assigned to the pod by the CNI plugin.</p>
+<p>Now try to curl your pod using its IP address:</p>
+<pre class="hljs"><code><div>~$ curl 10.32.0.4
+
+&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+&lt;head&gt;
+&lt;title&gt;Welcome to nginx!&lt;/title&gt;
+
+...
+
+~$
+</div></code></pre>
+<p>This works because the Weave SDN we are using to manage Pod networking creates a route on the host to the <code>weave</code>
+network interface (a software-based device connected to the weave pod network).</p>
+<p>List the routes on your host:</p>
+<pre class="hljs"><code><div>~$ ip route
+
+default via 172.31.32.1 dev ens5 proto dhcp src 172.31.32.172 metric 100
+10.32.0.0/12 dev weave proto kernel scope link src 10.32.0.1
+172.17.0.0/16 dev docker0 proto kernel scope link src 172.17.0.1 linkdown
+172.31.0.2 via 172.31.32.1 dev ens5 proto dhcp src 172.31.32.172 metric 100
+172.31.32.0/20 dev ens5 proto kernel scope link src 172.31.32.172 metric 100
+172.31.32.1 dev ens5 proto dhcp scope link src 172.31.32.172 metric 100
+
+~$
+</div></code></pre>
+<p>As you can see, all traffic destined for <code>10.32.0.0/12</code> is delivered to the <code>weave</code> device. Not all SDNs support traffic
+from the host into the Pod network by default.</p>
+<p>In most real-world cases a pod IP will not be directly accessible from a local client. You would need to run a client
+pod in the cluster to test the service pod to contact the server from inside the cluster network or use other Kubernetes
+features (like services and other integrations) to access the a pod from outside the cluster.</p>
+<p>Try creating another pod named <code>client</code> and submitting a request to the web pod's IP from there. Kubernetes does allow
+interactive sessions with containers in pods, giving you an easy way of interacting with containers from within the
+cluster network:</p>
+<pre class="hljs"><code><div>~$ kubectl run client --image docker.io/busybox:latest -it
+
+If you don't see a command prompt, try pressing enter.
+
+/ # wget -qO - 10.32.0.4
+
+&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+&lt;head&gt;
+&lt;title&gt;Welcome to nginx!&lt;/title&gt;
+
+...
+
+/ # exit
+
+Session ended, resume using 'kubectl attach client -c client -i -t' command when the pod is running
+
+~$
+</div></code></pre>
+<p>List your pods again:</p>
+<pre class="hljs"><code><div>~$ kubectl get pod
+
+NAME     READY   STATUS      RESTARTS   AGE
+client   0/1     Completed   0          25s
+web      1/1     Running     0          52s
+
+~$
+</div></code></pre>
+<p>Our client pod is still running and, per the comment from <code>kubectl</code> on exit, we can reattach and resume the session to
+it when desired.</p>
+<h3 id="10-challenge-kubectl-run">10. CHALLENGE: kubectl run</h3>
+<ul>
+<li>Run a pod named &quot;<code>challenge</code>&quot; based on the image <code>docker.io/rxmllc/hostinfo:latest</code>
+<ul>
+<li>The hostinfo image reports its hostname and IP address when queried</li>
+</ul>
+</li>
+<li>Resume your interactive session with the &quot;<code>client</code>&quot; pod</li>
+<li>Query the &quot;<code>challenge</code>&quot; pod on port <code>9898</code> with wget
+<ul>
+<li>What does the response tell you about pod hostnames?</li>
+</ul>
+</li>
+<li>Delete the <code>challenge</code> pod after completing the above steps</li>
+</ul>
+<h3 id="11-clean-up">11. Clean up</h3>
+<p>Delete all pods you created in the above steps with <code>kubectl delete</code>:</p>
+<pre class="hljs"><code><div>~$ kubectl delete pod client web
+
+pod &quot;client&quot; deleted
+pod &quot;web&quot; deleted
+
+~$
+</div></code></pre>
+<br>
+<p>Congratulations, you have completed the lab!</p>
+<br>
+<p><em>Copyright (c) 2023-2024 RX-M LLC, Cloud Native &amp; AI Training and Consulting, all rights reserved</em></p>
+
+</body>
+</html>

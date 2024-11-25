@@ -1,0 +1,958 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>rx-m-containers-k8s-accelerated-lab02.md</title>
+<meta http-equiv="Content-type" content="text/html;charset=UTF-8">
+
+<style>
+/* https://github.com/microsoft/vscode/blob/master/extensions/markdown-language-features/media/markdown.css */
+/*---------------------------------------------------------------------------------------------
+ *  Copyright (c) Microsoft Corporation. All rights reserved.
+ *  Licensed under the MIT License. See License.txt in the project root for license information.
+ *--------------------------------------------------------------------------------------------*/
+
+body {
+	font-family: var(--vscode-markdown-font-family, -apple-system, BlinkMacSystemFont, "Segoe WPC", "Segoe UI", "Ubuntu", "Droid Sans", sans-serif);
+	font-size: var(--vscode-markdown-font-size, 14px);
+	padding: 0 26px;
+	line-height: var(--vscode-markdown-line-height, 22px);
+	word-wrap: break-word;
+}
+
+#code-csp-warning {
+	position: fixed;
+	top: 0;
+	right: 0;
+	color: white;
+	margin: 16px;
+	text-align: center;
+	font-size: 12px;
+	font-family: sans-serif;
+	background-color:#444444;
+	cursor: pointer;
+	padding: 6px;
+	box-shadow: 1px 1px 1px rgba(0,0,0,.25);
+}
+
+#code-csp-warning:hover {
+	text-decoration: none;
+	background-color:#007acc;
+	box-shadow: 2px 2px 2px rgba(0,0,0,.25);
+}
+
+body.scrollBeyondLastLine {
+	margin-bottom: calc(100vh - 22px);
+}
+
+body.showEditorSelection .code-line {
+	position: relative;
+}
+
+body.showEditorSelection .code-active-line:before,
+body.showEditorSelection .code-line:hover:before {
+	content: "";
+	display: block;
+	position: absolute;
+	top: 0;
+	left: -12px;
+	height: 100%;
+}
+
+body.showEditorSelection li.code-active-line:before,
+body.showEditorSelection li.code-line:hover:before {
+	left: -30px;
+}
+
+.vscode-light.showEditorSelection .code-active-line:before {
+	border-left: 3px solid rgba(0, 0, 0, 0.15);
+}
+
+.vscode-light.showEditorSelection .code-line:hover:before {
+	border-left: 3px solid rgba(0, 0, 0, 0.40);
+}
+
+.vscode-light.showEditorSelection .code-line .code-line:hover:before {
+	border-left: none;
+}
+
+.vscode-dark.showEditorSelection .code-active-line:before {
+	border-left: 3px solid rgba(255, 255, 255, 0.4);
+}
+
+.vscode-dark.showEditorSelection .code-line:hover:before {
+	border-left: 3px solid rgba(255, 255, 255, 0.60);
+}
+
+.vscode-dark.showEditorSelection .code-line .code-line:hover:before {
+	border-left: none;
+}
+
+.vscode-high-contrast.showEditorSelection .code-active-line:before {
+	border-left: 3px solid rgba(255, 160, 0, 0.7);
+}
+
+.vscode-high-contrast.showEditorSelection .code-line:hover:before {
+	border-left: 3px solid rgba(255, 160, 0, 1);
+}
+
+.vscode-high-contrast.showEditorSelection .code-line .code-line:hover:before {
+	border-left: none;
+}
+
+img {
+	max-width: 100%;
+	max-height: 100%;
+}
+
+a {
+	text-decoration: none;
+}
+
+a:hover {
+	text-decoration: underline;
+}
+
+a:focus,
+input:focus,
+select:focus,
+textarea:focus {
+	outline: 1px solid -webkit-focus-ring-color;
+	outline-offset: -1px;
+}
+
+hr {
+	border: 0;
+	height: 2px;
+	border-bottom: 2px solid;
+}
+
+h1 {
+	padding-bottom: 0.3em;
+	line-height: 1.2;
+	border-bottom-width: 1px;
+	border-bottom-style: solid;
+}
+
+h1, h2, h3 {
+	font-weight: normal;
+}
+
+table {
+	border-collapse: collapse;
+}
+
+table > thead > tr > th {
+	text-align: left;
+	border-bottom: 1px solid;
+}
+
+table > thead > tr > th,
+table > thead > tr > td,
+table > tbody > tr > th,
+table > tbody > tr > td {
+	padding: 5px 10px;
+}
+
+table > tbody > tr + tr > td {
+	border-top: 1px solid;
+}
+
+blockquote {
+	margin: 0 7px 0 5px;
+	padding: 0 16px 0 10px;
+	border-left-width: 5px;
+	border-left-style: solid;
+}
+
+code {
+	font-family: Menlo, Monaco, Consolas, "Droid Sans Mono", "Courier New", monospace, "Droid Sans Fallback";
+	font-size: 1em;
+	line-height: 1.357em;
+}
+
+body.wordWrap pre {
+	white-space: pre-wrap;
+}
+
+pre:not(.hljs),
+pre.hljs code > div {
+	padding: 16px;
+	border-radius: 3px;
+	overflow: auto;
+}
+
+pre code {
+	color: var(--vscode-editor-foreground);
+	tab-size: 4;
+}
+
+/** Theming */
+
+.vscode-light pre {
+	background-color: rgba(220, 220, 220, 0.4);
+}
+
+.vscode-dark pre {
+	background-color: rgba(10, 10, 10, 0.4);
+}
+
+.vscode-high-contrast pre {
+	background-color: rgb(0, 0, 0);
+}
+
+.vscode-high-contrast h1 {
+	border-color: rgb(0, 0, 0);
+}
+
+.vscode-light table > thead > tr > th {
+	border-color: rgba(0, 0, 0, 0.69);
+}
+
+.vscode-dark table > thead > tr > th {
+	border-color: rgba(255, 255, 255, 0.69);
+}
+
+.vscode-light h1,
+.vscode-light hr,
+.vscode-light table > tbody > tr + tr > td {
+	border-color: rgba(0, 0, 0, 0.18);
+}
+
+.vscode-dark h1,
+.vscode-dark hr,
+.vscode-dark table > tbody > tr + tr > td {
+	border-color: rgba(255, 255, 255, 0.18);
+}
+
+</style>
+
+<style>
+/* Tomorrow Theme */
+/* http://jmblog.github.com/color-themes-for-google-code-highlightjs */
+/* Original theme - https://github.com/chriskempson/tomorrow-theme */
+
+/* Tomorrow Comment */
+.hljs-comment,
+.hljs-quote {
+	color: #8e908c;
+}
+
+/* Tomorrow Red */
+.hljs-variable,
+.hljs-template-variable,
+.hljs-tag,
+.hljs-name,
+.hljs-selector-id,
+.hljs-selector-class,
+.hljs-regexp,
+.hljs-deletion {
+	color: #c82829;
+}
+
+/* Tomorrow Orange */
+.hljs-number,
+.hljs-built_in,
+.hljs-builtin-name,
+.hljs-literal,
+.hljs-type,
+.hljs-params,
+.hljs-meta,
+.hljs-link {
+	color: #f5871f;
+}
+
+/* Tomorrow Yellow */
+.hljs-attribute {
+	color: #eab700;
+}
+
+/* Tomorrow Green */
+.hljs-string,
+.hljs-symbol,
+.hljs-bullet,
+.hljs-addition {
+	color: #718c00;
+}
+
+/* Tomorrow Blue */
+.hljs-title,
+.hljs-section {
+	color: #4271ae;
+}
+
+/* Tomorrow Purple */
+.hljs-keyword,
+.hljs-selector-tag {
+	color: #8959a8;
+}
+
+.hljs {
+	display: block;
+	overflow-x: auto;
+	color: #4d4d4c;
+	padding: 0.5em;
+}
+
+.hljs-emphasis {
+	font-style: italic;
+}
+
+.hljs-strong {
+	font-weight: bold;
+}
+</style>
+
+<style>
+/*
+ * Markdown PDF CSS
+ */
+
+ body {
+	font-family: -apple-system, BlinkMacSystemFont, "Segoe WPC", "Segoe UI", "Ubuntu", "Droid Sans", sans-serif, "Meiryo";
+	padding: 0 12px;
+}
+
+pre {
+	background-color: #f8f8f8;
+	border: 1px solid #cccccc;
+	border-radius: 3px;
+	overflow-x: auto;
+	white-space: pre-wrap;
+	overflow-wrap: break-word;
+}
+
+pre:not(.hljs) {
+	padding: 23px;
+	line-height: 19px;
+}
+
+blockquote {
+	background: rgba(127, 127, 127, 0.1);
+	border-color: rgba(0, 122, 204, 0.5);
+}
+
+.emoji {
+	height: 1.4em;
+}
+
+code {
+	font-size: 14px;
+	line-height: 19px;
+}
+
+/* for inline code */
+:not(pre):not(.hljs) > code {
+	color: #C9AE75; /* Change the old color so it seems less like an error */
+	font-size: inherit;
+}
+
+/* Page Break : use <div class="page"/> to insert page break
+-------------------------------------------------------- */
+.page {
+	page-break-after: always;
+}
+
+</style>
+
+<script src="https://unpkg.com/mermaid/dist/mermaid.min.js"></script>
+</head>
+<body>
+  <script>
+    mermaid.initialize({
+      startOnLoad: true,
+      theme: document.body.classList.contains('vscode-dark') || document.body.classList.contains('vscode-high-contrast')
+          ? 'dark'
+          : 'default'
+    });
+  </script>
+<p><img src="https://rx-m.com/rxm-cnc.svg" alt="RX-M, llc."></p>
+<h1 id="containers">Containers</h1>
+<h2 id="images-overview">Images Overview</h2>
+<p>In this lab you will get a chance to work with building images and using image registries. Registries are network based
+services for saving, looking up and retrieving container images. Docker Hub is the default registry for Docker based
+systems. Private registries can also be used to save and retrieve images within an organization. All modern public
+clouds also offer hosted registries for their clients. In the steps below you will run a private registry server and
+push/pull images to/from it. We will run the registry application itself in a container.</p>
+<h3 id="1-docker-registry-operations">1. Docker Registry operations</h3>
+<p>Docker supplies several subcommands to interact with registries, including:</p>
+<ul>
+<li>login</li>
+<li>logout</li>
+<li>push</li>
+<li>pull</li>
+</ul>
+<p>Setting up and running a simple service on a normal Linux system is often a daunting task. Even setting up a simple web
+server can take more time than you would like to spend; install packages, mess with config files, fix dependencies,
+test, change things some more, etc. Docker can reduce or even eliminate this repetitive work. Run the following command
+to start a container image registry server on your Docker host:</p>
+<pre class="hljs"><code><div>~$ docker container run -p 5000:5000 -d --name registry registry:2
+
+Unable to find image 'registry:2' locally
+2: Pulling from library/registry
+c926b61bad3b: Pull complete
+5501dced60f8: Pull complete
+e875fe5e6b9c: Pull complete
+21f4bf2f86f9: Pull complete
+98513cca25bb: Pull complete
+Digest: sha256:0a182cb82c93939407967d6d71d6caf11dcef0e5689c6afe2d60518e3b34ab86
+Status: Downloaded newer image for registry:2
+8180d8e6c24dd40f4755a372eacb08d4bf8021abd79f9749a87a2004f4b71602
+
+~$
+</div></code></pre>
+<p>List the containers on your system:</p>
+<pre class="hljs"><code><div>~$ docker container ls
+
+CONTAINER ID   IMAGE        COMMAND                  CREATED          STATUS         PORTS                                       NAMES
+8180d8e6c24d   registry:2   &quot;/entrypoint.sh /etc…&quot;   10 seconds ago   Up 9 seconds   0.0.0.0:5000-&gt;5000/tcp, :::5000-&gt;5000/tcp   registry
+
+~$
+</div></code></pre>
+<p>One Docker command and seconds later you have a running image registry. The container almost always works because it
+brings its own filesystem, configuration and environment with it. The only things we need to configure when we run a
+container are the external aspects of the service, which programs outside the container will make use of, like the
+network port to use and so on.</p>
+<p>Registry servers generally listen on TCP port 5000, however, at present, only software running on the Docker host can
+reach our container via their IP address. For this reason the Docker run command we used provided the <code>-p</code> switch to map
+the 5000 container port to the host so that we can contact the registry from the outside world using the host network
+interface. The <code>-d</code> switch runs the container detached (in the background).</p>
+<p>Lookup the official “registry” repository on Docker Hub.</p>
+<ul>
+<li>How many images are available through the “registry” repository?</li>
+<li>How many tags are defined in the “registry” repository?</li>
+<li>Which tag identifies the newest image in the repository?</li>
+<li>Which image does the “latest” tag refer to?</li>
+<li>Which OS Distribution and Version are the “registry” images based on?</li>
+</ul>
+<p>The registry service, like most Docker services, exposes its interface using a REST API. We can use the <code>curl</code> or <code>wget</code>
+tools to test our registry service:</p>
+<pre class="hljs"><code><div>~$ curl -i http://localhost:5000
+
+HTTP/1.1 200 OK
+Cache-Control: no-cache
+Date: Thu, 18 Jan 2024 00:30:59 GMT
+Content-Length: 0
+
+~$
+</div></code></pre>
+<p>Our service is running and responds with &quot;200 OK&quot;. Note that because we have mapped port 5000 on the host to port 5000
+in the container, we do not need to know the IP address of the container on the container network.</p>
+<h3 id="2-use-the-registry">2. Use the registry</h3>
+<p>Imagine we want to create a stable, repeatable environment to test some software in. We could create a single container
+image with all of our tools installed that we could use on our desktop, in our CI system and in development environments.</p>
+<p>To illustrate we'll create a simple dev container with git installed. Run the following commands:</p>
+<pre class="hljs"><code><div>~$ docker container run -it --name client ubuntu:20.04 /bin/bash
+
+Unable to find image 'ubuntu:20.04' locally
+20.04: Pulling from library/ubuntu
+06d39c85623a: Pull complete
+Digest: sha256:24a0df437301598d1a4b62ddf59fa0ed2969150d70d748c84225e6501e9c36b9
+Status: Downloaded newer image for ubuntu:20.04
+
+root@f36deaf920b6:/#
+</div></code></pre>
+<p>In the container:</p>
+<pre class="hljs"><code><div>root@f36deaf920b6:/# apt update
+
+...
+
+root@f36deaf920b6:/# apt install -y git
+
+...
+
+root@f36deaf920b6:/# exit
+
+exit
+
+~$
+</div></code></pre>
+<p>This is of course a trivial example, our container includes an Ubuntu 20.04 base and the Git version control system. In
+a real scenario we might install many other tools (valgrind, cmake, g++, java, maven, ant, scala, Play, ruby, Rails,
+python 2/3, Sinatra, etc.)</p>
+<p>Now that we have our example container prepared let’s create an image from the container that we can launch over and
+over again. Execute the following <code>commit</code> subcommand to create an image from your container:</p>
+<pre class="hljs"><code><div>~$ docker container commit client mydev/devenv
+
+sha256:e4f768d5906b6c4c70838faafe4886bbcdd121b349fc3bb1dbf32390827174b5
+
+~$
+</div></code></pre>
+<p>Now display the images on your docker system with the <code>image ls</code> subcommand:</p>
+<pre class="hljs"><code><div>~$ docker image ls
+
+REPOSITORY     TAG       IMAGE ID       CREATED          SIZE
+mydev/devenv   latest    e4f768d5906b   13 seconds ago   223MB
+ubuntu         20.04     f78909c2b360   5 weeks ago      72.8MB
+registry       2         909c3ff012b7   6 weeks ago      25.4MB
+
+...
+
+~$
+</div></code></pre>
+<p>We can push our devenv image to a registry to make it easy to access from any other Docker system on the network. Our
+image has a userId/repository formatted name. Pushing such a repository image will cause it to be sent to the Docker
+Hub. To push the image to a different repository we need to change the first part of the repository string to represent
+the URL for the local repository. We can create multiple names for a single image ID.</p>
+<p>Use the <code>tag</code> subcommand to add a second name for the image created above and display the results:</p>
+<pre class="hljs"><code><div>~$ docker image tag mydev/devenv localhost:5000/devenv
+
+~$ docker image ls | grep devenv
+
+mydev/devenv            latest    e4f768d5906b   39 seconds ago   223MB
+localhost:5000/devenv   latest    e4f768d5906b   39 seconds ago   223MB
+
+~$
+</div></code></pre>
+<p>Note that the image IDs are identical; the tag is simply a pointer to the same set of image bits on disk identified by
+the image ID.</p>
+<p>Use the following command to push the image to your local registry:</p>
+<pre class="hljs"><code><div>~$ docker image push localhost:5000/devenv
+
+Using default tag: latest
+The push refers to repository [localhost:5000/devenv]
+5500e19d29c0: Pushed
+3a03f09d2129: Pushed
+latest: digest: sha256:024337eb3ac3e0f07a91b562ca2254caa52f20b3b5c558b9d8289f2b05c1ed8f size: 741
+
+~$
+</div></code></pre>
+<p>When docker is asked to push the image it examines the image name to identify the registry to connect to, in our case,
+localhost:5000.</p>
+<p>We can confirm the registry has our image using curl:</p>
+<pre class="hljs"><code><div>~$ curl -X GET localhost:5000/v2/_catalog
+
+{&quot;repositories&quot;:[&quot;devenv&quot;]}
+
+~$
+</div></code></pre>
+<h3 id="3-pull-an-image-from-the-registry">3. Pull an image from the registry</h3>
+<p>To fully test our registry we should try to pull images from it. Remove the two image names you created above:</p>
+<pre class="hljs"><code><div>~$ docker image rm mydev/devenv
+
+Untagged: mydev/devenv:latest
+
+~$ docker image rm localhost:5000/devenv
+
+Untagged: localhost:5000/devenv:latest
+Untagged: localhost:5000/devenv@sha256:024337eb3ac3e0f07a91b562ca2254caa52f20b3b5c558b9d8289f2b05c1ed8f
+Deleted: sha256:e4f768d5906b6c4c70838faafe4886bbcdd121b349fc3bb1dbf32390827174b5
+Deleted: sha256:dca5ee06f6253cdd2ab94f461e4a55698dea01cbc2c0f0597fbfc0311ca83288
+
+~$
+</div></code></pre>
+<p>Because both tags referred to the same image only the second <code>image rm</code> subcommand actually deleted the image. In the
+example above two image layers are deleted. Under certain circumstances Docker creates unnamed intermediate images. When
+you delete a named image, Docker automatically removes any unused unnamed intermediate images in the ancestry.</p>
+<p>Run a <code>docker image ls</code> command to be sure the images have been removed, then try to pull your image back down to the
+Docker host from the registry:</p>
+<pre class="hljs"><code><div>~$ docker image ls
+
+REPOSITORY   TAG       IMAGE ID       CREATED       SIZE
+ubuntu       20.04     1c5c8d0b973a   2 weeks ago   72.8MB
+nginx        latest    904b8cb13b93   3 weeks ago   142MB
+registry     2         0d153fadf70b   5 weeks ago   24.2MB
+
+...
+
+~$
+</div></code></pre>
+<p>Now let's try to retrieve out image from the registry server:</p>
+<pre class="hljs"><code><div>~$ docker image pull localhost:5000/devenv
+
+Using default tag: latest
+latest: Pulling from devenv
+521f275cc58b: Already exists
+06a14fa56863: Pull complete
+Digest: sha256:024337eb3ac3e0f07a91b562ca2254caa52f20b3b5c558b9d8289f2b05c1ed8f
+Status: Downloaded newer image for localhost:5000/devenv:latest
+localhost:5000/devenv:latest
+
+~$
+</div></code></pre>
+<p>Success! Note the image layer(s) in the output above state <code>Already exists</code> even though we deleted our two <code>devenv</code>
+images, why do you think that is? (Hint: what base image is the devenv built on? Is it still cached on your Docker
+host?)</p>
+<p>List your local images to verify the download:</p>
+<pre class="hljs"><code><div>~$ docker image ls
+
+REPOSITORY              TAG       IMAGE ID       CREATED              SIZE
+localhost:5000/devenv   latest    e4f768d5906b   2 minutes ago   223MB
+ubuntu                  20.04     1c5c8d0b973a   2 weeks ago          72.8MB
+nginx                   latest    904b8cb13b93   3 weeks ago          142MB
+registry                2         0d153fadf70b   5 weeks ago          24.2MB
+
+...
+
+~$
+</div></code></pre>
+<ul>
+<li>Is the image you downloaded from the registry the same exact set of bits that you had before?
+<ul>
+<li>What makes you think so or not?</li>
+</ul>
+</li>
+</ul>
+<h3 id="4-dockerfiles">4. Dockerfiles</h3>
+<p>So far we have run a Docker container <em>from</em> an image and used the commit command to snapshot a container <em>into</em> an image.</p>
+<p>There is a way to build images automatically by reading the instructions in a file known as a Dockerfile. A Dockerfile
+is a text file that contains all of the commands you would normally execute manually to configure an application
+artifact. Scripting the image build makes it repeatable, allows it to be committed to source code control, audited,
+reverted, etc.</p>
+<p>In this lab step we'll begin by creating a &quot;build&quot; container image that builds and runs a simple Go Language &quot;hello&quot;
+service. The build image will include the Go compiler and linker, all of the source code for our application and the
+libraries it uses, all of the Go standard libraries and a lot of other bits and pieces.</p>
+<p>Later we will create a second image to release to production with only the necessities required to run our service.</p>
+<h4 id="41-create-a-basic-docker-image">4.1. Create a basic Docker image</h4>
+<p>Create a new directory for your Dockerfile project:</p>
+<pre class="hljs"><code><div>~$ mkdir ~/goapp &amp;&amp; cd $_
+
+~/goapp$
+</div></code></pre>
+<p>We will create a simple &quot;hello world&quot; microservice in Go to package into our container image. The program listens on
+port 8080 and responds to requests on the root route with a &quot;hello world&quot; message.</p>
+<p>First create the source file:</p>
+<pre class="hljs"><code><div>~/goapp$ nano hello.go &amp;&amp; cat $_
+</div></code></pre>
+<pre class="hljs"><code><div><span class="hljs-keyword">package</span> main
+
+<span class="hljs-keyword">import</span> (
+	<span class="hljs-string">"fmt"</span>
+	<span class="hljs-string">"net/http"</span>
+)
+
+<span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-title">helloHandler</span><span class="hljs-params">(w http.ResponseWriter, r *http.Request)</span></span> {
+	response := <span class="hljs-string">"Hello World!"</span>
+	fmt.Fprintln(w, response)
+	fmt.Println(<span class="hljs-string">"Processing hello request."</span>)
+}
+
+<span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-title">listenAndServe</span><span class="hljs-params">(port <span class="hljs-keyword">string</span>)</span></span> {
+	fmt.Printf(<span class="hljs-string">"Listening on port %s\n"</span>, port)
+	err := http.ListenAndServe(<span class="hljs-string">":"</span>+port, <span class="hljs-literal">nil</span>)
+	<span class="hljs-keyword">if</span> err != <span class="hljs-literal">nil</span> {
+		<span class="hljs-built_in">panic</span>(<span class="hljs-string">"ListenAndServe: "</span> + err.Error())
+	}
+}
+
+<span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-title">main</span><span class="hljs-params">()</span></span> {
+	http.HandleFunc(<span class="hljs-string">"/"</span>, helloHandler)
+	port := <span class="hljs-string">"8080"</span>
+	<span class="hljs-keyword">go</span> listenAndServe(port)
+	<span class="hljs-keyword">select</span> {}
+}
+</div></code></pre>
+<pre class="hljs"><code><div>~/goapp$
+</div></code></pre>
+<p>Now create a Dockerfile to build an image using the code above:</p>
+<ul>
+<li>We will use a preexisting image that has Golang already in it (<code>FROM golang:1.20</code>)</li>
+<li>Copy the source file into the image using the Dockerfile COPY command (<code>COPY ...</code>)</li>
+<li>Run the program (<code>CMD [&quot;go&quot;,&quot;run&quot;,&quot;hello.go&quot;]</code>)</li>
+</ul>
+<pre class="hljs"><code><div>~/goapp$ nano Dockerfile &amp;&amp; cat $_
+</div></code></pre>
+<pre class="hljs"><code><div><span class="hljs-keyword">FROM</span> docker.io/golang:<span class="hljs-number">1.20</span>
+<span class="hljs-keyword">WORKDIR</span><span class="bash"> /go/src/hello</span>
+<span class="hljs-keyword">COPY</span><span class="bash"> ./hello.go /go/src/hello</span>
+<span class="hljs-keyword">RUN</span><span class="bash"> go mod init example.com</span>
+<span class="hljs-keyword">CMD</span><span class="bash"> [<span class="hljs-string">"go"</span>,<span class="hljs-string">"run"</span>,<span class="hljs-string">"hello.go"</span>]</span>
+</div></code></pre>
+<pre class="hljs"><code><div>~/goapp$
+</div></code></pre>
+<p>We use the <code>image build</code> subcommand to create the image using our Dockerfile:</p>
+<pre class="hljs"><code><div>~/goapp$ docker image build -t hello-build:v1 .
+
+[+] Building 34.3s (9/9) FINISHED                                                                 docker:default
+ =&gt; [internal] load build definition from Dockerfile                                                        0.0s
+ =&gt; =&gt; transferring dockerfile: 174B                                                                        0.0s
+ =&gt; [internal] load .dockerignore                                                                           0.0s
+ =&gt; =&gt; transferring context: 2B                                                                             0.0s
+ =&gt; [internal] load metadata for docker.io/library/golang:1.20                                              2.4s
+ =&gt; [1/4] FROM docker.io/library/golang:1.20@sha256:bfc60723228b88180b1e15872eb435cf7e6d8199eae9be77c8dfd  28.6s
+ =&gt; =&gt; resolve docker.io/library/golang:1.20@sha256:bfc60723228b88180b1e15872eb435cf7e6d8199eae9be77c8dfd8  0.0s
+ =&gt; =&gt; sha256:30d85599795460b2d9d24c6b87c53ec60555b601705cc83bea31632240500980 64.14MB / 64.14MB            2.4s
+ =&gt; =&gt; sha256:bfc60723228b88180b1e15872eb435cf7e6d8199eae9be77c8dfd8f8079343df 2.36kB / 2.36kB              0.0s
+ =&gt; =&gt; sha256:0812e50d2e826e2feb01f7e5ef2a08978fc3acd398141d7940bfd7ef066347fd 1.58kB / 1.58kB              0.0s
+ =&gt; =&gt; sha256:69b75e52a296dce3b9e8a8361bb7418b3e8744c46edd59be58384a33022ac533 6.86kB / 6.86kB              0.0s
+ =&gt; =&gt; sha256:1b13d4e1a46e5e969702ec92b7c787c1b6891bff7c21ad378ff6dbc9e751d5d4 49.56MB / 49.56MB            1.6s
+ =&gt; =&gt; sha256:1c74526957fc2157e8b0989072dc99b9582b398c12d1dcd40270fd76231bab0c 24.05MB / 24.05MB            1.1s
+ =&gt; =&gt; sha256:7d90f81b68902900900a88202c27c541efbe650a06472cb0151c54917620eb6e 92.37MB / 92.37MB            3.6s
+ =&gt; =&gt; extracting sha256:1b13d4e1a46e5e969702ec92b7c787c1b6891bff7c21ad378ff6dbc9e751d5d4                   4.4s
+ =&gt; =&gt; sha256:01aa0e3863b47c0af24d0056fd011b9a6a25d1f4e7b4f5839b9635a4f61d90a7 100.52MB / 100.52MB          5.1s
+ =&gt; =&gt; sha256:b84861d468c4174be6db8f75a28ed02188abc5e4ebab42fe75c17c2c00e4a72e 155B / 155B                  3.6s
+ =&gt; =&gt; extracting sha256:1c74526957fc2157e8b0989072dc99b9582b398c12d1dcd40270fd76231bab0c                   1.1s
+ =&gt; =&gt; extracting sha256:30d85599795460b2d9d24c6b87c53ec60555b601705cc83bea31632240500980                   4.9s
+ =&gt; =&gt; extracting sha256:7d90f81b68902900900a88202c27c541efbe650a06472cb0151c54917620eb6e                   4.6s
+ =&gt; =&gt; extracting sha256:01aa0e3863b47c0af24d0056fd011b9a6a25d1f4e7b4f5839b9635a4f61d90a7                   7.9s
+ =&gt; =&gt; extracting sha256:b84861d468c4174be6db8f75a28ed02188abc5e4ebab42fe75c17c2c00e4a72e                   0.0s
+ =&gt; [internal] load build context                                                                           0.0s
+ =&gt; =&gt; transferring context: 533B                                                                           0.0s
+ =&gt; [2/4] WORKDIR /go/src/hello                                                                             2.6s
+ =&gt; [3/4] COPY ./hello.go /go/src/hello                                                                     0.0s
+ =&gt; [4/4] RUN go mod init example.com                                                                       0.4s
+ =&gt; exporting to image                                                                                      0.1s
+ =&gt; =&gt; exporting layers                                                                                     0.1s
+ =&gt; =&gt; writing image sha256:eff67c22e949ecdbeca754fb78471947e6ede4a53f986684b6e89d117176ef07                0.0s
+ =&gt; =&gt; naming to docker.io/library/hello-build:v1                                                           0.0s
+
+~/goapp$
+</div></code></pre>
+<p>Run the container so we can see that it works:</p>
+<pre class="hljs"><code><div>~/goapp$ docker container run -d --name mybuild hello-build:v1
+
+9518f4f8fbe23952e7f4a774ef6eecf3f13a24b3f41519ebda7a83f6beabbcf6
+
+~/goapp$
+</div></code></pre>
+<p>To see our container running, we can use <code>docker container ls</code>:</p>
+<pre class="hljs"><code><div>~/goapp$ docker container ls
+
+CONTAINER ID   IMAGE            COMMAND                  CREATED         STATUS         PORTS                                       NAMES
+9518f4f8fbe2   hello-build:v1   &quot;go run hello.go&quot;        9 seconds ago   Up 8 seconds                                               mybuild
+8180d8e6c24d   registry:2       &quot;/entrypoint.sh /etc…&quot;   5 minutes ago   Up 5 minutes   0.0.0.0:5000-&gt;5000/tcp, :::5000-&gt;5000/tcp   registry
+
+~/goapp$
+</div></code></pre>
+<p>When we're running many containers, the <code>ls</code> output can get difficult to read, but because our container is based on a
+particular image &quot;<code>hello-build:v1</code>&quot;, we can filter (<code>--filter</code>) using the &quot;ancestor&quot; filter so that Docker shows us
+containers based on our image only:</p>
+<pre class="hljs"><code><div>~/goapp$ docker container ls --filter ancestor=hello-build:v1
+
+CONTAINER ID   IMAGE            COMMAND             CREATED          STATUS          PORTS     NAMES
+c06af59cc070   hello-build:v1   &quot;go run hello.go&quot;   14 seconds ago   Up 14 seconds             mybuild
+
+~/goapp$
+</div></code></pre>
+<p>To discover information about our container we can examine its metadata using the <code>inspect</code> subcommand; <code>inspect</code> can
+tell us things like its IP address, environment variables, process ID, etc.</p>
+<pre class="hljs"><code><div>~/goapp$ docker container inspect mybuild | head -20
+
+[
+    {
+        &quot;Id&quot;: &quot;9518f4f8fbe23952e7f4a774ef6eecf3f13a24b3f41519ebda7a83f6beabbcf6&quot;,
+        &quot;Created&quot;: &quot;2024-01-18T00:36:12.628795003Z&quot;,
+        &quot;Path&quot;: &quot;go&quot;,
+        &quot;Args&quot;: [
+            &quot;run&quot;,
+            &quot;hello.go&quot;
+        ],
+        &quot;State&quot;: {
+            &quot;Status&quot;: &quot;running&quot;,
+            &quot;Running&quot;: true,
+            &quot;Paused&quot;: false,
+            &quot;Restarting&quot;: false,
+            &quot;OOMKilled&quot;: false,
+            &quot;Dead&quot;: false,
+            &quot;Pid&quot;: 20490,
+            &quot;ExitCode&quot;: 0,
+            &quot;Error&quot;: &quot;&quot;,
+            &quot;StartedAt&quot;: &quot;2024-01-18T00:36:13.047899829Z&quot;,
+
+~/goapp$
+</div></code></pre>
+<p>This too is <em>a lot</em> of information to sort through; fortunately the <code>inspect</code> hierarchy can be parsed using the go
+template language! By using what we know about the manifest's hierarchy, we can extract only the information we need
+with the <code>--format</code> argument.</p>
+<p>Examine your container's inspect hierarchy and try a few queries; <em>replace the example ID below with the ID of your own
+container!</em></p>
+<pre class="hljs"><code><div>~/goapp$ docker container inspect mybuild --format '{{.State.Pid}}'
+
+20490
+
+~/goapp$ docker container inspect mybuild --format '{{.Id}}'
+
+9518f4f8fbe23952e7f4a774ef6eecf3f13a24b3f41519ebda7a83f6beabbcf6
+
+~/goapp$ docker container inspect mybuild --format '{{.Config.Cmd}}'
+
+[go run hello.go]
+
+~/goapp$
+</div></code></pre>
+<p>Combining the previous <code>ls</code> and <code>inspect</code> commands we can:</p>
+<ul>
+<li>Target the container image with: <code>docker container ls --filter ancestor=hello-build:v1</code> in a nested shell, adding the
+&quot;quiet&quot; flag (<code>-q</code>) so that only the short ID is returned (try it on its own to see what it returns)</li>
+<li>Use <code>docker container inspect --format '{{.NetworkSettings.IPAddress}}'</code> to reveal your hello-build container's IP</li>
+<li>Assign the final output (the container's IP address) to an environment variable so that we can reuse it</li>
+</ul>
+<p>Try it:</p>
+<pre class="hljs"><code><div>~/goapp$ IP=$(docker container inspect --format '{{.NetworkSettings.IPAddress}}' mybuild) &amp;&amp; echo $IP
+
+172.17.0.3
+
+~/goapp$
+</div></code></pre>
+<p>Now run a client container to test the service; adding the <code>--rm</code> flag below deletes the container when the command
+completes since we only need to use our client container temporarily:</p>
+<pre class="hljs"><code><div>~/goapp$ docker container run --rm busybox wget -qO- $IP:8080 &amp;&amp; echo
+
+Unable to find image 'busybox:latest' locally
+latest: Pulling from library/busybox
+a307d6ecc620: Pull complete
+Digest: sha256:ba76950ac9eaa407512c9d859cea48114eeff8a6f12ebaa5d32ce79d4a017dd8
+Status: Downloaded newer image for busybox:latest
+Hello World!
+
+~/goapp$
+</div></code></pre>
+<p>The app is successfully running but you may have noticed that it took more than a moment to retrieve the golang image.</p>
+<p>If we check the size of our <code>hello-build</code> image, we notice it is quite sizeable:</p>
+<pre class="hljs"><code><div>~/goapp$ docker image ls hello-build
+
+REPOSITORY    TAG       IMAGE ID       CREATED         SIZE
+hello-build   v1        eff67c22e949   2 minutes ago   846MB
+
+~/goapp$
+</div></code></pre>
+<p>Let's fix that!</p>
+<h3 id="5-multistage-builds">5. Multistage Builds</h3>
+<p>One of the most challenging things about building images is keeping the image size down. Each instruction in the
+Dockerfile adds a layer to the image, and it is important to clean up any artifacts not needed before moving on to the
+next layer/instruction.</p>
+<p>It <em>was</em> common to have one Dockerfile to use for development and builds (which contained everything needed to build
+your application), and a slimmed-down one to use for production, which only contained your application and exactly what
+was needed to run it. This concept was known as the “builder pattern”.</p>
+<p>With multi-stage builds, we can implement the builder pattern in a single Dockerfile. Each FROM instruction can use a
+different base, and each of them begins a new stage of the build. We can selectively copy artifacts from one stage to
+another, leaving behind everything we don’t want in the final image.</p>
+<p>A typical multistage microservice build will build the service in the first stage and then package it for distribution
+in the second stage. In this step we will use the Docker multi-stage build functionality to create a static binary in the
+first stage which uses the golang image. In the second stage we will extract the executable service from the first
+stage.</p>
+<p>This final container will have a small footprint, making it quick to download and also minimizing its attack surface.</p>
+<p>To begin create a new context:</p>
+<pre class="hljs"><code><div>~$ mkdir ~/multi-build &amp;&amp; cd $_
+
+~/multi-build$
+</div></code></pre>
+<p>Now that we have a new directory to work in, create a Dockerfile with the following features:</p>
+<ul>
+<li>Just as before, use the Golang image (<code>FROM golang:1.20</code>)</li>
+<li>Add source code to the image (<code>COPY ...</code>)</li>
+<li>Run a build this time (<code>RUN [&quot;go&quot;,&quot;build&quot;,&quot;-tags&quot;,&quot;netgo&quot;]</code>)</li>
+</ul>
+<blockquote>
+<p>N.B. The &quot;-tags netgo&quot; flag causes Go to statically link the executable, making it free of dependencies.</p>
+</blockquote>
+<p>In the second image:</p>
+<ul>
+<li>Using a second <code>FROM</code> instruction, define the second build from scratch</li>
+<li>Copy the binary from the first build to the second image build <code>COPY --from=build-env</code></li>
+<li>Expose ports where our app is listening</li>
+<li>Set the entrypoint of the image as our app</li>
+</ul>
+<pre class="hljs"><code><div>~/multi-build$ cp ~/goapp/hello.go .
+
+~/multi-build$ nano Dockerfile &amp;&amp; cat $_
+</div></code></pre>
+<pre class="hljs"><code><div><span class="hljs-keyword">FROM</span> docker.io/golang:<span class="hljs-number">1.20</span> AS build-<span class="hljs-keyword">env</span>
+<span class="hljs-keyword">WORKDIR</span><span class="bash"> /go/src/hello/</span>
+<span class="hljs-keyword">COPY</span><span class="bash"> ./hello.go /go/src/hello/</span>
+<span class="hljs-keyword">RUN</span><span class="bash"> [<span class="hljs-string">"go"</span>,<span class="hljs-string">"mod"</span>,<span class="hljs-string">"init"</span>,<span class="hljs-string">"example.com/hello"</span>]</span>
+<span class="hljs-keyword">RUN</span><span class="bash"> [<span class="hljs-string">"go"</span>,<span class="hljs-string">"build"</span>,<span class="hljs-string">"-tags"</span>,<span class="hljs-string">"netgo"</span>]</span>
+
+<span class="hljs-keyword">FROM</span> scratch
+<span class="hljs-keyword">COPY</span><span class="bash"> --from=build-env /go/src/hello/hello hello</span>
+<span class="hljs-keyword">EXPOSE</span> <span class="hljs-number">8080</span>
+<span class="hljs-keyword">ENTRYPOINT</span><span class="bash"> [<span class="hljs-string">"./hello"</span>]</span>
+</div></code></pre>
+<pre class="hljs"><code><div>~/multi-build$
+</div></code></pre>
+<p>Now build the image with the same repo name <code>hello-build</code> with a <code>v2</code> tag:</p>
+<pre class="hljs"><code><div>~/multi-build$ docker image build -t hello-build:v2 .
+
+[+] Building 26.7s (11/11) FINISHED                                                               docker:default
+ =&gt; [internal] load build definition from Dockerfile                                                        0.0s
+ =&gt; =&gt; transferring dockerfile: 309B                                                                        0.0s
+ =&gt; [internal] load .dockerignore                                                                           0.0s
+ =&gt; =&gt; transferring context: 2B                                                                             0.0s
+ =&gt; [internal] load metadata for docker.io/library/golang:1.20                                              0.6s
+ =&gt; [build-env 1/5] FROM docker.io/library/golang:1.20@sha256:bfc60723228b88180b1e15872eb435cf7e6d8199eae9  0.0s
+ =&gt; [internal] load build context                                                                           0.0s
+ =&gt; =&gt; transferring context: 533B                                                                           0.0s
+ =&gt; CACHED [build-env 2/5] WORKDIR /go/src/hello/                                                           0.0s
+ =&gt; [build-env 3/5] COPY ./hello.go /go/src/hello/                                                          0.0s
+ =&gt; [build-env 4/5] RUN [&quot;go&quot;,&quot;mod&quot;,&quot;init&quot;,&quot;example.com/hello&quot;]                                             0.4s
+ =&gt; [build-env 5/5] RUN [&quot;go&quot;,&quot;build&quot;,&quot;-tags&quot;,&quot;netgo&quot;]                                                     25.3s
+ =&gt; [stage-1 1/1] COPY --from=build-env /go/src/hello/hello hello                                           0.1s
+ =&gt; exporting to image                                                                                      0.1s
+ =&gt; =&gt; exporting layers                                                                                     0.1s
+ =&gt; =&gt; writing image sha256:163ebaa35f52dc1a9e64b0e92dd7b9976286c773f1b8269a57725131f7af486f                0.0s
+ =&gt; =&gt; naming to docker.io/library/hello-build:v2                                                           0.0s
+
+~/multi-build$
+</div></code></pre>
+<p>List our hello-build images:</p>
+<pre class="hljs"><code><div>~/multi-build$ docker image ls hello-build
+
+REPOSITORY    TAG       IMAGE ID       CREATED         SIZE
+hello-build   v2        163ebaa35f52   2 minutes ago   6.63MB
+hello-build   v1        eff67c22e949   5 minutes ago   846MB
+
+~/multi-build$
+</div></code></pre>
+<p>Look at the difference; our v1 hello-build is just under 1GB but our v2 is under 10MB. Talk about improvement!</p>
+<p>Run a new container from our new image:</p>
+<pre class="hljs"><code><div>~/multi-build$ docker container run -d hello-build:v2
+
+7bd4ee8c9fc14dc1c7d91fa814c76e8af7b7333436da4df672484e79f57d84ef
+
+~/multi-build$
+</div></code></pre>
+<p>Store its IP in another environment variable, <em>making sure you change the ancestor argument to filter for the v2 image
+this time</em>:</p>
+<pre class="hljs"><code><div>~/multi-build$ IP2=$(docker container inspect --format '{{.NetworkSettings.IPAddress}}' \
+$(docker container ls -q --filter ancestor=hello-build:v2)) &amp;&amp; echo $IP2
+
+172.17.0.4
+
+~/multi-build$
+</div></code></pre>
+<p>Run another client container to test if it works:</p>
+<pre class="hljs"><code><div>~/multi-build$ docker container run --rm busybox wget -qO- $IP2:8080 &amp;&amp; echo
+
+Hello World!
+
+~/multi-build$
+</div></code></pre>
+<p>Success! The app is the same, but we have eliminated all of the build tools from the image, making it more secure and
+lighter weight.</p>
+<p>Use the <code>exec</code> command to take a look inside this lightweight container:</p>
+<pre class="hljs"><code><div>~/multi-build$ docker container exec -it $(docker container ls -q --filter ancestor=hello-build:v2) /bin/sh
+
+OCI runtime exec failed: exec failed: container_linux.go:380: starting container process caused: exec: &quot;/bin/sh&quot;: stat /bin/sh: no such file or directory: unknown
+
+~/multi-build$
+</div></code></pre>
+<p>What happened?</p>
+<p>We didn't include anything in our app image filesystem other than the application binary itself. It is impossible to run
+<code>/bin/sh</code> or anything else other than our app! This is great for security but can make the container harder to debug.</p>
+<h3 id="6-challenge-add-a-linux-distro-with-a-filesystem">6. CHALLENGE: add a Linux distro with a filesystem</h3>
+<p>Add a Linux distribution filesystem to the <code>hello-world:v2</code> image so that users can <code>exec</code> a sh in a running container.
+Build the image, tagging the new image version <code>hello-world:v3</code>; then run a container from the image and ensure you can
+exec a shell inside the container.</p>
+<h3 id="7-challenge-tagging-images">7. CHALLENGE: tagging images</h3>
+<p>Add an appropriate tag to your production go program image and push it to your local registry. Verify your registry has
+stored your image.</p>
+<h3 id="8-clean-up">8. Clean up</h3>
+<p>Stop and remove all of the containers on your system.</p>
+<pre class="hljs"><code><div>~/multi-build$ docker container rm $(docker container stop $(docker container ls -qa))
+
+8cd929133fb8
+7728345754b9
+c06af59cc070
+f36deaf920b6
+7839f47563b5
+
+~/multi-build$ cd
+
+~$
+</div></code></pre>
+<br>
+<p>Congratulations, you have completed the lab!</p>
+<br>
+<p><em>Copyright (c) 2023-2024 RX-M LLC, Cloud Native &amp; AI Training and Consulting, all rights reserved</em></p>
+
+</body>
+</html>

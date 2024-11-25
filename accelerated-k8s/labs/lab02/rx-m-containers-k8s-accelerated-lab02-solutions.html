@@ -1,0 +1,511 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>rx-m-containers-k8s-accelerated-lab02-solutions.md</title>
+<meta http-equiv="Content-type" content="text/html;charset=UTF-8">
+
+<style>
+/* https://github.com/microsoft/vscode/blob/master/extensions/markdown-language-features/media/markdown.css */
+/*---------------------------------------------------------------------------------------------
+ *  Copyright (c) Microsoft Corporation. All rights reserved.
+ *  Licensed under the MIT License. See License.txt in the project root for license information.
+ *--------------------------------------------------------------------------------------------*/
+
+body {
+	font-family: var(--vscode-markdown-font-family, -apple-system, BlinkMacSystemFont, "Segoe WPC", "Segoe UI", "Ubuntu", "Droid Sans", sans-serif);
+	font-size: var(--vscode-markdown-font-size, 14px);
+	padding: 0 26px;
+	line-height: var(--vscode-markdown-line-height, 22px);
+	word-wrap: break-word;
+}
+
+#code-csp-warning {
+	position: fixed;
+	top: 0;
+	right: 0;
+	color: white;
+	margin: 16px;
+	text-align: center;
+	font-size: 12px;
+	font-family: sans-serif;
+	background-color:#444444;
+	cursor: pointer;
+	padding: 6px;
+	box-shadow: 1px 1px 1px rgba(0,0,0,.25);
+}
+
+#code-csp-warning:hover {
+	text-decoration: none;
+	background-color:#007acc;
+	box-shadow: 2px 2px 2px rgba(0,0,0,.25);
+}
+
+body.scrollBeyondLastLine {
+	margin-bottom: calc(100vh - 22px);
+}
+
+body.showEditorSelection .code-line {
+	position: relative;
+}
+
+body.showEditorSelection .code-active-line:before,
+body.showEditorSelection .code-line:hover:before {
+	content: "";
+	display: block;
+	position: absolute;
+	top: 0;
+	left: -12px;
+	height: 100%;
+}
+
+body.showEditorSelection li.code-active-line:before,
+body.showEditorSelection li.code-line:hover:before {
+	left: -30px;
+}
+
+.vscode-light.showEditorSelection .code-active-line:before {
+	border-left: 3px solid rgba(0, 0, 0, 0.15);
+}
+
+.vscode-light.showEditorSelection .code-line:hover:before {
+	border-left: 3px solid rgba(0, 0, 0, 0.40);
+}
+
+.vscode-light.showEditorSelection .code-line .code-line:hover:before {
+	border-left: none;
+}
+
+.vscode-dark.showEditorSelection .code-active-line:before {
+	border-left: 3px solid rgba(255, 255, 255, 0.4);
+}
+
+.vscode-dark.showEditorSelection .code-line:hover:before {
+	border-left: 3px solid rgba(255, 255, 255, 0.60);
+}
+
+.vscode-dark.showEditorSelection .code-line .code-line:hover:before {
+	border-left: none;
+}
+
+.vscode-high-contrast.showEditorSelection .code-active-line:before {
+	border-left: 3px solid rgba(255, 160, 0, 0.7);
+}
+
+.vscode-high-contrast.showEditorSelection .code-line:hover:before {
+	border-left: 3px solid rgba(255, 160, 0, 1);
+}
+
+.vscode-high-contrast.showEditorSelection .code-line .code-line:hover:before {
+	border-left: none;
+}
+
+img {
+	max-width: 100%;
+	max-height: 100%;
+}
+
+a {
+	text-decoration: none;
+}
+
+a:hover {
+	text-decoration: underline;
+}
+
+a:focus,
+input:focus,
+select:focus,
+textarea:focus {
+	outline: 1px solid -webkit-focus-ring-color;
+	outline-offset: -1px;
+}
+
+hr {
+	border: 0;
+	height: 2px;
+	border-bottom: 2px solid;
+}
+
+h1 {
+	padding-bottom: 0.3em;
+	line-height: 1.2;
+	border-bottom-width: 1px;
+	border-bottom-style: solid;
+}
+
+h1, h2, h3 {
+	font-weight: normal;
+}
+
+table {
+	border-collapse: collapse;
+}
+
+table > thead > tr > th {
+	text-align: left;
+	border-bottom: 1px solid;
+}
+
+table > thead > tr > th,
+table > thead > tr > td,
+table > tbody > tr > th,
+table > tbody > tr > td {
+	padding: 5px 10px;
+}
+
+table > tbody > tr + tr > td {
+	border-top: 1px solid;
+}
+
+blockquote {
+	margin: 0 7px 0 5px;
+	padding: 0 16px 0 10px;
+	border-left-width: 5px;
+	border-left-style: solid;
+}
+
+code {
+	font-family: Menlo, Monaco, Consolas, "Droid Sans Mono", "Courier New", monospace, "Droid Sans Fallback";
+	font-size: 1em;
+	line-height: 1.357em;
+}
+
+body.wordWrap pre {
+	white-space: pre-wrap;
+}
+
+pre:not(.hljs),
+pre.hljs code > div {
+	padding: 16px;
+	border-radius: 3px;
+	overflow: auto;
+}
+
+pre code {
+	color: var(--vscode-editor-foreground);
+	tab-size: 4;
+}
+
+/** Theming */
+
+.vscode-light pre {
+	background-color: rgba(220, 220, 220, 0.4);
+}
+
+.vscode-dark pre {
+	background-color: rgba(10, 10, 10, 0.4);
+}
+
+.vscode-high-contrast pre {
+	background-color: rgb(0, 0, 0);
+}
+
+.vscode-high-contrast h1 {
+	border-color: rgb(0, 0, 0);
+}
+
+.vscode-light table > thead > tr > th {
+	border-color: rgba(0, 0, 0, 0.69);
+}
+
+.vscode-dark table > thead > tr > th {
+	border-color: rgba(255, 255, 255, 0.69);
+}
+
+.vscode-light h1,
+.vscode-light hr,
+.vscode-light table > tbody > tr + tr > td {
+	border-color: rgba(0, 0, 0, 0.18);
+}
+
+.vscode-dark h1,
+.vscode-dark hr,
+.vscode-dark table > tbody > tr + tr > td {
+	border-color: rgba(255, 255, 255, 0.18);
+}
+
+</style>
+
+<style>
+/* Tomorrow Theme */
+/* http://jmblog.github.com/color-themes-for-google-code-highlightjs */
+/* Original theme - https://github.com/chriskempson/tomorrow-theme */
+
+/* Tomorrow Comment */
+.hljs-comment,
+.hljs-quote {
+	color: #8e908c;
+}
+
+/* Tomorrow Red */
+.hljs-variable,
+.hljs-template-variable,
+.hljs-tag,
+.hljs-name,
+.hljs-selector-id,
+.hljs-selector-class,
+.hljs-regexp,
+.hljs-deletion {
+	color: #c82829;
+}
+
+/* Tomorrow Orange */
+.hljs-number,
+.hljs-built_in,
+.hljs-builtin-name,
+.hljs-literal,
+.hljs-type,
+.hljs-params,
+.hljs-meta,
+.hljs-link {
+	color: #f5871f;
+}
+
+/* Tomorrow Yellow */
+.hljs-attribute {
+	color: #eab700;
+}
+
+/* Tomorrow Green */
+.hljs-string,
+.hljs-symbol,
+.hljs-bullet,
+.hljs-addition {
+	color: #718c00;
+}
+
+/* Tomorrow Blue */
+.hljs-title,
+.hljs-section {
+	color: #4271ae;
+}
+
+/* Tomorrow Purple */
+.hljs-keyword,
+.hljs-selector-tag {
+	color: #8959a8;
+}
+
+.hljs {
+	display: block;
+	overflow-x: auto;
+	color: #4d4d4c;
+	padding: 0.5em;
+}
+
+.hljs-emphasis {
+	font-style: italic;
+}
+
+.hljs-strong {
+	font-weight: bold;
+}
+</style>
+
+<style>
+/*
+ * Markdown PDF CSS
+ */
+
+ body {
+	font-family: -apple-system, BlinkMacSystemFont, "Segoe WPC", "Segoe UI", "Ubuntu", "Droid Sans", sans-serif, "Meiryo";
+	padding: 0 12px;
+}
+
+pre {
+	background-color: #f8f8f8;
+	border: 1px solid #cccccc;
+	border-radius: 3px;
+	overflow-x: auto;
+	white-space: pre-wrap;
+	overflow-wrap: break-word;
+}
+
+pre:not(.hljs) {
+	padding: 23px;
+	line-height: 19px;
+}
+
+blockquote {
+	background: rgba(127, 127, 127, 0.1);
+	border-color: rgba(0, 122, 204, 0.5);
+}
+
+.emoji {
+	height: 1.4em;
+}
+
+code {
+	font-size: 14px;
+	line-height: 19px;
+}
+
+/* for inline code */
+:not(pre):not(.hljs) > code {
+	color: #C9AE75; /* Change the old color so it seems less like an error */
+	font-size: inherit;
+}
+
+/* Page Break : use <div class="page"/> to insert page break
+-------------------------------------------------------- */
+.page {
+	page-break-after: always;
+}
+
+</style>
+
+<script src="https://unpkg.com/mermaid/dist/mermaid.min.js"></script>
+</head>
+<body>
+  <script>
+    mermaid.initialize({
+      startOnLoad: true,
+      theme: document.body.classList.contains('vscode-dark') || document.body.classList.contains('vscode-high-contrast')
+          ? 'dark'
+          : 'default'
+    });
+  </script>
+<p><img src="https://rx-m.com/rxm-cnc.svg" alt="RX-M, llc."></p>
+<h1 id="containers">Containers</h1>
+<h2 id="images-overview-lab-solutions">Images Overview Lab Solutions</h2>
+<h3 id="6-challenge-add-a-linux-distro-with-a-filesystem">6. CHALLENGE: add a Linux distro with a filesystem</h3>
+<p>Fix the <code>hello-world:v2</code> image by using an OS distribution so that users can <code>exec</code> into the running container. Build
+the image, tagging the new image version <code>hello-world:v3</code>; then run a container from the image and exec into it to prove
+it can be done!</p>
+<p>In your Dockerfile, use a distro in the second <code>FROM</code> instruction instead of &quot;<code>scratch</code>&quot;, such as alpine:</p>
+<pre class="hljs"><code><div>~/multi-build$ cp Dockerfile Dockerfile-orig
+
+~/multi-build$ nano Dockerfile &amp;&amp; cat $_
+</div></code></pre>
+<pre class="hljs"><code><div><span class="hljs-keyword">FROM</span> golang:<span class="hljs-number">1.18</span> AS build-<span class="hljs-keyword">env</span>
+<span class="hljs-keyword">WORKDIR</span><span class="bash"> /go/src/hello/</span>
+<span class="hljs-keyword">COPY</span><span class="bash"> ./hello.go /go/src/hello/</span>
+<span class="hljs-keyword">RUN</span><span class="bash"> go mod init example.com</span>
+<span class="hljs-keyword">RUN</span><span class="bash"> [<span class="hljs-string">"go"</span>,<span class="hljs-string">"build"</span>,<span class="hljs-string">"-tags"</span>,<span class="hljs-string">"netgo"</span>,<span class="hljs-string">"-o"</span>,<span class="hljs-string">"hello"</span>]</span>
+
+<span class="hljs-keyword">FROM</span> alpine
+<span class="hljs-keyword">COPY</span><span class="bash"> --from=build-env /go/src/hello/hello hello</span>
+<span class="hljs-keyword">EXPOSE</span> <span class="hljs-number">8080</span>
+<span class="hljs-keyword">ENTRYPOINT</span><span class="bash"> [<span class="hljs-string">"./hello"</span>]</span>
+</div></code></pre>
+<pre class="hljs"><code><div>~/multi-build$
+</div></code></pre>
+<p>Now build the image with the same repo name <code>hello-build</code> with a <code>v3</code> tag:</p>
+<pre class="hljs"><code><div>~/multi-build$ docker image build -t hello-build:v3 .
+
+[+] Building 2.8s (13/13) FINISHED                                                                docker:default
+ =&gt; [internal] load build definition from Dockerfile                                                        0.0s
+ =&gt; =&gt; transferring dockerfile: 308B                                                                        0.0s
+ =&gt; [internal] load .dockerignore                                                                           0.0s
+ =&gt; =&gt; transferring context: 2B                                                                             0.0s
+ =&gt; [internal] load metadata for docker.io/library/alpine:latest                                            1.9s
+ =&gt; [internal] load metadata for docker.io/library/golang:1.20                                              1.2s
+ =&gt; [build-env 1/5] FROM docker.io/library/golang:1.20@sha256:bfc60723228b88180b1e15872eb435cf7e6d8199eae9  0.0s
+ =&gt; [internal] load build context                                                                           0.0s
+ =&gt; =&gt; transferring context: 30B                                                                            0.0s
+ =&gt; [stage-1 1/2] FROM docker.io/library/alpine@sha256:51b67269f354137895d43f3b3d810bfacd3945438e94dc5ac55  0.5s
+ =&gt; =&gt; resolve docker.io/library/alpine@sha256:51b67269f354137895d43f3b3d810bfacd3945438e94dc5ac55fdac3403  0.0s
+ =&gt; =&gt; sha256:51b67269f354137895d43f3b3d810bfacd3945438e94dc5ac55fdac340352f48 1.64kB / 1.64kB              0.0s
+ =&gt; =&gt; sha256:13b7e62e8df80264dbb747995705a986aa530415763a6c58f84a3ca8af9a5bcd 528B / 528B                  0.0s
+ =&gt; =&gt; sha256:f8c20f8bbcb684055b4fea470fdd169c86e87786940b3262335b12ec3adef418 1.47kB / 1.47kB              0.0s
+ =&gt; =&gt; sha256:661ff4d9561e3fd050929ee5097067c34bafc523ee60f5294a37fd08056a73ca 3.41MB / 3.41MB              0.3s
+ =&gt; =&gt; extracting sha256:661ff4d9561e3fd050929ee5097067c34bafc523ee60f5294a37fd08056a73ca                   0.2s
+ =&gt; CACHED [build-env 2/5] WORKDIR /go/src/hello/                                                           0.0s
+ =&gt; CACHED [build-env 3/5] COPY ./hello.go /go/src/hello/                                                   0.0s
+ =&gt; CACHED [build-env 4/5] RUN [&quot;go&quot;,&quot;mod&quot;,&quot;init&quot;,&quot;example.com/hello&quot;]                                      0.0s
+ =&gt; CACHED [build-env 5/5] RUN [&quot;go&quot;,&quot;build&quot;,&quot;-tags&quot;,&quot;netgo&quot;]                                               0.0s
+ =&gt; [stage-1 2/2] COPY --from=build-env /go/src/hello/hello hello                                           0.2s
+ =&gt; exporting to image                                                                                      0.1s
+ =&gt; =&gt; exporting layers                                                                                     0.1s
+ =&gt; =&gt; writing image sha256:2220a0adf07d7d4694734437aca696c0d06eba26698961f8ed1d64f743655681                0.0s
+ =&gt; =&gt; naming to docker.io/library/hello-build:v3                                                           0.0s
+
+~/multi-build$
+</div></code></pre>
+<p>List our hello-build images:</p>
+<pre class="hljs"><code><div>~/multi-build$ docker image ls hello-build
+
+hello-build   v3        2220a0adf07d   19 seconds ago   14MB
+hello-build   v2        163ebaa35f52   5 minutes ago    6.63MB
+hello-build   v1        eff67c22e949   8 minutes ago    846MB
+
+~/multi-build$
+</div></code></pre>
+<p>Using another distro like Ubuntu or CentOS your image wouldn't be nearly as lean, but in this case we've only added ~6
+MB!</p>
+<p>Run a new container from our new image:</p>
+<pre class="hljs"><code><div>~/multi-build$ docker container run -d --name challenge hello-build:v3
+
+c1f0325df1125cc9df981760ef112687898587ae141c3ed36c18fe5c679f6a06
+
+~/multi-build$
+</div></code></pre>
+<p>Use the <code>exec</code> command to take a look inside our lightweight container:</p>
+<pre class="hljs"><code><div>~/multi-build$ docker container exec -it challenge /bin/sh
+
+/ # ls -l
+
+total 6536
+drwxr-xr-x    2 root     root          4096 Dec  7 09:43 bin
+drwxr-xr-x    5 root     root           340 Jan 18 00:44 dev
+drwxr-xr-x    1 root     root          4096 Jan 18 00:44 etc
+-rwxr-xr-x    1 root     root       6633021 Jan 18 00:39 hello
+drwxr-xr-x    2 root     root          4096 Dec  7 09:43 home
+drwxr-xr-x    7 root     root          4096 Dec  7 09:43 lib
+drwxr-xr-x    5 root     root          4096 Dec  7 09:43 media
+drwxr-xr-x    2 root     root          4096 Dec  7 09:43 mnt
+drwxr-xr-x    2 root     root          4096 Dec  7 09:43 opt
+dr-xr-xr-x  180 root     root             0 Jan 18 00:44 proc
+drwx------    1 root     root          4096 Jan 18 00:44 root
+drwxr-xr-x    2 root     root          4096 Dec  7 09:43 run
+drwxr-xr-x    2 root     root          4096 Dec  7 09:43 sbin
+drwxr-xr-x    2 root     root          4096 Dec  7 09:43 srv
+dr-xr-xr-x   13 root     root             0 Jan 18 00:44 sys
+drwxrwxrwt    2 root     root          4096 Dec  7 09:43 tmp
+drwxr-xr-x    7 root     root          4096 Dec  7 09:43 usr
+drwxr-xr-x   12 root     root          4096 Dec  7 09:43 var
+
+/ #
+
+~/multi-build$
+</div></code></pre>
+<p>Success!</p>
+<p>Exit the container:</p>
+<pre class="hljs"><code><div>/ # exit
+
+~/multi-build$
+</div></code></pre>
+<h3 id="7-challenge-tagging-images">7. CHALLENGE: tagging images</h3>
+<p>Add an appropriate tag to your production go program image and push it to your local registry. Verify your registry has
+stored your image.</p>
+<p>In the example below we'll tag the go program image as <code>localhost:5000/hello-world</code> repo with the <code>prod</code> tag to push to
+the local repository.</p>
+<pre class="hljs"><code><div>~/multi-build$ docker image tag hello-build:v3 localhost:5000/hello-world:prod
+
+~/multi-build$ docker image ls | grep hello
+
+hello-build                  v3        2220a0adf07d   About a minute ago   14MB
+localhost:5000/hello-world   prod      2220a0adf07d   About a minute ago   14MB
+hello-build                  v2        163ebaa35f52   5 minutes ago        6.63MB
+hello-build                  v1        eff67c22e949   9 minutes ago        846MB
+
+~/multi-build$ docker image push localhost:5000/hello-world:prod
+
+The push refers to repository [localhost:5000/hello-world]
+a627f566a8be: Pushed
+5af4f8f59b76: Pushed
+prod: digest: sha256:7a2b4c25edff8d0be8f846c25a52a2492e6c33440aa99f14c78887f673d0f1a0 size: 739
+
+~/multi-build$
+</div></code></pre>
+<p>Verify with curl:</p>
+<pre class="hljs"><code><div>~/multi-build$ curl -X GET localhost:5000/v2/_catalog
+
+{&quot;repositories&quot;:[&quot;devenv&quot;,&quot;hello-world&quot;]}
+
+~/multi-build$
+</div></code></pre>
+<p><em>Copyright (c) 2023-2024 RX-M LLC, Cloud Native &amp; AI Training and Consulting, all rights reserved</em></p>
+
+</body>
+</html>

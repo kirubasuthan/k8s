@@ -1,0 +1,1109 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>rx-m-containers-k8s-accelerated-lab05.md</title>
+<meta http-equiv="Content-type" content="text/html;charset=UTF-8">
+
+<style>
+/* https://github.com/microsoft/vscode/blob/master/extensions/markdown-language-features/media/markdown.css */
+/*---------------------------------------------------------------------------------------------
+ *  Copyright (c) Microsoft Corporation. All rights reserved.
+ *  Licensed under the MIT License. See License.txt in the project root for license information.
+ *--------------------------------------------------------------------------------------------*/
+
+body {
+	font-family: var(--vscode-markdown-font-family, -apple-system, BlinkMacSystemFont, "Segoe WPC", "Segoe UI", "Ubuntu", "Droid Sans", sans-serif);
+	font-size: var(--vscode-markdown-font-size, 14px);
+	padding: 0 26px;
+	line-height: var(--vscode-markdown-line-height, 22px);
+	word-wrap: break-word;
+}
+
+#code-csp-warning {
+	position: fixed;
+	top: 0;
+	right: 0;
+	color: white;
+	margin: 16px;
+	text-align: center;
+	font-size: 12px;
+	font-family: sans-serif;
+	background-color:#444444;
+	cursor: pointer;
+	padding: 6px;
+	box-shadow: 1px 1px 1px rgba(0,0,0,.25);
+}
+
+#code-csp-warning:hover {
+	text-decoration: none;
+	background-color:#007acc;
+	box-shadow: 2px 2px 2px rgba(0,0,0,.25);
+}
+
+body.scrollBeyondLastLine {
+	margin-bottom: calc(100vh - 22px);
+}
+
+body.showEditorSelection .code-line {
+	position: relative;
+}
+
+body.showEditorSelection .code-active-line:before,
+body.showEditorSelection .code-line:hover:before {
+	content: "";
+	display: block;
+	position: absolute;
+	top: 0;
+	left: -12px;
+	height: 100%;
+}
+
+body.showEditorSelection li.code-active-line:before,
+body.showEditorSelection li.code-line:hover:before {
+	left: -30px;
+}
+
+.vscode-light.showEditorSelection .code-active-line:before {
+	border-left: 3px solid rgba(0, 0, 0, 0.15);
+}
+
+.vscode-light.showEditorSelection .code-line:hover:before {
+	border-left: 3px solid rgba(0, 0, 0, 0.40);
+}
+
+.vscode-light.showEditorSelection .code-line .code-line:hover:before {
+	border-left: none;
+}
+
+.vscode-dark.showEditorSelection .code-active-line:before {
+	border-left: 3px solid rgba(255, 255, 255, 0.4);
+}
+
+.vscode-dark.showEditorSelection .code-line:hover:before {
+	border-left: 3px solid rgba(255, 255, 255, 0.60);
+}
+
+.vscode-dark.showEditorSelection .code-line .code-line:hover:before {
+	border-left: none;
+}
+
+.vscode-high-contrast.showEditorSelection .code-active-line:before {
+	border-left: 3px solid rgba(255, 160, 0, 0.7);
+}
+
+.vscode-high-contrast.showEditorSelection .code-line:hover:before {
+	border-left: 3px solid rgba(255, 160, 0, 1);
+}
+
+.vscode-high-contrast.showEditorSelection .code-line .code-line:hover:before {
+	border-left: none;
+}
+
+img {
+	max-width: 100%;
+	max-height: 100%;
+}
+
+a {
+	text-decoration: none;
+}
+
+a:hover {
+	text-decoration: underline;
+}
+
+a:focus,
+input:focus,
+select:focus,
+textarea:focus {
+	outline: 1px solid -webkit-focus-ring-color;
+	outline-offset: -1px;
+}
+
+hr {
+	border: 0;
+	height: 2px;
+	border-bottom: 2px solid;
+}
+
+h1 {
+	padding-bottom: 0.3em;
+	line-height: 1.2;
+	border-bottom-width: 1px;
+	border-bottom-style: solid;
+}
+
+h1, h2, h3 {
+	font-weight: normal;
+}
+
+table {
+	border-collapse: collapse;
+}
+
+table > thead > tr > th {
+	text-align: left;
+	border-bottom: 1px solid;
+}
+
+table > thead > tr > th,
+table > thead > tr > td,
+table > tbody > tr > th,
+table > tbody > tr > td {
+	padding: 5px 10px;
+}
+
+table > tbody > tr + tr > td {
+	border-top: 1px solid;
+}
+
+blockquote {
+	margin: 0 7px 0 5px;
+	padding: 0 16px 0 10px;
+	border-left-width: 5px;
+	border-left-style: solid;
+}
+
+code {
+	font-family: Menlo, Monaco, Consolas, "Droid Sans Mono", "Courier New", monospace, "Droid Sans Fallback";
+	font-size: 1em;
+	line-height: 1.357em;
+}
+
+body.wordWrap pre {
+	white-space: pre-wrap;
+}
+
+pre:not(.hljs),
+pre.hljs code > div {
+	padding: 16px;
+	border-radius: 3px;
+	overflow: auto;
+}
+
+pre code {
+	color: var(--vscode-editor-foreground);
+	tab-size: 4;
+}
+
+/** Theming */
+
+.vscode-light pre {
+	background-color: rgba(220, 220, 220, 0.4);
+}
+
+.vscode-dark pre {
+	background-color: rgba(10, 10, 10, 0.4);
+}
+
+.vscode-high-contrast pre {
+	background-color: rgb(0, 0, 0);
+}
+
+.vscode-high-contrast h1 {
+	border-color: rgb(0, 0, 0);
+}
+
+.vscode-light table > thead > tr > th {
+	border-color: rgba(0, 0, 0, 0.69);
+}
+
+.vscode-dark table > thead > tr > th {
+	border-color: rgba(255, 255, 255, 0.69);
+}
+
+.vscode-light h1,
+.vscode-light hr,
+.vscode-light table > tbody > tr + tr > td {
+	border-color: rgba(0, 0, 0, 0.18);
+}
+
+.vscode-dark h1,
+.vscode-dark hr,
+.vscode-dark table > tbody > tr + tr > td {
+	border-color: rgba(255, 255, 255, 0.18);
+}
+
+</style>
+
+<style>
+/* Tomorrow Theme */
+/* http://jmblog.github.com/color-themes-for-google-code-highlightjs */
+/* Original theme - https://github.com/chriskempson/tomorrow-theme */
+
+/* Tomorrow Comment */
+.hljs-comment,
+.hljs-quote {
+	color: #8e908c;
+}
+
+/* Tomorrow Red */
+.hljs-variable,
+.hljs-template-variable,
+.hljs-tag,
+.hljs-name,
+.hljs-selector-id,
+.hljs-selector-class,
+.hljs-regexp,
+.hljs-deletion {
+	color: #c82829;
+}
+
+/* Tomorrow Orange */
+.hljs-number,
+.hljs-built_in,
+.hljs-builtin-name,
+.hljs-literal,
+.hljs-type,
+.hljs-params,
+.hljs-meta,
+.hljs-link {
+	color: #f5871f;
+}
+
+/* Tomorrow Yellow */
+.hljs-attribute {
+	color: #eab700;
+}
+
+/* Tomorrow Green */
+.hljs-string,
+.hljs-symbol,
+.hljs-bullet,
+.hljs-addition {
+	color: #718c00;
+}
+
+/* Tomorrow Blue */
+.hljs-title,
+.hljs-section {
+	color: #4271ae;
+}
+
+/* Tomorrow Purple */
+.hljs-keyword,
+.hljs-selector-tag {
+	color: #8959a8;
+}
+
+.hljs {
+	display: block;
+	overflow-x: auto;
+	color: #4d4d4c;
+	padding: 0.5em;
+}
+
+.hljs-emphasis {
+	font-style: italic;
+}
+
+.hljs-strong {
+	font-weight: bold;
+}
+</style>
+
+<style>
+/*
+ * Markdown PDF CSS
+ */
+
+ body {
+	font-family: -apple-system, BlinkMacSystemFont, "Segoe WPC", "Segoe UI", "Ubuntu", "Droid Sans", sans-serif, "Meiryo";
+	padding: 0 12px;
+}
+
+pre {
+	background-color: #f8f8f8;
+	border: 1px solid #cccccc;
+	border-radius: 3px;
+	overflow-x: auto;
+	white-space: pre-wrap;
+	overflow-wrap: break-word;
+}
+
+pre:not(.hljs) {
+	padding: 23px;
+	line-height: 19px;
+}
+
+blockquote {
+	background: rgba(127, 127, 127, 0.1);
+	border-color: rgba(0, 122, 204, 0.5);
+}
+
+.emoji {
+	height: 1.4em;
+}
+
+code {
+	font-size: 14px;
+	line-height: 19px;
+}
+
+/* for inline code */
+:not(pre):not(.hljs) > code {
+	color: #C9AE75; /* Change the old color so it seems less like an error */
+	font-size: inherit;
+}
+
+/* Page Break : use <div class="page"/> to insert page break
+-------------------------------------------------------- */
+.page {
+	page-break-after: always;
+}
+
+</style>
+
+<script src="https://unpkg.com/mermaid/dist/mermaid.min.js"></script>
+</head>
+<body>
+  <script>
+    mermaid.initialize({
+      startOnLoad: true,
+      theme: document.body.classList.contains('vscode-dark') || document.body.classList.contains('vscode-high-contrast')
+          ? 'dark'
+          : 'default'
+    });
+  </script>
+<p><img src="https://rx-m.com/rxm-cnc.svg" alt="RX-M, llc."></p>
+<h1 id="kubernetes">Kubernetes</h1>
+<h2 id="secrets-configmaps-and-downward-api">Secrets, ConfigMaps, and Downward API</h2>
+<p>Many applications require configuration via some combination of config files, command line arguments, and environment
+variables. These configuration artifacts should be decoupled from image content in order to keep containerized
+applications portable. The ConfigMap API resource provides mechanisms to inject containers with configuration data while
+keeping images agnostic of Kubernetes. <strong>ConfigMap</strong> can be used to store fine-grained information like individual
+properties or coarse-grained information like entire config files or JSON blobs.</p>
+<p>Secrets are Kubernetes objects used to hold sensitive information, such as passwords, OAuth tokens, and SSH keys.
+Putting this information in a secret is safer and more flexible than putting it verbatim in a pod definition or in a
+container image. All data in a Kubernetes Secrets is encoded in base64, and typically encrypted via an integration with
+a key management system (KMS).</p>
+<p>ConfigMaps and Secrets can be created by Kubernetes and by users. ConfigMaps and Secrets can be used with a pod in three
+ways:</p>
+<ul>
+<li>Environment variables</li>
+<li>Files in a volume mounted on one or more of its containers</li>
+<li>For use by the kubelet when pulling images for the pod (Secret type only)</li>
+</ul>
+<h3 id="0-prerequisites">0. Prerequisites</h3>
+<p>If you already know how to login to your lab system and Docker and Kubernetes are installed and configured you can skip
+this section and jump directly to <code>1.</code> . Otherwise, follow the instructions</p>
+<h3 id="01-login-to-your-lab-system">0.1 Login to your lab system</h3>
+<p>Login to your machine using an ssh client:</p>
+<pre class="hljs"><code><div>@laptop:~$ chmod 400 key.pem
+
+@laptop:~$ ssh -i key.pem ubuntu@55.55.55.55
+
+Welcome to Ubuntu 22.04.2 LTS (GNU/Linux 5.15.0-1031-aws x86_64)
+
+...
+
+~$
+</div></code></pre>
+<h3 id="02-install-and-configure-docker-and-kubernetes">0.2. Install and configure Docker and Kubernetes</h3>
+<p>For this lab you will need a Kubernetes cluster. We have prepared a quick installation script that expedites the process
+of setting up your Lab VM for Kubernetes by performing the following operations:</p>
+<ul>
+<li>Downloading and Installing Docker</li>
+<li>Enabling the apt package manager to retrieve the Kubernetes binaries</li>
+<li>Bootstrapping a Kubernetes Cluster</li>
+<li>Configuring kubectl</li>
+<li>Allowing regular workloads to run on a single node</li>
+</ul>
+<pre class="hljs"><code><div>~$ wget -qO - https://raw.githubusercontent.com/RX-M/classfiles/master/k8s.sh | sh
+
+...
+
+~$
+</div></code></pre>
+<p>We also add our account to the <code>docker</code> group to minimize use of <code>sudo</code>:</p>
+<pre class="hljs"><code><div>~$ sudo usermod -aG docker $(whoami)     # add yourself to the group
+
+~$
+</div></code></pre>
+<p>Add tab completion permanently to your bash shell:</p>
+<pre class="hljs"><code><div>~$ echo &quot;source &lt;(kubectl completion bash)&quot; &gt;&gt; ~/.bashrc
+</div></code></pre>
+<p>After updating your user groups and adding tab completion you will need to refresh your shell session. On the lab system
+the easiest approach is to logout at the command line:</p>
+<pre class="hljs"><code><div>~$ exit
+
+logout
+Connection to 55.55.55.55 closed.
+
+@laptop:~$
+</div></code></pre>
+<p>Log back in as <em>ubuntu</em> with the SSH key:</p>
+<pre class="hljs"><code><div>@laptop:~$ ssh -i \path-to-ssh-key\key.pem ubuntu@55.55.55.55
+
+...
+
+~$
+</div></code></pre>
+<p>Great. Your current shell, and any new shell sessions, can now use the <code>docker</code> command without <code>sudo</code> and can make use
+of tab completion.</p>
+<h3 id="1-secrets">1. Secrets</h3>
+<p>Let's test the volume mounted secret approach. First we need to create some secrets. Secrets are objects in Kubernetes
+just like pods and deployments. Create a config with a list of two secrets using <code>kubectl create</code> in the following
+sequence:</p>
+<pre class="hljs"><code><div>~$ mkdir ~/appconfig &amp;&amp; cd ~/appconfig
+
+~/appconfig$ kubectl create secret generic prod-db-secret --dry-run=client -o yaml  \
+--from-literal username=produser@example.com --from-literal password=PRod@PW &gt; secret.yaml
+
+~/appconfig$
+</div></code></pre>
+<p>Append <code>---</code> to the file using echo and <code>&gt;&gt;</code> before the second <code>create</code> command to declare separate specs in the
+manifest):</p>
+<pre class="hljs"><code><div>~/appconfig$ echo &quot;---&quot; &gt;&gt; secret.yaml
+
+~/appconfig$
+</div></code></pre>
+<p>Now append the second manifest to the file:</p>
+<pre class="hljs"><code><div>~/appconfig$ kubectl create secret generic test-db-secret --dry-run=client -o yaml \
+--from-literal username=testuser@example.com --from-literal password=TEST#pw &gt;&gt; secret.yaml
+
+~/appconfig$
+</div></code></pre>
+<p>Check the file:</p>
+<pre class="hljs"><code><div>~/appconfig$ cat secret.yaml
+</div></code></pre>
+<pre class="hljs"><code><div><span class="hljs-attr">apiVersion:</span> <span class="hljs-string">v1</span>
+<span class="hljs-attr">data:</span>
+  <span class="hljs-attr">password:</span> <span class="hljs-string">UFJvZEBQVw==</span>
+  <span class="hljs-attr">username:</span> <span class="hljs-string">cHJvZHVzZXJAZXhhbXBsZS5jb20=</span>
+<span class="hljs-attr">kind:</span> <span class="hljs-string">Secret</span>
+<span class="hljs-attr">metadata:</span>
+  <span class="hljs-attr">creationTimestamp:</span> <span class="hljs-literal">null</span>
+  <span class="hljs-attr">name:</span> <span class="hljs-string">prod-db-secret</span>
+<span class="hljs-meta">---</span>
+<span class="hljs-attr">apiVersion:</span> <span class="hljs-string">v1</span>
+<span class="hljs-attr">data:</span>
+  <span class="hljs-attr">password:</span> <span class="hljs-string">VEVTVCNwdw==</span>
+  <span class="hljs-attr">username:</span> <span class="hljs-string">dGVzdHVzZXJAZXhhbXBsZS5jb20=</span>
+<span class="hljs-attr">kind:</span> <span class="hljs-string">Secret</span>
+<span class="hljs-attr">metadata:</span>
+  <span class="hljs-attr">creationTimestamp:</span> <span class="hljs-literal">null</span>
+  <span class="hljs-attr">name:</span> <span class="hljs-string">test-db-secret</span>
+</div></code></pre>
+<pre class="hljs"><code><div>~/appconfig$
+</div></code></pre>
+<p>Use <code>kubectl apply</code> to create your secrets in the cluster:</p>
+<pre class="hljs"><code><div>~/appconfig$ kubectl apply -f secret.yaml
+
+secret/prod-db-secret created
+secret/test-db-secret created
+
+~/appconfig$
+</div></code></pre>
+<p>Once created you can get and describe Secrets just like any other object:</p>
+<pre class="hljs"><code><div>~/appconfig$ kubectl get secret
+
+NAME             TYPE     DATA   AGE
+prod-db-secret   Opaque   2      3s
+test-db-secret   Opaque   2      3s
+
+~/appconfig$
+</div></code></pre>
+<p>Note that the values of the secret are obfuscated when using <code>describe</code>:</p>
+<pre class="hljs"><code><div>~/appconfig$ kubectl describe secret prod-db-secret
+</div></code></pre>
+<pre class="hljs"><code><div><span class="hljs-attr">Name:</span>         <span class="hljs-string">prod-db-secret</span>
+<span class="hljs-attr">Namespace:</span>    <span class="hljs-string">default</span>
+<span class="hljs-attr">Labels:</span>       <span class="hljs-string">&lt;none&gt;</span>
+<span class="hljs-attr">Annotations:</span>  <span class="hljs-string">&lt;none&gt;</span>
+
+<span class="hljs-attr">Type:</span>  <span class="hljs-string">Opaque</span>
+
+<span class="hljs-string">Data</span>
+<span class="hljs-string">====</span>
+<span class="hljs-attr">password:</span>  <span class="hljs-number">7</span> <span class="hljs-string">bytes</span>
+<span class="hljs-attr">username:</span>  <span class="hljs-number">20</span> <span class="hljs-string">bytes</span>
+</div></code></pre>
+<pre class="hljs"><code><div>~/appconfig$
+</div></code></pre>
+<p>Now we can create and run a pod that uses the secret. The secret will be mounted as a tmpfs volume and will never be
+written to disk on the node. First create the pod config:</p>
+<pre class="hljs"><code><div>~/appconfig$ kubectl run prod-db-client-pod --image nginx --dry-run=client -o yaml &gt; secpod.yaml
+
+~/appconfig$
+</div></code></pre>
+<p>Then add the secret as a volume named <code>secret-volume</code> to the pod. Mount the <code>secret-volume</code> to the container as a
+readOnly directory at <code>/etc/secret-volume</code>:</p>
+<pre class="hljs"><code><div>~/appconfig$ nano secpod.yaml &amp;&amp; cat $_
+</div></code></pre>
+<pre class="hljs"><code><div><span class="hljs-attr">apiVersion:</span> <span class="hljs-string">v1</span>
+<span class="hljs-attr">kind:</span> <span class="hljs-string">Pod</span>
+<span class="hljs-attr">metadata:</span>
+  <span class="hljs-attr">creationTimestamp:</span> <span class="hljs-literal">null</span>
+  <span class="hljs-attr">labels:</span>
+    <span class="hljs-attr">run:</span> <span class="hljs-string">prod-db-client-pod</span>
+  <span class="hljs-attr">name:</span> <span class="hljs-string">prod-db-client-pod</span>
+<span class="hljs-attr">spec:</span>
+  <span class="hljs-attr">containers:</span>
+  <span class="hljs-bullet">-</span> <span class="hljs-attr">image:</span> <span class="hljs-string">nginx</span>
+    <span class="hljs-attr">name:</span> <span class="hljs-string">prod-db-client-pod</span>
+    <span class="hljs-attr">resources:</span> <span class="hljs-string">{}</span>
+    <span class="hljs-attr">volumeMounts:</span>                      <span class="hljs-comment"># Add this</span>
+    <span class="hljs-bullet">-</span> <span class="hljs-attr">name:</span> <span class="hljs-string">secret-volume</span>              <span class="hljs-comment"># Add this</span>
+      <span class="hljs-attr">readOnly:</span> <span class="hljs-literal">true</span>                   <span class="hljs-comment"># Add this</span>
+      <span class="hljs-attr">mountPath:</span> <span class="hljs-string">"/etc/secret-volume"</span>  <span class="hljs-comment"># Add this</span>
+  <span class="hljs-attr">volumes:</span>                             <span class="hljs-comment"># Add this</span>
+  <span class="hljs-bullet">-</span> <span class="hljs-attr">name:</span> <span class="hljs-string">secret-volume</span>                <span class="hljs-comment"># Add this</span>
+    <span class="hljs-attr">secret:</span>                            <span class="hljs-comment"># Add this</span>
+      <span class="hljs-attr">secretName:</span> <span class="hljs-string">prod-db-secret</span>       <span class="hljs-comment"># Add this</span>
+  <span class="hljs-attr">dnsPolicy:</span> <span class="hljs-string">ClusterFirst</span>
+  <span class="hljs-attr">restartPolicy:</span> <span class="hljs-string">Always</span>
+<span class="hljs-attr">status:</span> <span class="hljs-string">{}</span>
+</div></code></pre>
+<pre class="hljs"><code><div>~/appconfig$
+</div></code></pre>
+<p>Now create the pod:</p>
+<pre class="hljs"><code><div>~/appconfig$ kubectl apply -f secpod.yaml
+
+pod/prod-db-client-pod created
+
+~/appconfig$ kubectl get pod prod-db-client-pod
+
+NAME                 READY   STATUS    RESTARTS   AGE
+prod-db-client-pod   1/1     Running   0          3s
+
+~/appconfig$
+</div></code></pre>
+<p>Now examine your secret volume:</p>
+<pre class="hljs"><code><div>~/appconfig$ kubectl exec prod-db-client-pod -- ls -l /etc/secret-volume
+
+total 0
+lrwxrwxrwx 1 root root 15 Jan 18 01:50 password -&gt; ..data/password
+lrwxrwxrwx 1 root root 15 Jan 18 01:50 username -&gt; ..data/username
+
+~/appconfig$
+</div></code></pre>
+<p>Echo the values of the files:</p>
+<blockquote>
+<p>N.B. The <code>; echo</code> in each command ensures the <code>kubectl</code> output is printed cleanly on a new line.</p>
+</blockquote>
+<pre class="hljs"><code><div>~/appconfig$ kubectl exec prod-db-client-pod -- cat /etc/secret-volume/username ; echo
+
+produser@example.com
+
+~/appconfig$ kubectl exec prod-db-client-pod -- cat /etc/secret-volume/password ; echo
+
+PRod@PW
+
+~/appconfig$
+</div></code></pre>
+<p>Though secrets are encoded (and likely encrypted) by a Kubernetes platform, applications receive the decrypted/decoded
+values.</p>
+<p>Delete the resources you created by passing the path to the configmaps directory to <code>delete -f</code>:</p>
+<pre class="hljs"><code><div>~/appconfig$ kubectl delete -f ~/appconfig/.
+
+pod &quot;prod-db-client-pod&quot; deleted
+secret &quot;prod-db-secret&quot; deleted
+secret &quot;test-db-secret&quot; deleted
+
+~/appconfig$
+</div></code></pre>
+<h3 id="2-configmaps">2. ConfigMaps</h3>
+<p>There are a number of ways to create a ConfigMap, including via directory upload, file(s), or literal.</p>
+<h3 id="21-creating-a-configmap-from-a-directory">2.1. Creating a ConfigMap from a directory</h3>
+<p>We will create a couple of sample property files we will use to populate the ConfigMap.</p>
+<pre class="hljs"><code><div>~/appconfig$ mkdir files
+
+~/appconfig$
+</div></code></pre>
+<p>For the first property file, enter some parameters that would influence a hypothetical game:</p>
+<pre class="hljs"><code><div>~/appconfig$ nano ./files/game.properties &amp;&amp; cat $_
+</div></code></pre>
+<pre class="hljs"><code><div>enemies=aliens
+lives=3
+enemies.cheat=true
+enemies.cheat.level=noGoodRotten
+secret.code.passphrase=UUDDLRLRBABAS
+secret.code.allowed=true
+secret.code.lives=30
+</div></code></pre>
+<pre class="hljs"><code><div>~/appconfig$
+</div></code></pre>
+<p>For the next property file, enter parameters that would influence the hypothetical game's interface:</p>
+<pre class="hljs"><code><div>~/appconfig$ nano ./files/ui.properties &amp;&amp; cat $_
+</div></code></pre>
+<pre class="hljs"><code><div>color.good=purple
+color.bad=yellow
+allow.textmode=true
+how.nice.to.look=fairlyNice
+</div></code></pre>
+<pre class="hljs"><code><div>~/appconfig$
+</div></code></pre>
+<p>We will use the <em>--from-file</em> option to supply the directory path containing all the properties files.</p>
+<pre class="hljs"><code><div>~/appconfig$ kubectl create configmap game-config --from-file=./files
+
+configmap/game-config created
+
+~/appconfig$
+</div></code></pre>
+<pre class="hljs"><code><div>~/appconfig$ kubectl describe configmaps game-config
+</div></code></pre>
+<pre class="hljs"><code><div><span class="hljs-attr">Name:</span>         <span class="hljs-string">game-config</span>
+<span class="hljs-attr">Namespace:</span>    <span class="hljs-string">default</span>
+<span class="hljs-attr">Labels:</span>       <span class="hljs-string">&lt;none&gt;</span>
+<span class="hljs-attr">Annotations:</span>  <span class="hljs-string">&lt;none&gt;</span>
+
+<span class="hljs-string">Data</span>
+<span class="hljs-string">====</span>
+<span class="hljs-attr">game.properties:</span>
+<span class="hljs-string">----</span>
+<span class="hljs-string">enemies=aliens</span>
+<span class="hljs-string">lives=3</span>
+<span class="hljs-string">enemies.cheat=true</span>
+<span class="hljs-string">enemies.cheat.level=noGoodRotten</span>
+<span class="hljs-string">secret.code.passphrase=UUDDLRLRBABAS</span>
+<span class="hljs-string">secret.code.allowed=true</span>
+<span class="hljs-string">secret.code.lives=30</span>
+
+<span class="hljs-attr">ui.properties:</span>
+<span class="hljs-string">----</span>
+<span class="hljs-string">color.good=purple</span>
+<span class="hljs-string">color.bad=yellow</span>
+<span class="hljs-string">allow.textmode=true</span>
+<span class="hljs-string">how.nice.to.look=fairlyNice</span>
+
+
+<span class="hljs-string">BinaryData</span>
+<span class="hljs-string">====</span>
+
+<span class="hljs-attr">Events:</span>  <span class="hljs-string">&lt;none&gt;</span>
+</div></code></pre>
+<pre class="hljs"><code><div>~/appconfig$
+</div></code></pre>
+<p>Unlike secrets, data stored in configMaps are stored in plain text.</p>
+<h3 id="22-creating-configmaps-from-files">2.2. Creating ConfigMaps from files</h3>
+<p>Similar to supplying a directory, we use the <em>--from-file</em> switch but specify the files of interest (via multiple
+flags):</p>
+<pre class="hljs"><code><div>~/appconfig$ kubectl create configmap game-config-2 \
+--from-file=./files/ui.properties --from-file=./files/game.properties
+
+configmap/game-config-2 created
+
+~/appconfig$
+</div></code></pre>
+<p>Now check the contents of the game-config-2 configmap you just created from separate files:</p>
+<pre class="hljs"><code><div>~/appconfig$ kubectl get configmaps game-config-2 -o json
+</div></code></pre>
+<pre class="hljs"><code><div>{
+    <span class="hljs-attr">"apiVersion"</span>: <span class="hljs-string">"v1"</span>,
+    <span class="hljs-attr">"data"</span>: {
+        <span class="hljs-attr">"game.properties"</span>: <span class="hljs-string">"enemies=aliens\nlives=3\nenemies.cheat=true\nenemies.cheat.level=noGoodRotten\nsecret.code.passphrase=UUDDLRLRBABAS\nsecret.code.allowed=tr\n"</span>,
+        <span class="hljs-attr">"ui.properties"</span>: <span class="hljs-string">"color.good=purple\ncolor.bad=yellow\nallow.textmode=true\nhow.nice.to.look=fairlyNice\n"</span>
+    },
+    <span class="hljs-attr">"kind"</span>: <span class="hljs-string">"ConfigMap"</span>,
+    <span class="hljs-attr">"metadata"</span>: {
+        <span class="hljs-attr">"creationTimestamp"</span>: <span class="hljs-string">"2023-07-26T01:06:44Z"</span>,
+        <span class="hljs-attr">"name"</span>: <span class="hljs-string">"game-config-2"</span>,
+        <span class="hljs-attr">"namespace"</span>: <span class="hljs-string">"default"</span>,
+        <span class="hljs-attr">"resourceVersion"</span>: <span class="hljs-string">"198157"</span>,
+        <span class="hljs-attr">"uid"</span>: <span class="hljs-string">"f0eb7b3c-c9dc-4841-be41-f42b97cae083"</span>
+    }
+}
+</div></code></pre>
+<pre class="hljs"><code><div>~/appconfig$
+</div></code></pre>
+<h4 id="23-override-key">2.3. Override key</h4>
+<p>Sometimes you don't want to use the file name as the key for a ConfigMap. During its creation we can supply the key as a
+prefix.</p>
+<pre class="hljs"><code><div>~/appconfig$ kubectl create configmap game-config-3 \
+--from-file=game-special-key=./files/game.properties
+
+configmap/game-config-3 created
+
+~/appconfig$ kubectl get configmaps game-config-3 -o jsonpath='{.data.game-special-key}'
+
+enemies=aliens
+lives=3
+enemies.cheat=true
+enemies.cheat.level=noGoodRotten
+secret.code.passphrase=UUDDLRLRBABAS
+secret.code.allowed=true
+secret.code.lives=30
+
+~/appconfig$
+</div></code></pre>
+<h4 id="24-creating-a-configmap-from-literal-values">2.4. Creating a ConfigMap from literal values</h4>
+<p>Unlike the previous methods, with literals we use <code>--from-literal</code> and provide the property (key=value.) to create a
+ConfigMap.</p>
+<p>Use the <code>--from-literal</code> option to create a configmap using literal statements:</p>
+<pre class="hljs"><code><div>~/appconfig$ kubectl create configmap special-config \
+--from-literal=special.type=charm --from-literal=special.how=very
+
+configmap/special-config created
+
+~/appconfig$ kubectl get configmap special-config -o yaml
+</div></code></pre>
+<pre class="hljs"><code><div><span class="hljs-attr">apiVersion:</span> <span class="hljs-string">v1</span>
+<span class="hljs-attr">data:</span>
+  <span class="hljs-attr">special.how:</span> <span class="hljs-string">very</span>
+  <span class="hljs-attr">special.type:</span> <span class="hljs-string">charm</span>
+<span class="hljs-attr">kind:</span> <span class="hljs-string">ConfigMap</span>
+<span class="hljs-attr">metadata:</span>
+  <span class="hljs-attr">creationTimestamp:</span> <span class="hljs-string">"2023-07-10T02:01:38Z"</span>
+  <span class="hljs-attr">name:</span> <span class="hljs-string">special-config</span>
+  <span class="hljs-attr">namespace:</span> <span class="hljs-string">default</span>
+  <span class="hljs-attr">resourceVersion:</span> <span class="hljs-string">"3031"</span>
+  <span class="hljs-attr">uid:</span> <span class="hljs-string">6cdbf266-666b-4dd9-ab53-e50b99b0d954</span>
+</div></code></pre>
+<pre class="hljs"><code><div>~/appconfig$
+</div></code></pre>
+<p>Applications that override configurations when new, minimal config files receive the greatest benefit from creating
+ConfigMaps with <code>--from-literal</code>. You can create quick configurations that without having to type out, uncomment, and
+otherwise modify a potentially long configuration file to affect a change to the application's behavior.</p>
+<p>List your current configMaps:</p>
+<pre class="hljs"><code><div>~/appconfig$ kubectl get configmaps
+
+NAME               DATA   AGE
+game-config        2      78s
+game-config-2      2      36s
+game-config-3      1      21s
+kube-root-ca.crt   1      29m
+special-config     2      14s
+
+~/appconfig$
+</div></code></pre>
+<p>Delete your ConfigMaps using <code>-o name</code> with the previous command and the configMap short name <code>cm</code>:</p>
+<pre class="hljs"><code><div>~/appconfig$ kubectl delete configmap game-config game-config-2 game-config-3 special-config
+
+configmap &quot;game-config&quot; deleted
+configmap &quot;game-config-2&quot; deleted
+configmap &quot;game-config-3&quot; deleted
+configmap &quot;special-config&quot; deleted
+
+~/appconfig$ kubectl get cm
+
+NAME               DATA   AGE
+kube-root-ca.crt   1      179m
+
+~/appconfig$
+</div></code></pre>
+<h4 id="25-consuming-a-configmap">2.5. Consuming a ConfigMap</h4>
+<p>Like creation, we have a few options on how to consume a ConfigMap including environment variables, command line
+arguments, and as a Volume.</p>
+<h4 id="251-consume-a-configmap-via-environment-variables">2.5.1. Consume a ConfigMap via environment variables</h4>
+<p>Environment variables are a common method of configuring applications. This is especially true in containerized
+scenarios, where many applications expose key settings as environment variables. You can create and consume ConfigMaps
+as environment variables for your pod's containers to take advantage of this.</p>
+<p>First create a ConfigMap via a spec file:</p>
+<pre class="hljs"><code><div>~/appconfig$ kubectl create configmap special-config --dry-run=client -o yaml \
+--from-literal special.how=very --from-literal special.type=charm -n default &gt; env-cm.yaml
+
+~/appconfig$ cat env-cm.yaml
+</div></code></pre>
+<pre class="hljs"><code><div><span class="hljs-attr">apiVersion:</span> <span class="hljs-string">v1</span>
+<span class="hljs-attr">data:</span>
+  <span class="hljs-attr">special.how:</span> <span class="hljs-string">very</span>
+  <span class="hljs-attr">special.type:</span> <span class="hljs-string">charm</span>
+<span class="hljs-attr">kind:</span> <span class="hljs-string">ConfigMap</span>
+<span class="hljs-attr">metadata:</span>
+  <span class="hljs-attr">creationTimestamp:</span> <span class="hljs-literal">null</span>
+  <span class="hljs-attr">name:</span> <span class="hljs-string">special-config</span>
+  <span class="hljs-attr">namespace:</span> <span class="hljs-string">default</span>
+</div></code></pre>
+<pre class="hljs"><code><div>~/appconfig$ kubectl apply -f env-cm.yaml
+
+configmap/special-config created
+
+~/appconfig$
+</div></code></pre>
+<p>Next we ingest the ConfigMap first in our container's shell environment. Create the PodSpec structure we will work from:</p>
+<pre class="hljs"><code><div>~/appconfig$ kubectl run --dry-run=client -o yaml cm-test-pod --image busybox \
+--restart Never --env SPECIAL_LEVEL_KEY=changeMe --env SPECIAL_TYPE_KEY=changeMe \
+--command -- /bin/sh -c \&quot;env\&quot; &gt; env-pod.yaml
+
+~/appconfig$
+</div></code></pre>
+<p>Edit the environment variables in the manifest to use the ConfigMap as environment variables with the <code>valueFrom</code> and
+<code>configMapKeyRef</code> keys under each environment variables:</p>
+<pre class="hljs"><code><div>~/appconfig$ nano env-pod.yaml &amp;&amp; cat $_
+</div></code></pre>
+<pre class="hljs"><code><div><span class="hljs-attr">apiVersion:</span> <span class="hljs-string">v1</span>
+<span class="hljs-attr">kind:</span> <span class="hljs-string">Pod</span>
+<span class="hljs-attr">metadata:</span>
+  <span class="hljs-attr">creationTimestamp:</span> <span class="hljs-literal">null</span>
+  <span class="hljs-attr">labels:</span>
+    <span class="hljs-attr">run:</span> <span class="hljs-string">cm-test-pod</span>
+  <span class="hljs-attr">name:</span> <span class="hljs-string">cm-test-pod</span>
+<span class="hljs-attr">spec:</span>
+  <span class="hljs-attr">containers:</span>
+  <span class="hljs-bullet">-</span> <span class="hljs-attr">command:</span>
+    <span class="hljs-bullet">-</span> <span class="hljs-string">/bin/sh</span>
+    <span class="hljs-bullet">-</span> <span class="hljs-string">-c</span>
+    <span class="hljs-bullet">-</span> <span class="hljs-string">env</span>
+    <span class="hljs-attr">env:</span>
+    <span class="hljs-bullet">-</span> <span class="hljs-attr">name:</span> <span class="hljs-string">SPECIAL_LEVEL_KEY</span>
+      <span class="hljs-attr">valueFrom:</span>                <span class="hljs-comment"># Change this</span>
+        <span class="hljs-attr">configMapKeyRef:</span>        <span class="hljs-comment"># Add this</span>
+          <span class="hljs-attr">name:</span> <span class="hljs-string">special-config</span>  <span class="hljs-comment"># Add this</span>
+          <span class="hljs-attr">key:</span> <span class="hljs-string">special.how</span>      <span class="hljs-comment"># Add this</span>
+    <span class="hljs-bullet">-</span> <span class="hljs-attr">name:</span> <span class="hljs-string">SPECIAL_TYPE_KEY</span>
+      <span class="hljs-attr">valueFrom:</span>                <span class="hljs-comment"># Change this</span>
+        <span class="hljs-attr">configMapKeyRef:</span>        <span class="hljs-comment"># Add this</span>
+          <span class="hljs-attr">name:</span> <span class="hljs-string">special-config</span>  <span class="hljs-comment"># Add this</span>
+          <span class="hljs-attr">key:</span> <span class="hljs-string">special.type</span>     <span class="hljs-comment"># Add this</span>
+    <span class="hljs-attr">image:</span> <span class="hljs-string">busybox</span>
+    <span class="hljs-attr">name:</span> <span class="hljs-string">cm-test-pod</span>
+    <span class="hljs-attr">resources:</span> <span class="hljs-string">{}</span>
+  <span class="hljs-attr">dnsPolicy:</span> <span class="hljs-string">ClusterFirst</span>
+  <span class="hljs-attr">restartPolicy:</span> <span class="hljs-string">Never</span>
+<span class="hljs-attr">status:</span> <span class="hljs-string">{}</span>
+</div></code></pre>
+<pre class="hljs"><code><div>~/appconfig$
+</div></code></pre>
+<p>This test pod will take the values from the configMap and assign it to environment variables <code>SPECIAL_LEVEL_KEY</code> and
+<code>SPECIAL_TYPE_KEY</code> in its container. The container itself will run the <code>env</code> command to dump any environment variables
+assigned to it.</p>
+<pre class="hljs"><code><div>~/appconfig$ kubectl apply -f env-pod.yaml
+
+pod/cm-test-pod created
+
+~/appconfig$
+</div></code></pre>
+<pre class="hljs"><code><div>~/appconfig$ kubectl get pods
+
+NAME          READY   STATUS      RESTARTS   AGE
+cm-test-pod   0/1     Completed   0          4s
+
+~/appconfig$
+</div></code></pre>
+<p>Now, check the container log, grepping for SPECIAL to see if the SPECIAL_LEVEL_KEY and SPECIAL_TYPE_KEY variables were
+dumped when the container ran the <code>env</code> command:</p>
+<pre class="hljs"><code><div>~/appconfig$ kubectl logs cm-test-pod | grep SPECIAL
+
+SPECIAL_TYPE_KEY=charm
+SPECIAL_LEVEL_KEY=very
+
+~/appconfig$
+</div></code></pre>
+<p>Success! The container pulled the level key and type key from the configmap.</p>
+<p>Go ahead and remove the dapi test pod:</p>
+<pre class="hljs"><code><div>~/appconfig$ kubectl delete pod cm-test-pod
+
+pod &quot;cm-test-pod&quot; deleted
+
+~/appconfig$
+</div></code></pre>
+<h4 id="configmap-restrictions">ConfigMap restrictions</h4>
+<ul>
+<li>
+<p>ConfigMaps <em>must</em> be created before they are consumed in pods. Controllers may be written to tolerate missing
+configuration data; consult individual components configured via ConfigMap on a case-by-case basis.</p>
+</li>
+<li>
+<p>If ConfigMaps are modified or updated, any pods that use that ConfigMap <em>may</em> need to be restarted in order for the
+changes made to take effect. A container that detects configMap changes and restarts the primary application container
+in its pod is a good use case for a sidecar!</p>
+<ul>
+<li>Files projected into a container filesystem from a ConfigMap are read-only and ignore any other settings that affect
+file permissions on those files (such as <code>readOnly</code> in the <code>spec.containers.volumeMounts</code> section or the
+<code>spec.volumes.configMap.defaultMode</code>)</li>
+<li>If a ConfigMap's file contents are updated and they are projected in as files, the files in the pod will reflect the
+update after about a minute</li>
+</ul>
+</li>
+<li>
+<p>ConfigMaps reside in a namespace. They can only be referenced by pods in the <em>same namespace</em>.</p>
+</li>
+<li>
+<p>Quota for ConfigMap size has not been implemented yet, but etcd does have a 1MB limit for objects stored within it.</p>
+</li>
+<li>
+<p>Kubelet only supports use of ConfigMap for pods it gets from the API server. This includes any pods created using
+kubectl, or indirectly via a ReplicaSets. It does not include pods created via the Kubelet’s <code>staticPodPath</code> config,
+its <code>--config</code> flag, or its REST API (these are not common ways to create pods).</p>
+</li>
+</ul>
+<h3 id="3-downward-api">3. Downward API</h3>
+<p>Containers may need to acquire information about themselves. The downward API allows containers to discover information
+about themselves or the system without the need to call into the Kubernetes cluster. The Downward API allows configs to
+expose pod metadata to containers through environment variables or via a volume mount. The downward API volume refreshes
+its data in step with the <code>kubelet</code> refresh loop.</p>
+<p>To test the downward API we can create a pod spec that mounts downward api data in the <code>/dapi</code> directory. Lots of
+information can be mounted via the Downward API:</p>
+<p>For pods:</p>
+<ul>
+<li>metadata.name</li>
+<li>metadata.namespace</li>
+<li>metadata.uid</li>
+<li>metadata.labels</li>
+<li>metadata.annotations</li>
+</ul>
+<p>For containers:</p>
+<ul>
+<li>requests.cpu</li>
+<li>requests.ephemeral-storage</li>
+<li>requests.memory</li>
+<li>limits.cpu</li>
+<li>limits.ephemeral-storage</li>
+<li>limits.memory</li>
+</ul>
+<p>The following is available through environment variables:</p>
+<ul>
+<li>spec.nodeName</li>
+<li>status.hostIP</li>
+<li>status.podIP</li>
+<li>spec.serviceAccountName</li>
+</ul>
+<p>This list will likely grow over time and is available here:
+https://k8s.io/docs/tasks/inject-data-application/downward-api-volume-expose-pod-information/#capabilities-of-the-downward-api.
+Create the following pod config to demonstrate each of the metadata items in the above list:</p>
+<pre class="hljs"><code><div>~/appconfig$ mkdir ~/dapi &amp;&amp; cd $_
+
+~/dapi$ kubectl run dapi --dry-run=client -o yaml --image docker.io/busybox \
+-l zone=us-east-coast,cluster=test-cluster1,rack=rack-22 \
+--restart Never --command -- /bin/sh -c &quot;tail -f /dev/null&quot; &gt; dapi.yaml
+
+~/dapi$ nano dapi.yaml &amp;&amp; cat $_
+</div></code></pre>
+<ul>
+<li>Add the annotations <code>build: two</code> and <code>builder: john-doe</code></li>
+<li>Add the <code>downwardAPI</code> with the labels and annotations as shown below as a volume named <code>podinfo</code></li>
+<li>Mount the <code>podinfo</code> volume to the client-container at <code>/dapi</code></li>
+</ul>
+<pre class="hljs"><code><div><span class="hljs-attr">apiVersion:</span> <span class="hljs-string">v1</span>
+<span class="hljs-attr">kind:</span> <span class="hljs-string">Pod</span>
+<span class="hljs-attr">metadata:</span>
+  <span class="hljs-attr">annotations:</span>                             <span class="hljs-comment"># Add this</span>
+    <span class="hljs-attr">build:</span> <span class="hljs-string">two</span>                             <span class="hljs-comment"># Add this</span>
+    <span class="hljs-attr">builder:</span> <span class="hljs-string">john-doe</span>                      <span class="hljs-comment"># Add this</span>
+  <span class="hljs-attr">creationTimestamp:</span> <span class="hljs-literal">null</span>
+  <span class="hljs-attr">labels:</span>
+    <span class="hljs-attr">cluster:</span> <span class="hljs-string">test-cluster1</span>
+    <span class="hljs-attr">rack:</span> <span class="hljs-string">rack-22</span>
+    <span class="hljs-attr">zone:</span> <span class="hljs-string">us-east-coast</span>
+  <span class="hljs-attr">name:</span> <span class="hljs-string">dapi</span>
+<span class="hljs-attr">spec:</span>
+  <span class="hljs-attr">containers:</span>
+  <span class="hljs-bullet">-</span> <span class="hljs-attr">command:</span>
+    <span class="hljs-bullet">-</span> <span class="hljs-string">/bin/sh</span>
+    <span class="hljs-bullet">-</span> <span class="hljs-string">-c</span>
+    <span class="hljs-bullet">-</span> <span class="hljs-string">tail</span> <span class="hljs-string">-f</span> <span class="hljs-string">/dev/null</span>
+    <span class="hljs-attr">image:</span> <span class="hljs-string">docker.io/busybox</span>
+    <span class="hljs-attr">name:</span> <span class="hljs-string">dapi</span>
+    <span class="hljs-attr">resources:</span> <span class="hljs-string">{}</span>
+    <span class="hljs-attr">volumeMounts:</span>                          <span class="hljs-comment"># Add this</span>
+    <span class="hljs-bullet">-</span> <span class="hljs-attr">name:</span> <span class="hljs-string">podinfo</span>                        <span class="hljs-comment"># Add this</span>
+      <span class="hljs-attr">mountPath:</span> <span class="hljs-string">/dapi</span>                     <span class="hljs-comment"># Add this</span>
+      <span class="hljs-attr">readOnly:</span> <span class="hljs-literal">false</span>                      <span class="hljs-comment"># Add this</span>
+  <span class="hljs-attr">dnsPolicy:</span> <span class="hljs-string">ClusterFirst</span>
+  <span class="hljs-attr">restartPolicy:</span> <span class="hljs-string">Never</span>
+  <span class="hljs-attr">volumes:</span>                                 <span class="hljs-comment"># Add this</span>
+  <span class="hljs-bullet">-</span> <span class="hljs-attr">name:</span> <span class="hljs-string">podinfo</span>                          <span class="hljs-comment"># Add this</span>
+    <span class="hljs-attr">downwardAPI:</span>                           <span class="hljs-comment"># Add this</span>
+      <span class="hljs-attr">items:</span>                               <span class="hljs-comment"># Add this</span>
+      <span class="hljs-bullet">-</span> <span class="hljs-attr">path:</span> <span class="hljs-string">"labels"</span>                     <span class="hljs-comment"># Add this</span>
+        <span class="hljs-attr">fieldRef:</span>                          <span class="hljs-comment"># Add this</span>
+          <span class="hljs-attr">fieldPath:</span> <span class="hljs-string">metadata.labels</span>       <span class="hljs-comment"># Add this</span>
+      <span class="hljs-bullet">-</span> <span class="hljs-attr">path:</span> <span class="hljs-string">"annotations"</span>                <span class="hljs-comment"># Add this</span>
+        <span class="hljs-attr">fieldRef:</span>                          <span class="hljs-comment"># Add this</span>
+          <span class="hljs-attr">fieldPath:</span> <span class="hljs-string">metadata.annotations</span>  <span class="hljs-comment"># Add this</span>
+<span class="hljs-attr">status:</span> <span class="hljs-string">{}</span>
+</div></code></pre>
+<pre class="hljs"><code><div>~/dapi$
+</div></code></pre>
+<p>The volume mount hash inside <code>volumeMounts</code> within the container spec looks like any other volume mount. The pod volumes
+list however includes a downwardAPI mount which specifies each of the bits of pod data we want to capture.</p>
+<p>We mounted the pod's annotations as one of the volumes. Annotations store arbitrary non-identifying metadata for
+Kubernetes objects used for retrieval by API clients, tools and libraries. This information may vary in size, structure,
+or may include characters not permitted by labels, etc. Annotations are not used for object selection to ensure that
+arbitrary metadata does not get picked up by Kubernetes selectors accidentally.</p>
+<p>To see how this works, run the pod and wait until it's STATUS is Running:</p>
+<pre class="hljs"><code><div>~/dapi$ kubectl apply -f dapi.yaml
+
+pod/dapi created
+
+~/dapi$ kubectl get po dapi
+
+NAME   READY   STATUS    RESTARTS   AGE
+dapi   1/1     Running   0          3s
+
+~/dapi$
+</div></code></pre>
+<p>Now exec a shell into the pod to display the mounted metadata:</p>
+<pre class="hljs"><code><div>~/dapi$ kubectl exec -it dapi -- ls -l /dapi
+
+total 0
+lrwxrwxrwx    1 root     root            18 Jan 18 01:54 annotations -&gt; ..data/annotations
+lrwxrwxrwx    1 root     root            13 Jan 18 01:54 labels -&gt; ..data/labels
+
+~/dapi$ kubectl exec -it dapi -- cat /dapi/annotations
+
+build=&quot;two&quot;
+builder=&quot;john-doe&quot;
+kubectl.kubernetes.io/last-applied-configuration=&quot;{\&quot;apiVersion\&quot;:\&quot;v1\&quot;,\&quot;kind\&quot;:\&quot;Pod\&quot;,\&quot;metadata\&quot;:{\&quot;annotations\&quot;:{\&quot;build\&quot;:\&quot;two\&quot;,\&quot;builder\&quot;:\&quot;john-doe\&quot;},\&quot;creationTimestamp\&quot;:null,\&quot;labels\&quot;:{\&quot;cluster\&quot;:\&quot;test-cluster1\&quot;,\&quot;rack\&quot;:\&quot;rack-22\&quot;,\&quot;zone\&quot;:\&quot;us-east-coast\&quot;},\&quot;name\&quot;:\&quot;dapi\&quot;,\&quot;namespace\&quot;:\&quot;default\&quot;},\&quot;spec\&quot;:{\&quot;containers\&quot;:[{\&quot;command\&quot;:[\&quot;/bin/sh\&quot;,\&quot;-c\&quot;,\&quot;tail -f /dev/null\&quot;],\&quot;image\&quot;:\&quot;busybox\&quot;,\&quot;name\&quot;:\&quot;dapi\&quot;,\&quot;resources\&quot;:{},\&quot;volumeMounts\&quot;:[{\&quot;mountPath\&quot;:\&quot;/dapi\&quot;,\&quot;name\&quot;:\&quot;podinfo\&quot;,\&quot;readOnly\&quot;:false}]}],\&quot;dnsPolicy\&quot;:\&quot;ClusterFirst\&quot;,\&quot;restartPolicy\&quot;:\&quot;Never\&quot;,\&quot;volumes\&quot;:[{\&quot;downwardAPI\&quot;:{\&quot;items\&quot;:[{\&quot;fieldRef\&quot;:{\&quot;fieldPath\&quot;:\&quot;metadata.labels\&quot;},\&quot;path\&quot;:\&quot;labels\&quot;},{\&quot;fieldRef\&quot;:{\&quot;fieldPath\&quot;:\&quot;metadata.annotations\&quot;},\&quot;path\&quot;:\&quot;annotations\&quot;}]},\&quot;name\&quot;:\&quot;podinfo\&quot;}]},\&quot;status\&quot;:{}}\n&quot;
+kubernetes.io/config.seen=&quot;2023-07-10T02:03:14.491165170Z&quot;
+kubernetes.io/config.source=&quot;api&quot;
+
+~/dapi$
+</div></code></pre>
+<p>We see the contents of the annotations, which we didn't include in our original spec. Kubernetes stores some
+miscellaneous information, like previous configurations or commands that changed the resource as annotations, which is
+what you see.</p>
+<p>Delete all services, deployments, replicasets and pods when you are finished exploring. For resources created based on
+files inside a directory, <code>kubectl delete</code> can be instructed to delete resources described inside files within a
+directory.</p>
+<p>Delete all the resources created from files inside the ~/dapi/ directory:</p>
+<pre class="hljs"><code><div>~/dapi$ kubectl delete -f ~/dapi/
+
+pod &quot;dapi&quot; deleted
+
+~/dapi$
+</div></code></pre>
+<h3 id="challenges">CHALLENGES</h3>
+<p>Try the following exercises on your own, using the class slides and the knowledge from this lab to guide you.</p>
+<p>First, recreate the <code>special-config</code> ConfigMap if you deleted it:</p>
+<pre class="hljs"><code><div>~/dapi$ cd ~/appconfig
+
+~/appconfig$ kubectl delete configmap special-config
+
+~/appconfig$ kubectl create configmap special-config \
+--from-literal=special.type=charm --from-literal=special.how=very
+
+configmap/special-config created
+
+~/appconfig$
+</div></code></pre>
+<h3 id="challenge-1">CHALLENGE 1</h3>
+<p>Mount the values of the <code>special-config</code> configmap as environment variables <code>SPECIAL_LEVEL_KEY</code> and <code>SPECIAL_TYPE_KEY</code>,
+and modify the <code>dapi-test-pod</code> to output the value of those variables to stdout</p>
+<ul>
+<li>Configure the pod with the command <code>/bin/sh -c &quot;echo $SPECIAL_LEVEL_KEY $SPECIAL_TYPE_KEY&quot;</code></li>
+</ul>
+<h3 id="challenge-2">CHALLENGE 2</h3>
+<p>Modify the dapi-test-pod manifest to mount the <code>special-config</code> configmap as a volume</p>
+<ul>
+<li>Configure the pod with the command <code>/bin/sh -c &quot;cat /etc/config/special.how&quot;</code></li>
+<li>You should be able to use <code>kubectl logs dapi-test-pod</code> to verify that the contents of special.how are printed</li>
+<li>The keys used to define a configMap as a volume may be different</li>
+</ul>
+<p>Delete any resources you created after you complete the challenges.</p>
+<h3 id="challenge-3">CHALLENGE 3</h3>
+<p>Deploy a pod running the <code>httpd:2.4</code> image that uses the following <code>index.html</code> document:</p>
+<pre class="hljs"><code><div>~/appconfig$ nano index.html &amp;&amp; cat $_
+</div></code></pre>
+<pre class="hljs"><code><div>&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+    &lt;head&gt;
+        &lt;title&gt;Hello!&lt;/title&gt;
+    &lt;/head&gt;
+    &lt;body&gt;
+	&lt;p&gt;The page has loaded successfully!&lt;/p&gt;
+    &lt;/body&gt;
+&lt;/html&gt;
+</div></code></pre>
+<ul>
+<li>The index.html should be stored in the API and supplied to the pod's container when the pod is created.</li>
+<li>Webpages for Apache are placed in the <code>/usr/local/apache2/htdocs/</code> directory</li>
+</ul>
+<br>
+<p>Congratulations you have completed the lab!</p>
+<br>
+<p><em>Copyright (c) 2023-2024 RX-M LLC, Cloud Native &amp; AI Training and Consulting, all rights reserved</em></p>
+
+</body>
+</html>

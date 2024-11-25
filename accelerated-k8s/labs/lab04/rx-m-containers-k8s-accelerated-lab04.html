@@ -1,0 +1,1006 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>rx-m-containers-k8s-accelerated-lab04.md</title>
+<meta http-equiv="Content-type" content="text/html;charset=UTF-8">
+
+<style>
+/* https://github.com/microsoft/vscode/blob/master/extensions/markdown-language-features/media/markdown.css */
+/*---------------------------------------------------------------------------------------------
+ *  Copyright (c) Microsoft Corporation. All rights reserved.
+ *  Licensed under the MIT License. See License.txt in the project root for license information.
+ *--------------------------------------------------------------------------------------------*/
+
+body {
+	font-family: var(--vscode-markdown-font-family, -apple-system, BlinkMacSystemFont, "Segoe WPC", "Segoe UI", "Ubuntu", "Droid Sans", sans-serif);
+	font-size: var(--vscode-markdown-font-size, 14px);
+	padding: 0 26px;
+	line-height: var(--vscode-markdown-line-height, 22px);
+	word-wrap: break-word;
+}
+
+#code-csp-warning {
+	position: fixed;
+	top: 0;
+	right: 0;
+	color: white;
+	margin: 16px;
+	text-align: center;
+	font-size: 12px;
+	font-family: sans-serif;
+	background-color:#444444;
+	cursor: pointer;
+	padding: 6px;
+	box-shadow: 1px 1px 1px rgba(0,0,0,.25);
+}
+
+#code-csp-warning:hover {
+	text-decoration: none;
+	background-color:#007acc;
+	box-shadow: 2px 2px 2px rgba(0,0,0,.25);
+}
+
+body.scrollBeyondLastLine {
+	margin-bottom: calc(100vh - 22px);
+}
+
+body.showEditorSelection .code-line {
+	position: relative;
+}
+
+body.showEditorSelection .code-active-line:before,
+body.showEditorSelection .code-line:hover:before {
+	content: "";
+	display: block;
+	position: absolute;
+	top: 0;
+	left: -12px;
+	height: 100%;
+}
+
+body.showEditorSelection li.code-active-line:before,
+body.showEditorSelection li.code-line:hover:before {
+	left: -30px;
+}
+
+.vscode-light.showEditorSelection .code-active-line:before {
+	border-left: 3px solid rgba(0, 0, 0, 0.15);
+}
+
+.vscode-light.showEditorSelection .code-line:hover:before {
+	border-left: 3px solid rgba(0, 0, 0, 0.40);
+}
+
+.vscode-light.showEditorSelection .code-line .code-line:hover:before {
+	border-left: none;
+}
+
+.vscode-dark.showEditorSelection .code-active-line:before {
+	border-left: 3px solid rgba(255, 255, 255, 0.4);
+}
+
+.vscode-dark.showEditorSelection .code-line:hover:before {
+	border-left: 3px solid rgba(255, 255, 255, 0.60);
+}
+
+.vscode-dark.showEditorSelection .code-line .code-line:hover:before {
+	border-left: none;
+}
+
+.vscode-high-contrast.showEditorSelection .code-active-line:before {
+	border-left: 3px solid rgba(255, 160, 0, 0.7);
+}
+
+.vscode-high-contrast.showEditorSelection .code-line:hover:before {
+	border-left: 3px solid rgba(255, 160, 0, 1);
+}
+
+.vscode-high-contrast.showEditorSelection .code-line .code-line:hover:before {
+	border-left: none;
+}
+
+img {
+	max-width: 100%;
+	max-height: 100%;
+}
+
+a {
+	text-decoration: none;
+}
+
+a:hover {
+	text-decoration: underline;
+}
+
+a:focus,
+input:focus,
+select:focus,
+textarea:focus {
+	outline: 1px solid -webkit-focus-ring-color;
+	outline-offset: -1px;
+}
+
+hr {
+	border: 0;
+	height: 2px;
+	border-bottom: 2px solid;
+}
+
+h1 {
+	padding-bottom: 0.3em;
+	line-height: 1.2;
+	border-bottom-width: 1px;
+	border-bottom-style: solid;
+}
+
+h1, h2, h3 {
+	font-weight: normal;
+}
+
+table {
+	border-collapse: collapse;
+}
+
+table > thead > tr > th {
+	text-align: left;
+	border-bottom: 1px solid;
+}
+
+table > thead > tr > th,
+table > thead > tr > td,
+table > tbody > tr > th,
+table > tbody > tr > td {
+	padding: 5px 10px;
+}
+
+table > tbody > tr + tr > td {
+	border-top: 1px solid;
+}
+
+blockquote {
+	margin: 0 7px 0 5px;
+	padding: 0 16px 0 10px;
+	border-left-width: 5px;
+	border-left-style: solid;
+}
+
+code {
+	font-family: Menlo, Monaco, Consolas, "Droid Sans Mono", "Courier New", monospace, "Droid Sans Fallback";
+	font-size: 1em;
+	line-height: 1.357em;
+}
+
+body.wordWrap pre {
+	white-space: pre-wrap;
+}
+
+pre:not(.hljs),
+pre.hljs code > div {
+	padding: 16px;
+	border-radius: 3px;
+	overflow: auto;
+}
+
+pre code {
+	color: var(--vscode-editor-foreground);
+	tab-size: 4;
+}
+
+/** Theming */
+
+.vscode-light pre {
+	background-color: rgba(220, 220, 220, 0.4);
+}
+
+.vscode-dark pre {
+	background-color: rgba(10, 10, 10, 0.4);
+}
+
+.vscode-high-contrast pre {
+	background-color: rgb(0, 0, 0);
+}
+
+.vscode-high-contrast h1 {
+	border-color: rgb(0, 0, 0);
+}
+
+.vscode-light table > thead > tr > th {
+	border-color: rgba(0, 0, 0, 0.69);
+}
+
+.vscode-dark table > thead > tr > th {
+	border-color: rgba(255, 255, 255, 0.69);
+}
+
+.vscode-light h1,
+.vscode-light hr,
+.vscode-light table > tbody > tr + tr > td {
+	border-color: rgba(0, 0, 0, 0.18);
+}
+
+.vscode-dark h1,
+.vscode-dark hr,
+.vscode-dark table > tbody > tr + tr > td {
+	border-color: rgba(255, 255, 255, 0.18);
+}
+
+</style>
+
+<style>
+/* Tomorrow Theme */
+/* http://jmblog.github.com/color-themes-for-google-code-highlightjs */
+/* Original theme - https://github.com/chriskempson/tomorrow-theme */
+
+/* Tomorrow Comment */
+.hljs-comment,
+.hljs-quote {
+	color: #8e908c;
+}
+
+/* Tomorrow Red */
+.hljs-variable,
+.hljs-template-variable,
+.hljs-tag,
+.hljs-name,
+.hljs-selector-id,
+.hljs-selector-class,
+.hljs-regexp,
+.hljs-deletion {
+	color: #c82829;
+}
+
+/* Tomorrow Orange */
+.hljs-number,
+.hljs-built_in,
+.hljs-builtin-name,
+.hljs-literal,
+.hljs-type,
+.hljs-params,
+.hljs-meta,
+.hljs-link {
+	color: #f5871f;
+}
+
+/* Tomorrow Yellow */
+.hljs-attribute {
+	color: #eab700;
+}
+
+/* Tomorrow Green */
+.hljs-string,
+.hljs-symbol,
+.hljs-bullet,
+.hljs-addition {
+	color: #718c00;
+}
+
+/* Tomorrow Blue */
+.hljs-title,
+.hljs-section {
+	color: #4271ae;
+}
+
+/* Tomorrow Purple */
+.hljs-keyword,
+.hljs-selector-tag {
+	color: #8959a8;
+}
+
+.hljs {
+	display: block;
+	overflow-x: auto;
+	color: #4d4d4c;
+	padding: 0.5em;
+}
+
+.hljs-emphasis {
+	font-style: italic;
+}
+
+.hljs-strong {
+	font-weight: bold;
+}
+</style>
+
+<style>
+/*
+ * Markdown PDF CSS
+ */
+
+ body {
+	font-family: -apple-system, BlinkMacSystemFont, "Segoe WPC", "Segoe UI", "Ubuntu", "Droid Sans", sans-serif, "Meiryo";
+	padding: 0 12px;
+}
+
+pre {
+	background-color: #f8f8f8;
+	border: 1px solid #cccccc;
+	border-radius: 3px;
+	overflow-x: auto;
+	white-space: pre-wrap;
+	overflow-wrap: break-word;
+}
+
+pre:not(.hljs) {
+	padding: 23px;
+	line-height: 19px;
+}
+
+blockquote {
+	background: rgba(127, 127, 127, 0.1);
+	border-color: rgba(0, 122, 204, 0.5);
+}
+
+.emoji {
+	height: 1.4em;
+}
+
+code {
+	font-size: 14px;
+	line-height: 19px;
+}
+
+/* for inline code */
+:not(pre):not(.hljs) > code {
+	color: #C9AE75; /* Change the old color so it seems less like an error */
+	font-size: inherit;
+}
+
+/* Page Break : use <div class="page"/> to insert page break
+-------------------------------------------------------- */
+.page {
+	page-break-after: always;
+}
+
+</style>
+
+<script src="https://unpkg.com/mermaid/dist/mermaid.min.js"></script>
+</head>
+<body>
+  <script>
+    mermaid.initialize({
+      startOnLoad: true,
+      theme: document.body.classList.contains('vscode-dark') || document.body.classList.contains('vscode-high-contrast')
+          ? 'dark'
+          : 'default'
+    });
+  </script>
+<p><img src="https://rx-m.com/rxm-cnc.svg" alt="RX-M, llc."></p>
+<h1 id="kubernetes">Kubernetes</h1>
+<h2 id="pods-basics">Pods: Basics</h2>
+<p>In this lab we will explore the nature of Kubernetes pods and how to work with them.</p>
+<p>Like individual application containers, pods are considered to be relatively ephemeral rather than durable entities.
+Pods are scheduled to nodes and remain there until termination (according to restart policy) or deletion. When a node
+dies, the pods scheduled to that node are deleted. Specific pods are never moved to new nodes; instead, they must be
+replaced by running fresh copies of the images on another node.</p>
+<p>Kubernetes supports declarative YAML or JSON configuration files. Often times config files are preferable to imperative
+commands, since they can be checked into version control and changes to the files can be code reviewed, producing a more
+robust, reliable and CI/CD or GitOps friendly system. They can also save a lot of typing if you would like to deploy
+complex pods or entire applications.</p>
+<h3 id="0-prerequisites">0. Prerequisites</h3>
+<p>If you already know how to login to your lab system and Docker and Kubernetes are installed and configured you can skip
+this section and jump directly to <code>1.</code> . Otherwise, follow these instructions</p>
+<h3 id="01-login-to-your-lab-system">0.1 Login to your lab system</h3>
+<p>Login to your machine using an ssh client:</p>
+<pre class="hljs"><code><div>@laptop:~$ chmod 400 key.pem
+
+@laptop:~$ ssh -i &lt;class SSH Key&gt;.pem ubuntu@&lt;your VM IP&gt;
+
+Welcome to Ubuntu 22.04.2 LTS (GNU/Linux 5.15.0-1031-aws x86_64)
+
+...
+
+~$
+</div></code></pre>
+<h3 id="02-install-and-configure-docker-and-kubernetes">0.2. Install and configure Docker and Kubernetes</h3>
+<p>For this lab you will need a Kubernetes cluster. We have prepared a quick installation script that expedites the process
+of setting up your Lab VM for Kubernetes by performing the following operations:</p>
+<ul>
+<li>Downloading and Installing Docker</li>
+<li>Enabling the apt package manager to retrieve the Kubernetes binaries</li>
+<li>Bootstrapping a Kubernetes Cluster</li>
+<li>Configuring kubectl</li>
+<li>Allowing regular workloads to run on a single node</li>
+</ul>
+<pre class="hljs"><code><div>~$ wget -qO - https://raw.githubusercontent.com/RX-M/classfiles/master/k8s.sh | sh
+
+...
+
+~$
+</div></code></pre>
+<p>We also add our account to the <code>docker</code> group to minimize use of <code>sudo</code>:</p>
+<pre class="hljs"><code><div>~$ sudo usermod -aG docker $(whoami)     # add yourself to the group
+
+~$
+</div></code></pre>
+<p>Add tab completion permanently to your bash shell:</p>
+<pre class="hljs"><code><div>~$ echo &quot;source &lt;(kubectl completion bash)&quot; &gt;&gt; ~/.bashrc
+</div></code></pre>
+<p>After updating your user groups and adding tab completion you will need to refresh your shell session. On the lab system
+the easiest approach is to logout at the command line:</p>
+<pre class="hljs"><code><div>~$ exit
+
+logout
+Connection to 55.55.55.55 closed.
+
+@laptop:~$
+</div></code></pre>
+<p>Log back in as <em>ubuntu</em> with the SSH key:</p>
+<pre class="hljs"><code><div>@laptop:~$ ssh -i \path-to-ssh-key\key.pem ubuntu@&lt;your VM IP&gt;
+
+...
+
+~$
+</div></code></pre>
+<p>Great. Your current shell, and any new shell sessions, can now use the <code>docker</code> command without <code>sudo</code> and can make use
+of tab completion.</p>
+<h3 id="1-a-simple-pod">1. A simple pod</h3>
+<p>To begin our exploration, we’ll create a basic Kubernetes pod from the command line. The easiest way to run a pod is
+using the <code>kubectl run</code> command. Try creating a simple Apache Web Server pod using the <code>kubectl run</code> subcommand as
+follows.</p>
+<pre class="hljs"><code><div>~$ kubectl run apache --image=docker.io/httpd:2.2
+
+pod/apache created
+
+~$
+</div></code></pre>
+<p>Now view the pod:</p>
+<pre class="hljs"><code><div>~$ kubectl get pod
+
+NAME     READY   STATUS    RESTARTS   AGE
+apache   1/1     Running   0          8s
+
+~$
+</div></code></pre>
+<p>What happened here?</p>
+<p>The <code>kubectl run</code> command takes a name, an image and an API object as parameters and it generates pod template including
+the image you specified.</p>
+<p>The <code>run</code> subcommand syntax is as follows:</p>
+<pre class="hljs"><code><div>~$ kubectl run -h | grep COMMAND
+
+  kubectl run NAME --image=image [--env=&quot;key=value&quot;] [--port=port] [--dry-run=server|client] [--overrides=inline-json] [--command] -- [COMMAND] [args...] [options]
+
+~$
+</div></code></pre>
+<ul>
+<li><code>--env</code> switch sets environment variables (just like the <code>docker run –e</code> switch)</li>
+<li><code>--port</code> switch exposes ports for service mapping</li>
+<li><code>--dry-run</code> switch (if set to client) allows you to submit the command without executing it to test the parameters</li>
+<li><code>--overrides</code> switch can be used to provide json for fields that don't have flags</li>
+<li><code>--command</code> switch will accept paths to binaries and arguments to pass to those binaries, note the <code>--</code> required for the syntax</li>
+</ul>
+<p>To get more information about our pod use the <code>kubectl describe</code> subcommand:</p>
+<pre class="hljs"><code><div>~$ kubectl describe pod apache
+
+Name:             apache
+Namespace:        default
+Priority:         0
+Service Account:  default
+Node:             ip-172-31-4-161/172.31.4.161
+Start Time:       Thu, 18 Jan 2024 01:07:23 +0000
+Labels:           run=apache
+Annotations:      &lt;none&gt;
+Status:           Pending
+IP:
+IPs:              &lt;none&gt;
+Containers:
+  apache:
+    Container ID:
+    Image:          docker.io/httpd:2.2
+    Image ID:
+    Port:           &lt;none&gt;
+    Host Port:      &lt;none&gt;
+    State:          Waiting
+      Reason:       ContainerCreating
+    Ready:          False
+    Restart Count:  0
+    Environment:    &lt;none&gt;
+    Mounts:
+      /var/run/secrets/kubernetes.io/serviceaccount from kube-api-access-blgw9 (ro)
+Conditions:
+  Type                        Status
+  PodReadyToStartContainers   False
+  Initialized                 True
+  Ready                       False
+  ContainersReady             False
+  PodScheduled                True
+Volumes:
+  kube-api-access-blgw9:
+    Type:                    Projected (a volume that contains injected data from multiple sources)
+    TokenExpirationSeconds:  3607
+    ConfigMapName:           kube-root-ca.crt
+    ConfigMapOptional:       &lt;nil&gt;
+    DownwardAPI:             true
+QoS Class:                   BestEffort
+Node-Selectors:              &lt;none&gt;
+Tolerations:                 node.kubernetes.io/not-ready:NoExecute op=Exists for 300s
+                             node.kubernetes.io/unreachable:NoExecute op=Exists for 300s
+Events:
+  Type    Reason     Age   From               Message
+  ----    ------     ----  ----               -------
+  Normal  Scheduled  11s   default-scheduler  Successfully assigned default/apache to ip-172-31-4-161
+  Normal  Pulling    10s   kubelet            Pulling image &quot;docker.io/httpd:2.2&quot;
+
+~$
+</div></code></pre>
+<p>Read through the <em>Events</em> reported for the pod.</p>
+<p>You can see that Kubernetes used containerd to pull, create, and start the httpd image requested. You can also
+see which part of Kubernetes caused the event. For example the scheduler assigned the pod to the node and then the
+Kubelet on the assigned node starts the container.</p>
+<p>Kubernetes also injects a standard set of environment variables into the containers of a pod providing the location of
+the cluster API service. Use <code>kubectl exec</code> to see the pod's environment variables. We'll go into further details about
+<code>kubectl exec</code> later.</p>
+<pre class="hljs"><code><div>~$ kubectl exec apache -- env
+
+PATH=/usr/local/apache2/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+HOSTNAME=apache
+HTTPD_PREFIX=/usr/local/apache2
+HTTPD_VERSION=2.2.34
+HTTPD_SHA256=e53183d5dfac5740d768b4c9bea193b1099f4b06b57e5f28d7caaf9ea7498160
+HTTPD_PATCHES=CVE-2017-9798-patch-2.2.patch 42c610f8a8f8d4d08664db6d9857120c2c252c9b388d56f238718854e6013e46 2.2.x-mod_proxy-without-APR_HAS_THREADS.patch beb66a79a239f7e898311c5ed6a38c070c641ec56706a295b7e5caf3c55a7296
+APACHE_DIST_URLS=https://www.apache.org/dyn/closer.cgi?action=download&amp;filename=        https://www-us.apache.org/dist/  https://www.apache.org/dist/    https://archive.apache.org/dist/
+KUBERNETES_PORT_443_TCP_PORT=443
+KUBERNETES_PORT_443_TCP_ADDR=10.96.0.1
+KUBERNETES_SERVICE_HOST=10.96.0.1
+KUBERNETES_SERVICE_PORT=443
+KUBERNETES_SERVICE_PORT_HTTPS=443
+KUBERNETES_PORT=tcp://10.96.0.1:443
+KUBERNETES_PORT_443_TCP=tcp://10.96.0.1:443
+KUBERNETES_PORT_443_TCP_PROTO=tcp
+HOME=/root
+
+~$
+</div></code></pre>
+<p>The <code>kubectl get</code> command also allows you to retrieve pod metadata using the <code>-o</code> switch. The <code>-o</code> (or <code>--output</code>)
+switch formats the output of the get command. The output format can be <em>json</em>, <em>yaml</em>, <em>wide</em>, <em>name</em>, <em>template</em>,
+<em>template-file</em>, <em>jsonpath</em>, or <em>jsonpath-file</em>. The golang template specification is also used by Docker (more info
+here: http://golang.org/pkg/text/template/).</p>
+<p>For example, to retrieve pod data in YAML, try:</p>
+<pre class="hljs"><code><div>~$ kubectl get pod apache -o yaml
+</div></code></pre>
+<pre class="hljs"><code><div><span class="hljs-attr">apiVersion:</span> <span class="hljs-string">v1</span>
+<span class="hljs-attr">kind:</span> <span class="hljs-string">Pod</span>
+<span class="hljs-attr">metadata:</span>
+  <span class="hljs-attr">creationTimestamp:</span> <span class="hljs-string">"2024-01-18T01:07:23Z"</span>
+  <span class="hljs-attr">labels:</span>
+    <span class="hljs-attr">run:</span> <span class="hljs-string">apache</span>
+  <span class="hljs-attr">name:</span> <span class="hljs-string">apache</span>
+  <span class="hljs-attr">namespace:</span> <span class="hljs-string">default</span>
+  <span class="hljs-attr">resourceVersion:</span> <span class="hljs-string">"1838"</span>
+  <span class="hljs-attr">uid:</span> <span class="hljs-string">a13820c3-c6ad-4f57-bc02-ec9133c91a77</span>
+<span class="hljs-attr">spec:</span>
+  <span class="hljs-attr">containers:</span>
+  <span class="hljs-bullet">-</span> <span class="hljs-attr">image:</span> <span class="hljs-string">docker.io/httpd:2.2</span>
+    <span class="hljs-attr">imagePullPolicy:</span> <span class="hljs-string">IfNotPresent</span>
+    <span class="hljs-attr">name:</span> <span class="hljs-string">apache</span>
+    <span class="hljs-attr">resources:</span> <span class="hljs-string">{}</span>
+    <span class="hljs-attr">terminationMessagePath:</span> <span class="hljs-string">/dev/termination-log</span>
+    <span class="hljs-attr">terminationMessagePolicy:</span> <span class="hljs-string">File</span>
+    <span class="hljs-attr">volumeMounts:</span>
+    <span class="hljs-bullet">-</span> <span class="hljs-attr">mountPath:</span> <span class="hljs-string">/var/run/secrets/kubernetes.io/serviceaccount</span>
+      <span class="hljs-attr">name:</span> <span class="hljs-string">kube-api-access-blgw9</span>
+      <span class="hljs-attr">readOnly:</span> <span class="hljs-literal">true</span>
+  <span class="hljs-attr">dnsPolicy:</span> <span class="hljs-string">ClusterFirst</span>
+  <span class="hljs-attr">enableServiceLinks:</span> <span class="hljs-literal">true</span>
+  <span class="hljs-attr">nodeName:</span> <span class="hljs-string">ip-172-31-4-161</span>
+  <span class="hljs-attr">preemptionPolicy:</span> <span class="hljs-string">PreemptLowerPriority</span>
+  <span class="hljs-attr">priority:</span> <span class="hljs-number">0</span>
+  <span class="hljs-attr">restartPolicy:</span> <span class="hljs-string">Always</span>
+  <span class="hljs-attr">schedulerName:</span> <span class="hljs-string">default-scheduler</span>
+  <span class="hljs-attr">securityContext:</span> <span class="hljs-string">{}</span>
+  <span class="hljs-attr">serviceAccount:</span> <span class="hljs-string">default</span>
+  <span class="hljs-attr">serviceAccountName:</span> <span class="hljs-string">default</span>
+  <span class="hljs-attr">terminationGracePeriodSeconds:</span> <span class="hljs-number">30</span>
+  <span class="hljs-attr">tolerations:</span>
+  <span class="hljs-bullet">-</span> <span class="hljs-attr">effect:</span> <span class="hljs-string">NoExecute</span>
+    <span class="hljs-attr">key:</span> <span class="hljs-string">node.kubernetes.io/not-ready</span>
+    <span class="hljs-attr">operator:</span> <span class="hljs-string">Exists</span>
+    <span class="hljs-attr">tolerationSeconds:</span> <span class="hljs-number">300</span>
+  <span class="hljs-bullet">-</span> <span class="hljs-attr">effect:</span> <span class="hljs-string">NoExecute</span>
+    <span class="hljs-attr">key:</span> <span class="hljs-string">node.kubernetes.io/unreachable</span>
+    <span class="hljs-attr">operator:</span> <span class="hljs-string">Exists</span>
+    <span class="hljs-attr">tolerationSeconds:</span> <span class="hljs-number">300</span>
+  <span class="hljs-attr">volumes:</span>
+  <span class="hljs-bullet">-</span> <span class="hljs-attr">name:</span> <span class="hljs-string">kube-api-access-blgw9</span>
+    <span class="hljs-attr">projected:</span>
+      <span class="hljs-attr">defaultMode:</span> <span class="hljs-number">420</span>
+      <span class="hljs-attr">sources:</span>
+      <span class="hljs-bullet">-</span> <span class="hljs-attr">serviceAccountToken:</span>
+          <span class="hljs-attr">expirationSeconds:</span> <span class="hljs-number">3607</span>
+          <span class="hljs-attr">path:</span> <span class="hljs-string">token</span>
+      <span class="hljs-bullet">-</span> <span class="hljs-attr">configMap:</span>
+          <span class="hljs-attr">items:</span>
+          <span class="hljs-bullet">-</span> <span class="hljs-attr">key:</span> <span class="hljs-string">ca.crt</span>
+            <span class="hljs-attr">path:</span> <span class="hljs-string">ca.crt</span>
+          <span class="hljs-attr">name:</span> <span class="hljs-string">kube-root-ca.crt</span>
+      <span class="hljs-bullet">-</span> <span class="hljs-attr">downwardAPI:</span>
+          <span class="hljs-attr">items:</span>
+          <span class="hljs-bullet">-</span> <span class="hljs-attr">fieldRef:</span>
+              <span class="hljs-attr">apiVersion:</span> <span class="hljs-string">v1</span>
+              <span class="hljs-attr">fieldPath:</span> <span class="hljs-string">metadata.namespace</span>
+            <span class="hljs-attr">path:</span> <span class="hljs-string">namespace</span>
+<span class="hljs-attr">status:</span>
+  <span class="hljs-attr">conditions:</span>
+  <span class="hljs-bullet">-</span> <span class="hljs-attr">lastProbeTime:</span> <span class="hljs-literal">null</span>
+    <span class="hljs-attr">lastTransitionTime:</span> <span class="hljs-string">"2024-01-18T01:07:36Z"</span>
+    <span class="hljs-attr">status:</span> <span class="hljs-string">"True"</span>
+    <span class="hljs-attr">type:</span> <span class="hljs-string">PodReadyToStartContainers</span>
+  <span class="hljs-bullet">-</span> <span class="hljs-attr">lastProbeTime:</span> <span class="hljs-literal">null</span>
+    <span class="hljs-attr">lastTransitionTime:</span> <span class="hljs-string">"2024-01-18T01:07:23Z"</span>
+    <span class="hljs-attr">status:</span> <span class="hljs-string">"True"</span>
+    <span class="hljs-attr">type:</span> <span class="hljs-string">Initialized</span>
+  <span class="hljs-bullet">-</span> <span class="hljs-attr">lastProbeTime:</span> <span class="hljs-literal">null</span>
+    <span class="hljs-attr">lastTransitionTime:</span> <span class="hljs-string">"2024-01-18T01:07:36Z"</span>
+    <span class="hljs-attr">status:</span> <span class="hljs-string">"True"</span>
+    <span class="hljs-attr">type:</span> <span class="hljs-string">Ready</span>
+  <span class="hljs-bullet">-</span> <span class="hljs-attr">lastProbeTime:</span> <span class="hljs-literal">null</span>
+    <span class="hljs-attr">lastTransitionTime:</span> <span class="hljs-string">"2024-01-18T01:07:36Z"</span>
+    <span class="hljs-attr">status:</span> <span class="hljs-string">"True"</span>
+    <span class="hljs-attr">type:</span> <span class="hljs-string">ContainersReady</span>
+  <span class="hljs-bullet">-</span> <span class="hljs-attr">lastProbeTime:</span> <span class="hljs-literal">null</span>
+    <span class="hljs-attr">lastTransitionTime:</span> <span class="hljs-string">"2024-01-18T01:07:23Z"</span>
+    <span class="hljs-attr">status:</span> <span class="hljs-string">"True"</span>
+    <span class="hljs-attr">type:</span> <span class="hljs-string">PodScheduled</span>
+  <span class="hljs-attr">containerStatuses:</span>
+  <span class="hljs-bullet">-</span> <span class="hljs-attr">containerID:</span> <span class="hljs-string">containerd://70d5e1cfc69307947f61f75f45832a11c9df5e12bf910d268fa2dca880f0d8b7</span>
+    <span class="hljs-attr">image:</span> <span class="hljs-string">docker.io/library/httpd:2.2</span>
+    <span class="hljs-attr">imageID:</span> <span class="hljs-string">docker.io/library/httpd@sha256:9784d70c8ea466fabd52b0bc8cde84980324f9612380d22fbad2151df9a430eb</span>
+    <span class="hljs-attr">lastState:</span> <span class="hljs-string">{}</span>
+    <span class="hljs-attr">name:</span> <span class="hljs-string">apache</span>
+    <span class="hljs-attr">ready:</span> <span class="hljs-literal">true</span>
+    <span class="hljs-attr">restartCount:</span> <span class="hljs-number">0</span>
+    <span class="hljs-attr">started:</span> <span class="hljs-literal">true</span>
+    <span class="hljs-attr">state:</span>
+      <span class="hljs-attr">running:</span>
+        <span class="hljs-attr">startedAt:</span> <span class="hljs-string">"2024-01-18T01:07:36Z"</span>
+  <span class="hljs-attr">hostIP:</span> <span class="hljs-number">172.31</span><span class="hljs-number">.4</span><span class="hljs-number">.161</span>
+  <span class="hljs-attr">hostIPs:</span>
+  <span class="hljs-bullet">-</span> <span class="hljs-attr">ip:</span> <span class="hljs-number">172.31</span><span class="hljs-number">.4</span><span class="hljs-number">.161</span>
+  <span class="hljs-attr">phase:</span> <span class="hljs-string">Running</span>
+  <span class="hljs-attr">podIP:</span> <span class="hljs-number">10.32</span><span class="hljs-number">.0</span><span class="hljs-number">.4</span>
+  <span class="hljs-attr">podIPs:</span>
+  <span class="hljs-bullet">-</span> <span class="hljs-attr">ip:</span> <span class="hljs-number">10.32</span><span class="hljs-number">.0</span><span class="hljs-number">.4</span>
+  <span class="hljs-attr">qosClass:</span> <span class="hljs-string">BestEffort</span>
+  <span class="hljs-attr">startTime:</span> <span class="hljs-string">"2024-01-18T01:07:23Z"</span>
+</div></code></pre>
+<pre class="hljs"><code><div>~$
+</div></code></pre>
+<p>We can see the entire pod manifest (spec <em>and</em> status) using the yaml outputter but like <code>docker container inspect</code> this
+is a lot of information all at once and also like <code>docker container inspect</code> it can be parsed for individual properties.</p>
+<p>To curl our pod all we need is its IP address. This information is reported dynamically by the kubelet and is part of
+the pod's &quot;status&quot;, so looking under the <code>status</code> section of the excerpts above, you will see that &quot;<code>podIP</code>&quot; is one of
+the available status keys.</p>
+<p>Using the <code>jsonpath</code> outputter or <code>--template</code> flag, we can extract just the <code>podIP</code>, try it:</p>
+<pre class="hljs"><code><div>~$ kubectl get pod apache -o jsonpath='{.status.podIP}' &amp;&amp; echo
+
+10.32.0.4
+
+~$
+</div></code></pre>
+<p>Using the above command in a nested shell, store the <code>podIP</code> in an environment variable and curl the IP address of the
+pod to ensure that you can reach the running Apache web server:</p>
+<pre class="hljs"><code><div>~$ PIP=$(kubectl get pod apache -o jsonpath='{.status.podIP}') &amp;&amp; echo $PIP
+
+10.32.0.4
+
+~$
+</div></code></pre>
+<pre class="hljs"><code><div>~$ curl -I $PIP
+
+HTTP/1.1 200 OK
+Date: Mon, 25 Sep 2023 08:37:46 GMT
+Server: Apache/2.2.34 (Unix) mod_ssl/2.2.34 OpenSSL/1.0.1t DAV/2
+Last-Modified: Sat, 20 Nov 2004 20:16:24 GMT
+ETag: &quot;45118-2c-3e9564c23b600&quot;
+Accept-Ranges: bytes
+Content-Length: 44
+Content-Type: text/html
+
+~$
+</div></code></pre>
+<p>Your Apache web server is reachable from the pod's IP!</p>
+<h3 id="2-terminating-pods">2. Terminating pods</h3>
+<p>Because pods house running processes on nodes in the cluster, it is important to allow those processes to gracefully
+terminate when they are no longer needed. In Kubernetes, users can request deletion and discover when processes
+terminate.</p>
+<p>Go ahead and delete the apache pod:</p>
+<pre class="hljs"><code><div>~$ kubectl delete pod apache
+
+pod &quot;apache&quot; deleted
+
+~$ kubectl get pod
+
+No resources found in default namespace.
+
+~$
+</div></code></pre>
+<p>You may have noticed a slight delay between your deletion request and when Kubernetes finished the process. When a user
+requests deletion of a pod, Kubernetes sends the appropriate termination signal to each container in the pod (either
+SIGTERM or the container defined stop signal). Kubernetes then waits for a grace period after which, if the pod has not
+shutdown, the pod is forcefully killed with SIGKILL and the pod is then deleted from the API server. If the Kubelet or
+the container manager is restarted while waiting for processes to terminate, the termination will be retried with the
+full grace period.</p>
+<h3 id="21-challenge-pod-exploration">2.1. CHALLENGE: pod exploration</h3>
+<ul>
+<li>Run <code>kubectl run apache --image docker.io/httpd:latest</code> to create another <code>apache</code> pod</li>
+<li>Use <code>kubectl describe</code> to view the new <code>apache</code> pod
+<ul>
+<li>What image is this new apache pod running?</li>
+<li>Are there any labels?</li>
+</ul>
+</li>
+<li>Using the <code>kubectl delete -h</code> help page, try to delete the new <code>apache</code> pod using any labels</li>
+</ul>
+<h3 id="3-pod-config-files">3. Pod config files</h3>
+<p>Let’s try running an nginx container in a pod but this time we’ll create the pod using a YAML configuration file.</p>
+<pre class="hljs"><code><div>~$ mkdir -p ~/pods &amp;&amp; cd $_
+
+~/pods$
+</div></code></pre>
+<p>Create a spec for a pod named nginxpod that runs the <code>nginx:1.11</code> image on port 80. You can easily do so with <code>kubectl run</code> with the <code>--dry-run</code>, and <code>-o yaml</code> flags, sending the output to a file:</p>
+<pre class="hljs"><code><div>~/pods$ kubectl run nginxpod --image docker.io/nginx:1.11 --port 80 -o yaml --dry-run=client &gt; nginxpod.yaml
+</div></code></pre>
+<p>Examine the pod spec:</p>
+<pre class="hljs"><code><div>~/pods$ cat nginxpod.yaml
+</div></code></pre>
+<pre class="hljs"><code><div><span class="hljs-attr">apiVersion:</span> <span class="hljs-string">v1</span>
+<span class="hljs-attr">kind:</span> <span class="hljs-string">Pod</span>
+<span class="hljs-attr">metadata:</span>
+  <span class="hljs-attr">creationTimestamp:</span> <span class="hljs-literal">null</span>
+  <span class="hljs-attr">labels:</span>
+    <span class="hljs-attr">run:</span> <span class="hljs-string">nginxpod</span>
+  <span class="hljs-attr">name:</span> <span class="hljs-string">nginxpod</span>
+<span class="hljs-attr">spec:</span>
+  <span class="hljs-attr">containers:</span>
+  <span class="hljs-bullet">-</span> <span class="hljs-attr">image:</span> <span class="hljs-string">nginx:1.11</span>
+    <span class="hljs-attr">name:</span> <span class="hljs-string">nginxpod</span>
+    <span class="hljs-attr">ports:</span>
+    <span class="hljs-bullet">-</span> <span class="hljs-attr">containerPort:</span> <span class="hljs-number">80</span>
+    <span class="hljs-attr">resources:</span> <span class="hljs-string">{}</span>
+  <span class="hljs-attr">dnsPolicy:</span> <span class="hljs-string">ClusterFirst</span>
+  <span class="hljs-attr">restartPolicy:</span> <span class="hljs-string">Always</span>
+<span class="hljs-attr">status:</span> <span class="hljs-string">{}</span>
+</div></code></pre>
+<pre class="hljs"><code><div>~/pods$
+</div></code></pre>
+<blockquote>
+<p>N.B. Creating specs imperatively adds the <code>dnsPolicy</code>, <code>restartPolicy</code>, <code>status</code>, <code>resources</code>, and <code>creationTimestamp</code>
+keys to the resulting yaml. You can safely remove these keys as Kubernetes will populate default values for them when
+created. You will also see a label <code>run: podName</code> in the metadata.</p>
+</blockquote>
+<p>The key <code>kind</code> tells Kubernetes we wish to create a pod. The <code>metadata</code> section allows us to define a name for the pod
+and to apply any other labels we might deem useful.</p>
+<p>The <code>spec</code> section defines the containers we wish to run in our pod. In our case we will run just a single container
+based on the nginx image. The <code>ports</code> key allows us to share the ports the pod will be using with the orchestration
+layer.</p>
+<p>To have Kubernetes create your new pod you can use the <code>kubectl create</code> or <code>kubectl apply</code> subcommand. The <em>create</em>
+subcommand will accept a config file via stdin or you can load the config from a file with the <code>-f</code> switch (more
+common). Whereas <em>apply</em> loads configs from files or whole directories with <code>-f</code>. Try the following:</p>
+<pre class="hljs"><code><div>~/pods$ kubectl apply -f nginxpod.yaml
+
+pod/nginxpod created
+
+~/pods$
+</div></code></pre>
+<p>Now list the pods on your cluster:</p>
+<pre class="hljs"><code><div>~/pods$ kubectl get pods
+
+NAME       READY   STATUS    RESTARTS   AGE
+nginxpod   1/1     Running   0          11s
+
+~/pods$
+</div></code></pre>
+<p>Describe your pod:</p>
+<pre class="hljs"><code><div>~/pods$ kubectl describe pod nginxpod
+
+Name:             nginxpod
+Namespace:        default
+Priority:         0
+Service Account:  default
+Node:             ip-172-31-4-161/172.31.4.161
+Start Time:       Thu, 18 Jan 2024 01:23:01 +0000
+Labels:           run=nginxpod
+Annotations:      &lt;none&gt;
+Status:           Pending
+IP:
+IPs:              &lt;none&gt;
+Containers:
+  nginxpod:
+
+...
+
+~/pods$
+</div></code></pre>
+<p>Like we did before with <em>jsonpath</em>, extract just the status section’s <code>podIP</code> value using the <code>--template</code> flag and
+store that in an environment variable:</p>
+<pre class="hljs"><code><div>~/pods$ POD=$(kubectl get pod nginxpod --template={{.status.podIP}}) &amp;&amp; echo $POD
+
+10.32.0.4
+
+~/pods$
+</div></code></pre>
+<p>Like the <code>jsonpath</code> outputter, the <code>--template</code> flag retrieves to the <code>podIP</code> key, which is nested under the <code>.status</code>
+key in the pod spec. The <code>.key.nestedKey</code> format is widely used to refer to specific keys in a Kubernetes resource
+manifest. For example, if you wanted to retrieve the nginxpod's namespace (from the <code>kubectl get</code> command above), you
+would enter the template: <code>.metadata.namespace</code>.</p>
+<p>Now that we have the pod IP we can try curling our nginx server:</p>
+<pre class="hljs"><code><div>~/pods$ curl -I $POD
+
+HTTP/1.1 200 OK
+Server: nginx/1.11.13
+Date: Thu, 18 Jan 2024 01:24:05 GMT
+Content-Type: text/html
+Content-Length: 612
+Last-Modified: Tue, 04 Apr 2017 15:01:57 GMT
+Connection: keep-alive
+ETag: &quot;58e3b565-264&quot;
+Accept-Ranges: bytes
+
+~/pods$
+</div></code></pre>
+<h3 id="4-clean-up">4. Clean up</h3>
+<p>Now that we have completed our work with the pod we can delete it declaratively using the manifest:</p>
+<pre class="hljs"><code><div>~/pods$ kubectl delete -f nginxpod.yaml
+
+pod &quot;nginxpod&quot; deleted
+
+~/pods$
+</div></code></pre>
+<pre class="hljs"><code><div>~/pods$ kubectl get pod
+
+No resources found in default namespace.
+
+~/pods$
+</div></code></pre>
+<h3 id="5-challenge-a-complex-pod">5. CHALLENGE: a complex pod</h3>
+<p>Next let’s try creating a pod with a more complex specification.</p>
+<p>Create a pod config that describes a pod called <code>hello</code> with a:</p>
+<ul>
+<li>container based on an <code>docker.io/ubuntu:14.04</code> image</li>
+<li>with an environment variable called <code>MESSAGE</code> and a value <code>hello world</code></li>
+<li>Runs the command: <code>/bin/sh -c &quot;echo $MESSAGE&quot;</code></li>
+<li>make sure that the container is <em>never restarted</em></li>
+</ul>
+<p>See if you can design this specification on your own.</p>
+<p>The pod and container spec documentation can be found here:</p>
+<ul>
+<li><strong>Pod Spec Reference</strong> - https://kubernetes.io/docs/reference/kubernetes-api/workload-resources/pod-v1/</li>
+<li><strong>Container Spec Reference</strong> - https://kubernetes.io/docs/reference/kubernetes-api/workload-resources/pod-v1/#Container</li>
+</ul>
+<p><code>kubectl explain</code> can help here too! For example, if we want to know what the valid fields for a pod are:</p>
+<pre class="hljs"><code><div>~/pods$ kubectl explain pod
+
+KIND:       Pod
+VERSION:    v1
+
+DESCRIPTION:
+    Pod is a collection of containers that can run on a host. This resource is
+    created by clients and scheduled onto hosts.
+
+FIELDS:
+  apiVersion	&lt;string&gt;
+    APIVersion defines the versioned schema of this representation of an object.
+    Servers should convert recognized schemas to the latest internal value, and
+    may reject unrecognized values. More info:
+    https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources
+
+...
+
+~/pods$
+</div></code></pre>
+<p>Since we are interested in the specification or &quot;<code>pod.spec</code>&quot;, we can use explain to show us the spec fields:</p>
+<pre class="hljs"><code><div>~/pods$ kubectl explain pod.spec
+
+KIND:       Pod
+VERSION:    v1
+
+FIELD: spec &lt;PodSpec&gt;
+
+DESCRIPTION:
+    Specification of the desired behavior of the pod. More info:
+    https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#spec-and-status
+    PodSpec is a description of a pod.
+
+FIELDS:
+  activeDeadlineSeconds	&lt;integer&gt;
+    Optional duration in seconds the pod may be active on the node relative to
+    StartTime before the system will actively try to mark it failed and kill
+    associated containers. Value must be a positive integer.
+
+...
+
+~/pods$
+</div></code></pre>
+<p>That's a lot of info! Filter just the objects (without their explanations) with grep:</p>
+<pre class="hljs"><code><div>~/pods$ kubectl explain pod.spec | grep &quot;&lt;&quot;
+
+RESOURCE: spec &lt;Object&gt;
+  activeDeadlineSeconds	&lt;integer&gt;
+  affinity	&lt;Object&gt;
+  automountServiceAccountToken	&lt;boolean&gt;
+  containers	&lt;[]Object&gt; -required-
+  dnsConfig	&lt;Object&gt;
+  dnsPolicy	&lt;string&gt;
+
+...
+
+~/pods$
+</div></code></pre>
+<p><code>kubectl explain</code> can navigate through any/all objects/fields, providing explanations, no matter how granular! For
+example:</p>
+<pre class="hljs"><code><div>~/pods$ kubectl explain pod.spec.containers.ports.containerPort
+
+KIND:     Pod
+VERSION:  v1
+
+FIELD:    containerPort &lt;integer&gt;
+
+DESCRIPTION:
+     Number of port to expose on the pod's IP address. This must be a valid port
+     number, 0 &lt; x &lt; 65536.
+
+~/pods$
+</div></code></pre>
+<p>When you have the configuration complete, create your pod:</p>
+<pre class="hljs"><code><div>~/pods$ kubectl apply -f complex-pod.yaml ### this file only exists after completing the challenge
+
+pod/hello created
+
+~/pods$
+</div></code></pre>
+<p>List your pods:</p>
+<pre class="hljs"><code><div>~/pods$ kubectl get pod
+
+NAME    READY   STATUS      RESTARTS   AGE
+hello   0/1     Completed   0          12s
+
+~/pods$
+</div></code></pre>
+<p>We can verify that the container did what it was supposed to do by checking the log output of the pod using the
+<code>kubectl logs</code> subcommand:</p>
+<pre class="hljs"><code><div>~/pods$ kubectl logs hello
+
+hello world
+
+~/pods$
+</div></code></pre>
+<h3 id="6-clean-up">6. Clean up</h3>
+<p>Now that we have given our new cluster a good test we can clean up by deleting the pods we have created. The
+<code>kubectl delete</code> subcommand allows you to delete objects you have created in the cluster.</p>
+<p>Delete any pods you created:</p>
+<pre class="hljs"><code><div>~/pods$ kubectl get pod
+
+NAME    READY   STATUS      RESTARTS   AGE
+hello   0/1     Completed   0          60s
+
+~/pods$
+</div></code></pre>
+<pre class="hljs"><code><div>~/pods$ kubectl delete pod hello
+
+pod &quot;hello&quot; deleted
+
+~/pods$
+</div></code></pre>
+<p>Double-check:</p>
+<pre class="hljs"><code><div>~/pods$ kubectl get pod
+
+No resources found in default namespace.
+
+~/pods$
+</div></code></pre>
+<p>You Kubernetes cluster should now be cleaned up:</p>
+<pre class="hljs"><code><div>~/pods$ kubectl get services,deployments,replicasets,pods
+
+NAME                 TYPE        CLUSTER-IP   EXTERNAL-IP   PORT(S)   AGE
+service/kubernetes   ClusterIP   10.96.0.1    &lt;none&gt;        443/TCP   39m
+
+~/pods$
+</div></code></pre>
+<p>Be sure to leave the <code>service/kubernetes</code> service!</p>
+<br>
+<p>Congratulations, you have completed the lab!</p>
+<br>
+<p><em>Copyright (c) 2023-2024 RX-M LLC, Cloud Native &amp; AI Training and Consulting, all rights reserved</em></p>
+
+</body>
+</html>

@@ -1,0 +1,769 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>rx-m-containers-k8s-accelerated-lab08.md</title>
+<meta http-equiv="Content-type" content="text/html;charset=UTF-8">
+
+<style>
+/* https://github.com/microsoft/vscode/blob/master/extensions/markdown-language-features/media/markdown.css */
+/*---------------------------------------------------------------------------------------------
+ *  Copyright (c) Microsoft Corporation. All rights reserved.
+ *  Licensed under the MIT License. See License.txt in the project root for license information.
+ *--------------------------------------------------------------------------------------------*/
+
+body {
+	font-family: var(--vscode-markdown-font-family, -apple-system, BlinkMacSystemFont, "Segoe WPC", "Segoe UI", "Ubuntu", "Droid Sans", sans-serif);
+	font-size: var(--vscode-markdown-font-size, 14px);
+	padding: 0 26px;
+	line-height: var(--vscode-markdown-line-height, 22px);
+	word-wrap: break-word;
+}
+
+#code-csp-warning {
+	position: fixed;
+	top: 0;
+	right: 0;
+	color: white;
+	margin: 16px;
+	text-align: center;
+	font-size: 12px;
+	font-family: sans-serif;
+	background-color:#444444;
+	cursor: pointer;
+	padding: 6px;
+	box-shadow: 1px 1px 1px rgba(0,0,0,.25);
+}
+
+#code-csp-warning:hover {
+	text-decoration: none;
+	background-color:#007acc;
+	box-shadow: 2px 2px 2px rgba(0,0,0,.25);
+}
+
+body.scrollBeyondLastLine {
+	margin-bottom: calc(100vh - 22px);
+}
+
+body.showEditorSelection .code-line {
+	position: relative;
+}
+
+body.showEditorSelection .code-active-line:before,
+body.showEditorSelection .code-line:hover:before {
+	content: "";
+	display: block;
+	position: absolute;
+	top: 0;
+	left: -12px;
+	height: 100%;
+}
+
+body.showEditorSelection li.code-active-line:before,
+body.showEditorSelection li.code-line:hover:before {
+	left: -30px;
+}
+
+.vscode-light.showEditorSelection .code-active-line:before {
+	border-left: 3px solid rgba(0, 0, 0, 0.15);
+}
+
+.vscode-light.showEditorSelection .code-line:hover:before {
+	border-left: 3px solid rgba(0, 0, 0, 0.40);
+}
+
+.vscode-light.showEditorSelection .code-line .code-line:hover:before {
+	border-left: none;
+}
+
+.vscode-dark.showEditorSelection .code-active-line:before {
+	border-left: 3px solid rgba(255, 255, 255, 0.4);
+}
+
+.vscode-dark.showEditorSelection .code-line:hover:before {
+	border-left: 3px solid rgba(255, 255, 255, 0.60);
+}
+
+.vscode-dark.showEditorSelection .code-line .code-line:hover:before {
+	border-left: none;
+}
+
+.vscode-high-contrast.showEditorSelection .code-active-line:before {
+	border-left: 3px solid rgba(255, 160, 0, 0.7);
+}
+
+.vscode-high-contrast.showEditorSelection .code-line:hover:before {
+	border-left: 3px solid rgba(255, 160, 0, 1);
+}
+
+.vscode-high-contrast.showEditorSelection .code-line .code-line:hover:before {
+	border-left: none;
+}
+
+img {
+	max-width: 100%;
+	max-height: 100%;
+}
+
+a {
+	text-decoration: none;
+}
+
+a:hover {
+	text-decoration: underline;
+}
+
+a:focus,
+input:focus,
+select:focus,
+textarea:focus {
+	outline: 1px solid -webkit-focus-ring-color;
+	outline-offset: -1px;
+}
+
+hr {
+	border: 0;
+	height: 2px;
+	border-bottom: 2px solid;
+}
+
+h1 {
+	padding-bottom: 0.3em;
+	line-height: 1.2;
+	border-bottom-width: 1px;
+	border-bottom-style: solid;
+}
+
+h1, h2, h3 {
+	font-weight: normal;
+}
+
+table {
+	border-collapse: collapse;
+}
+
+table > thead > tr > th {
+	text-align: left;
+	border-bottom: 1px solid;
+}
+
+table > thead > tr > th,
+table > thead > tr > td,
+table > tbody > tr > th,
+table > tbody > tr > td {
+	padding: 5px 10px;
+}
+
+table > tbody > tr + tr > td {
+	border-top: 1px solid;
+}
+
+blockquote {
+	margin: 0 7px 0 5px;
+	padding: 0 16px 0 10px;
+	border-left-width: 5px;
+	border-left-style: solid;
+}
+
+code {
+	font-family: Menlo, Monaco, Consolas, "Droid Sans Mono", "Courier New", monospace, "Droid Sans Fallback";
+	font-size: 1em;
+	line-height: 1.357em;
+}
+
+body.wordWrap pre {
+	white-space: pre-wrap;
+}
+
+pre:not(.hljs),
+pre.hljs code > div {
+	padding: 16px;
+	border-radius: 3px;
+	overflow: auto;
+}
+
+pre code {
+	color: var(--vscode-editor-foreground);
+	tab-size: 4;
+}
+
+/** Theming */
+
+.vscode-light pre {
+	background-color: rgba(220, 220, 220, 0.4);
+}
+
+.vscode-dark pre {
+	background-color: rgba(10, 10, 10, 0.4);
+}
+
+.vscode-high-contrast pre {
+	background-color: rgb(0, 0, 0);
+}
+
+.vscode-high-contrast h1 {
+	border-color: rgb(0, 0, 0);
+}
+
+.vscode-light table > thead > tr > th {
+	border-color: rgba(0, 0, 0, 0.69);
+}
+
+.vscode-dark table > thead > tr > th {
+	border-color: rgba(255, 255, 255, 0.69);
+}
+
+.vscode-light h1,
+.vscode-light hr,
+.vscode-light table > tbody > tr + tr > td {
+	border-color: rgba(0, 0, 0, 0.18);
+}
+
+.vscode-dark h1,
+.vscode-dark hr,
+.vscode-dark table > tbody > tr + tr > td {
+	border-color: rgba(255, 255, 255, 0.18);
+}
+
+</style>
+
+<style>
+/* Tomorrow Theme */
+/* http://jmblog.github.com/color-themes-for-google-code-highlightjs */
+/* Original theme - https://github.com/chriskempson/tomorrow-theme */
+
+/* Tomorrow Comment */
+.hljs-comment,
+.hljs-quote {
+	color: #8e908c;
+}
+
+/* Tomorrow Red */
+.hljs-variable,
+.hljs-template-variable,
+.hljs-tag,
+.hljs-name,
+.hljs-selector-id,
+.hljs-selector-class,
+.hljs-regexp,
+.hljs-deletion {
+	color: #c82829;
+}
+
+/* Tomorrow Orange */
+.hljs-number,
+.hljs-built_in,
+.hljs-builtin-name,
+.hljs-literal,
+.hljs-type,
+.hljs-params,
+.hljs-meta,
+.hljs-link {
+	color: #f5871f;
+}
+
+/* Tomorrow Yellow */
+.hljs-attribute {
+	color: #eab700;
+}
+
+/* Tomorrow Green */
+.hljs-string,
+.hljs-symbol,
+.hljs-bullet,
+.hljs-addition {
+	color: #718c00;
+}
+
+/* Tomorrow Blue */
+.hljs-title,
+.hljs-section {
+	color: #4271ae;
+}
+
+/* Tomorrow Purple */
+.hljs-keyword,
+.hljs-selector-tag {
+	color: #8959a8;
+}
+
+.hljs {
+	display: block;
+	overflow-x: auto;
+	color: #4d4d4c;
+	padding: 0.5em;
+}
+
+.hljs-emphasis {
+	font-style: italic;
+}
+
+.hljs-strong {
+	font-weight: bold;
+}
+</style>
+
+<style>
+/*
+ * Markdown PDF CSS
+ */
+
+ body {
+	font-family: -apple-system, BlinkMacSystemFont, "Segoe WPC", "Segoe UI", "Ubuntu", "Droid Sans", sans-serif, "Meiryo";
+	padding: 0 12px;
+}
+
+pre {
+	background-color: #f8f8f8;
+	border: 1px solid #cccccc;
+	border-radius: 3px;
+	overflow-x: auto;
+	white-space: pre-wrap;
+	overflow-wrap: break-word;
+}
+
+pre:not(.hljs) {
+	padding: 23px;
+	line-height: 19px;
+}
+
+blockquote {
+	background: rgba(127, 127, 127, 0.1);
+	border-color: rgba(0, 122, 204, 0.5);
+}
+
+.emoji {
+	height: 1.4em;
+}
+
+code {
+	font-size: 14px;
+	line-height: 19px;
+}
+
+/* for inline code */
+:not(pre):not(.hljs) > code {
+	color: #C9AE75; /* Change the old color so it seems less like an error */
+	font-size: inherit;
+}
+
+/* Page Break : use <div class="page"/> to insert page break
+-------------------------------------------------------- */
+.page {
+	page-break-after: always;
+}
+
+</style>
+
+<script src="https://unpkg.com/mermaid/dist/mermaid.min.js"></script>
+</head>
+<body>
+  <script>
+    mermaid.initialize({
+      startOnLoad: true,
+      theme: document.body.classList.contains('vscode-dark') || document.body.classList.contains('vscode-high-contrast')
+          ? 'dark'
+          : 'default'
+    });
+  </script>
+<p><img src="https://rx-m.com/rxm-cnc.svg" alt="RX-M, llc."></p>
+<h1 id="kubernetes">Kubernetes</h1>
+<h2 id="observability">Observability</h2>
+<p>Resource usage metrics like container CPU and memory usage are available in Kubernetes through the Metrics API. These
+metrics can be either accessed directly by a user with <code>kubectl top</code>, or used by a controller in the cluster, such as
+the Horizontal Pod AutoScaler.</p>
+<p>The Metrics API only reports the current resource utilization of a nodes and pods. Those wishing to view a history of
+resource utilization should use a monitoring tool and database such as Prometheus or InfluxDB/Grafana.</p>
+<p>In this lab we'll install the Metrics Server and explore the metrics enabled features of Kubernetes. Delete all user
+defined deployments, services, and other resources before starting.</p>
+<h3 id="1-deploy-the-metrics-server">1. Deploy the Metrics Server</h3>
+<p>In our kubeadm clusters, the metrics server is not installed automatically. The Metrics Server runs as a stand alone
+deployment in the kube-system namespace rather than a module of the controller manager. The Metrics Server requires a
+ServiceAccount object with an appropriate RBAC role so that it can communicate with the API server and extend the K8s
+API.</p>
+<p>The metrics server deployment consists of:</p>
+<ul>
+<li>ServiceAccount for the metrics server (metrics-server)</li>
+<li>Two cluster roles:
+<ul>
+<li><code>aggregated-metrics-reader</code> (system:aggregated-metrics-reader) - provides access to the pod information within the
+metrics.k8s.io API group</li>
+<li><code>resource-reader</code> (system:metrics-server) - provides access to information methods for pods, nodes, nodes/stats and
+namespaces across all API groups and information access to deployments within the extensions API group</li>
+</ul>
+</li>
+<li>ClusterRoleBindings bind the ClusterRoles to the metrics-server ServiceAccount created in the kube-system namespace.</li>
+<li>RoleBinding (metrics-server-auth-reader) binds the preexisting extension-apiserver-authentication-reader Role to the
+Metric Server's service account</li>
+<li>APIService manifest (v1beta1.metrics.k8s.io) defines the metric-server service API extension to the core Kubernetes API</li>
+<li>Metrics server deployment that actually scrapes kubelets for information</li>
+<li>Metrics server service that exposes the metrics server pods to the rest of the network</li>
+</ul>
+<p>We can launch the Metrics Server by creating all of the resources in the deploy/kubernetes directory by providing
+<code>kubectl apply -f</code> with the URL to the latest release manifest of the metrics-server:</p>
+<pre class="hljs"><code><div>~$ kubectl apply -f https://raw.githubusercontent.com/RX-M/classfiles/master/k8s-metrics-server.yaml
+
+serviceaccount/metrics-server created
+clusterrole.rbac.authorization.k8s.io/system:aggregated-metrics-reader created
+clusterrole.rbac.authorization.k8s.io/system:metrics-server created
+rolebinding.rbac.authorization.k8s.io/metrics-server-auth-reader created
+clusterrolebinding.rbac.authorization.k8s.io/metrics-server:system:auth-delegator created
+clusterrolebinding.rbac.authorization.k8s.io/system:metrics-server created
+service/metrics-server created
+deployment.apps/metrics-server created
+apiservice.apiregistration.k8s.io/v1beta1.metrics.k8s.io created
+
+~$
+</div></code></pre>
+<p>This metrics server deployment is a variation of the one served from the official Kubernetes metrics server repo. It
+configures the metrics server to include the <code>hostNetwork: true</code> key to enable the metrics server to use the host
+network of the node it is deployed on, and also includes the <code>--kubelet-preferred-address-types=InternalIP</code> and
+<code>--kubelet-insecure-tls</code> options on the metrics server to enable the metrics server to communicate with the Kubelets
+without TLS. These changes are only necessary in this lab environment - in production it is ideal to set up the metrics
+server to use certificates signed by the API Server.</p>
+<p>Now check the status of the deployed resources:</p>
+<pre class="hljs"><code><div>~$ kubectl get all -n kube-system -l k8s-app=metrics-server
+
+NAME                                  READY   STATUS    RESTARTS   AGE
+pod/metrics-server-c5fbf4cb9-lr2kd   0/1     Running   0          9s
+
+NAME                     TYPE        CLUSTER-IP      EXTERNAL-IP   PORT(S)   AGE
+service/metrics-server   ClusterIP   10.107.229.22   &lt;none&gt;        443/TCP   9s
+
+NAME                             READY   UP-TO-DATE   AVAILABLE   AGE
+deployment.apps/metrics-server   0/1     1            0           9s
+
+NAME                                       DESIRED   CURRENT   READY   AGE
+replicaset.apps/metrics-server-c5fbf4cb9   1         1         0       9s
+
+~$
+</div></code></pre>
+<p>The metrics server resources are deployed to the kube-system namespace and bear the label <code>k8s-app=metrics-server</code>.</p>
+<h3 id="2-test-the-metrics-server">2. Test the Metrics Server</h3>
+<p>Metrics retrieved by the metrics server are accessible using <code>kubectl top</code>.</p>
+<p>It may take about two or three minutes for the Metrics Server to collect data from the kubelets. Eventually you will
+see that top returns actual metrics. Use the Linux <code>watch</code> command (not to be confused with <code>kubectl -watch</code>) tool to
+continually run a <code>kubectl top node</code> to see this happen live. Once you see that the metrics are being
+reported, use <code>CTRL c</code> to stop watching:</p>
+<pre class="hljs"><code><div>~$ watch -t kubectl top node
+
+NAME              CPU(cores)   CPU%   MEMORY(bytes)   MEMORY%
+ip-172-31-4-161   163m         8%     1784Mi          47%
+
+^C
+
+~$
+</div></code></pre>
+<p>Great, our nodes are reporting metrics. Now try <code>kubectl top</code> for pods:</p>
+<pre class="hljs"><code><div>~$ kubectl top pod -n kube-system
+
+NAME                                      CPU(cores)   MEMORY(bytes)
+coredns-76f75df574-9k4tx                  2m           12Mi
+coredns-76f75df574-9p29r                  2m           12Mi
+etcd-ip-172-31-4-161                      20m          42Mi
+kube-apiserver-ip-172-31-4-161            46m          281Mi
+kube-controller-manager-ip-172-31-4-161   17m          50Mi
+kube-proxy-kbdll                          1m           14Mi
+kube-scheduler-ip-172-31-4-161            4m           20Mi
+metrics-server-c5fbf4cb9-lr2kd            3m           15Mi
+weave-net-x76wg                           1m           37Mi
+
+~$
+</div></code></pre>
+<p>Awesome, metrics for our nodes and pods are now available!</p>
+<h3 id="21-challenge-kubectl-top">2.1. CHALLENGE: kubectl top</h3>
+<p>Using the <code>kubectl top</code> command and its help text available from <code>-h</code> or <code>--help</code>, try the following operations:</p>
+<ul>
+<li>Retrieve the current CPU and Memory utilization of all control plane components in the <code>kube-system</code> namespace by their label
+<ul>
+<li>Sort the output by memory use</li>
+<li>Which control plane component is currently using the most memory?</li>
+</ul>
+</li>
+<li>Retrieve a listing of resource use of all nodes in your cluster sorted by CPU utilization without printing the column headers</li>
+</ul>
+<h3 id="3-autoscaling">3. Autoscaling</h3>
+<p>Pod auto-scaling controllers like the HorizontalPodAutoScaler use metrics collected by the metrics server. The base
+metrics used in most autoscaling scenarios are CPU and memory.</p>
+<p>To test autoscaling we need:</p>
+<ul>
+<li>A target pod or container image that we can load</li>
+<li>A pod we can use to generate load on the target pod</li>
+<li>A Horizontal Pod Autoscalor (HPA) to scale the target pod's deployment in response to load</li>
+</ul>
+<p>We'll be using a pre-made container that runs a simple php web server to serve as our target pod, <code>rxmllc/target</code>. This
+app's code computes a million square roots each time it receives a request on port 80:</p>
+<pre class="hljs"><code><div><span class="hljs-meta">&lt;?php</span>
+  $x = <span class="hljs-number">0.0001</span>;
+  <span class="hljs-keyword">for</span> ($i = <span class="hljs-number">0</span>; $i &lt;= <span class="hljs-number">1000000</span>; $i++) {
+    $x += sqrt($x);
+  }
+  <span class="hljs-keyword">echo</span> <span class="hljs-string">"OK!"</span>;
+<span class="hljs-meta">?&gt;</span>
+</div></code></pre>
+<p>First, create a deployment spec imperatively:</p>
+<pre class="hljs"><code><div>~$ mkdir ~/hpa &amp;&amp; cd $_
+
+~/hpa$ kubectl create deploy web1 --image=rxmllc/target --dry-run=client -o yaml &gt; target-deploy.yaml
+
+~/hpa$
+</div></code></pre>
+<p>Then edit the deployment spec with the following flags:</p>
+<ul>
+<li>Add a <code>resources</code> section that <code>requests</code> for <code>200m</code> of <code>cpu</code></li>
+</ul>
+<pre class="hljs"><code><div>~/hpa$ nano target-deploy.yaml &amp;&amp; cat $_
+</div></code></pre>
+<pre class="hljs"><code><div><span class="hljs-attr">apiVersion:</span> <span class="hljs-string">apps/v1</span>
+<span class="hljs-attr">kind:</span> <span class="hljs-string">Deployment</span>
+<span class="hljs-attr">metadata:</span>
+  <span class="hljs-attr">labels:</span>
+    <span class="hljs-attr">app:</span> <span class="hljs-string">web1</span>
+  <span class="hljs-attr">name:</span> <span class="hljs-string">web1</span>
+<span class="hljs-attr">spec:</span>
+  <span class="hljs-attr">replicas:</span> <span class="hljs-number">1</span>
+  <span class="hljs-attr">selector:</span>
+    <span class="hljs-attr">matchLabels:</span>
+      <span class="hljs-attr">app:</span> <span class="hljs-string">web1</span>
+  <span class="hljs-attr">template:</span>
+    <span class="hljs-attr">metadata:</span>
+      <span class="hljs-attr">labels:</span>
+        <span class="hljs-attr">app:</span> <span class="hljs-string">web1</span>
+    <span class="hljs-attr">spec:</span>
+      <span class="hljs-attr">containers:</span>
+      <span class="hljs-bullet">-</span> <span class="hljs-attr">image:</span> <span class="hljs-string">rxmllc/target</span>
+        <span class="hljs-attr">name:</span> <span class="hljs-string">target</span>
+        <span class="hljs-attr">resources:</span>            <span class="hljs-comment"># Add this</span>
+          <span class="hljs-attr">requests:</span>           <span class="hljs-comment"># Add this</span>
+            <span class="hljs-attr">cpu:</span> <span class="hljs-string">"200m"</span>       <span class="hljs-comment"># Add this</span>
+</div></code></pre>
+<pre class="hljs"><code><div>~/hpa$ kubectl apply -f target-deploy.yaml
+
+deployment.apps/web1 created
+
+~/hpa$
+</div></code></pre>
+<p>Now, create a service for the target deployment using <code>kubectl expose</code> so the target pods have an easily reachable DNS
+name:</p>
+<pre class="hljs"><code><div>~/hpa$ kubectl expose deploy web1 --port 80
+
+service/web1 exposed
+
+~/hpa$
+</div></code></pre>
+<p>After exposing the deployment, list your resources:</p>
+<pre class="hljs"><code><div>~/hpa$ kubectl get deploy,rs,po,svc
+
+NAME                   READY   UP-TO-DATE   AVAILABLE   AGE
+deployment.apps/web1   1/1     1            1           19s
+
+NAME                              DESIRED   CURRENT   READY   AGE
+replicaset.apps/web1-658f9667d6   1         1         1       19s
+
+NAME                        READY   STATUS    RESTARTS   AGE
+pod/web1-658f9667d6-w4c82   1/1     Running   0          19s
+
+NAME                 TYPE        CLUSTER-IP      EXTERNAL-IP   PORT(S)   AGE
+service/kubernetes   ClusterIP   10.96.0.1       &lt;none&gt;        443/TCP   103m
+service/web1         ClusterIP   10.98.148.113   &lt;none&gt;        80/TCP    13s
+
+~/hpa$
+</div></code></pre>
+<p>Our PHP server is now ready to generate some metrics.</p>
+<p>Now let's create an HPA for our PHP server deployment:</p>
+<pre class="hljs"><code><div>~/hpa$ kubectl autoscale deployment web1 --cpu-percent=50 --min=1 --max=5
+
+horizontalpodautoscaler.autoscaling/web1 autoscaled
+
+~/hpa$
+</div></code></pre>
+<p>Our HPA will now scale up our deployment when one of its pods exceeds 50% of their desired CPU resources (100 mils).
+Right now we have one pod with a request for 20% of a CPU, or 200 mils.</p>
+<p>Display the HPA with the <code>-w</code> flag, using <code>ctrl c</code> to end the watch when you see <code>TARGETS</code> reporting <code>0%/50%</code>:</p>
+<pre class="hljs"><code><div>~/hpa$ kubectl get hpa -w
+
+NAME   REFERENCE         TARGETS         MINPODS   MAXPODS   REPLICAS   AGE
+web1   Deployment/web1   &lt;unknown&gt;/50%   1         5         0          4s
+web1   Deployment/web1   &lt;unknown&gt;/50%   1         5         1          15s
+web1   Deployment/web1   0%/50%          1         5         1          30s
+
+# takes a couple minutes
+^C
+
+~/hpa$
+</div></code></pre>
+<p>Now display the resources used by your pod:</p>
+<pre class="hljs"><code><div>~/hpa$ kubectl top pod
+
+NAME                    CPU(cores)   MEMORY(bytes)
+web1-658f9667d6-w4c82   1m           9Mi
+
+~/hpa$
+</div></code></pre>
+<p>Our pod is using 1 mil of maximum 200 mils and is below the scaling threshold defined in our HPA. It needs to get to 100
+mils before the HPA will add another pod to the deployment. Let's create some load!</p>
+<p>Run an interactive busybox pod to send requests to the PHP server:</p>
+<pre class="hljs"><code><div>~/hpa$ kubectl run -it driver --image=busybox:1.35
+
+If you don't see a command prompt, try pressing enter.
+
+/ #
+
+</div></code></pre>
+<p>Now start a loop that will make continuous requests of our PHP server:</p>
+<pre class="hljs"><code><div>/ # while true; do wget -q -O- http://web1.default.svc.cluster.local; done
+
+OK!OK!OK!
+
+...
+
+</div></code></pre>
+<p>While the requests are running, <strong>open a new terminal</strong> check the pod utilization with top:</p>
+<pre class="hljs"><code><div>@Laptop:~$ ssh -i key.pem 55.55.55.55
+
+~$ cd ~/hpa
+
+~/hpa$ kubectl top pod
+
+NAME                    CPU(cores)   MEMORY(bytes)
+driver                  23m          0Mi
+web1-658f9667d6-w4c82   778m         12Mi
+
+~/hpa$
+</div></code></pre>
+<p><code>kubectl top</code> shows that the web1 pod's CPU is above the threshold of 100 millicpu. But why don't we have more pods reporting
+metrics? The HPA will not respond to spikes because this would trash the cluster, creating and deleting pods wastefully.
+Rather the HPA waits for a configurable period (defined by Controller Manager settings, defaulting to about 3 minutes)
+and then begins to scale.</p>
+<p>Run top several more times (or use <code>watch kubectl top pod</code>) until you see scaling activity.</p>
+<pre class="hljs"><code><div>~/hpa$ kubectl top pod
+
+NAME                    CPU(cores)   MEMORY(bytes)
+driver                  24m          0Mi
+web1-658f9667d6-5dfsh   187m         12Mi
+web1-658f9667d6-w4c82   182m         12Mi
+web1-658f9667d6-wkm92   236m         12Mi
+web1-658f9667d6-z4j24   310m         12Mi
+# we are missing one!?!
+
+~/hpa$ kubectl get hpa
+
+NAME   REFERENCE         TARGETS    MINPODS   MAXPODS   REPLICAS   AGE
+web1   Deployment/web1   109%/50%   1         5         5          9m4s
+
+~/hpa$
+</div></code></pre>
+<p>You will see that the HPA scaled the deployment out to the configured limit of 5, but they are not showing on <code>kubectl top pod</code>. The new pods need a few minutes to communicate with the metrics server before they appear on <code>kubectl top</code>
+output.</p>
+<p>Let's confirm whether the scaling did occur in the meantime. Display your deployment:</p>
+<pre class="hljs"><code><div>~/hpa$ kubectl get deploy
+
+NAME   READY   UP-TO-DATE   AVAILABLE   AGE
+web1   4/5     5            4           10m
+
+~/hpa$
+</div></code></pre>
+<p>The only thing the HPA does is change the replica count on the deployment. The deployment and replica set do the rest of
+the updates.</p>
+<p>Depending on what your system is running, you may have all five running. Above we see 4 running. If you have issues, be
+sure to list the pods and describe them, checking events.</p>
+<pre class="hljs"><code><div>~/hpa$ kubectl get pods
+
+NAME                    READY   STATUS    RESTARTS   AGE
+driver                  1/1     Running   0          2m33s
+web1-658f9667d6-5dfsh   1/1     Running   0          2m6s
+web1-658f9667d6-msk6f   0/1     Pending   0          111s
+web1-658f9667d6-w4c82   1/1     Running   0          10m
+web1-658f9667d6-wkm92   1/1     Running   0          2m6s
+web1-658f9667d6-z4j24   1/1     Running   0          2m6s
+</div></code></pre>
+<p>Lets grab the <code>Pending</code> pod and check its events:</p>
+<pre class="hljs"><code><div>~/hpa$ export PEND=$(kubectl get pods | grep Pending | awk '{print $1}') &amp;&amp; echo $PEND
+
+web1-75c44bd99c-qqkbq
+
+~/hpa$ kubectl get event --field-selector involvedObject.name=$PEND
+
+LAST SEEN   TYPE      REASON             OBJECT                      MESSAGE
+2m10s       Warning   FailedScheduling   pod/web1-658f9667d6-msk6f   0/1 nodes are available: 1 Insufficient cpu. preemption: 0/1 nodes are available: 1 No preemption victims found for incoming pod.
+
+~/hpa$
+</div></code></pre>
+<p>Not great, not terrible; yet its good to know!</p>
+<p>Time to stop sending load to the <code>target</code> pod. Attach to the driver pod using <code>kubectl attach driver -c driver -i -t</code>,
+use <code>CTRL c</code> to stop the driver loop, then exit the pod:</p>
+<pre class="hljs"><code><div>~/hpa$ kubectl attach driver -c driver -i -t
+
+If you don't see a command prompt, try pressing enter.
+OK!OK!OK!OK!OK!OK!OK!OK!OK!OK!OK!OK!OK!OK!OK!
+
+^C
+
+/ # exit
+
+Session ended, resume using 'kubectl attach driver -c driver -i -t' command when the pod is running
+
+~/hpa$
+</div></code></pre>
+<p>Examine the metrics and HPA and you will see that activity is trending down, using <code>ctrl c</code> to end the watch:</p>
+<pre class="hljs"><code><div>~/hpa$ kubectl get hpa -w
+
+NAME   REFERENCE         TARGETS   MINPODS   MAXPODS   REPLICAS   AGE
+web1   Deployment/web1   0%/50%    1         5         5          11m
+web1   Deployment/web1   0%/50%    1         5         5          16m
+web1   Deployment/web1   0%/50%    1         5         1          16m  # takes 5 minutes to reach this point
+
+^C
+
+~/hpa$
+</div></code></pre>
+<p>Even though we stopped the load and resource use is trending downward, the deployment is still holding at the 5 replicas
+from the initial scaling. The HPA uses a setting on the kube-controller-manager called
+<code>horizontal-pod-autoscaler-downscale-stabilization</code>. This argument prevents an HPA from scaling down for 5 minutes by
+default. After 5 minutes, the HPA will scale the deployment back down to one pod. This long tail is to reduce thrashing.</p>
+<p>Review the HPA related events.</p>
+<pre class="hljs"><code><div>~/hpa$ kubectl get event --field-selector involvedObject.name=web1
+
+LAST SEEN   TYPE      REASON                         OBJECT                         MESSAGE
+22m         Normal    ScalingReplicaSet              deployment/web1                Scaled up replica set web1-658f9667d6 to 1
+22m         Warning   FailedGetResourceMetric        horizontalpodautoscaler/web1   failed to get cpu utilization: did not receive metrics for targeted pods (pods might be unready)
+22m         Warning   FailedComputeMetricsReplicas   horizontalpodautoscaler/web1   invalid metrics (1 invalid out of 1), first error is: failed to get cpu resource metric value: failed to get cpu utilization: did not receive metrics for targeted pods (pods might be unready)
+14m         Normal    SuccessfulRescale              horizontalpodautoscaler/web1   New size: 4; reason: cpu resource utilization (percentage of request) above target
+14m         Normal    ScalingReplicaSet              deployment/web1                Scaled up replica set web1-658f9667d6 to 4 from 1
+13m         Normal    SuccessfulRescale              horizontalpodautoscaler/web1   New size: 5; reason: cpu resource utilization (percentage of request) above target
+13m         Normal    ScalingReplicaSet              deployment/web1                Scaled up replica set web1-658f9667d6 to 5 from 4
+6m21s       Normal    SuccessfulRescale              horizontalpodautoscaler/web1   New size: 1; reason: All metrics below target
+6m21s       Normal    ScalingReplicaSet              deployment/web1                Scaled down replica set web1-658f9667d6 to 1 from 5
+
+~/hpa$
+</div></code></pre>
+<p>With a working metrics server, your cluster can now dynamically create or remove additional resources based on metrics
+measured from incoming workloads.</p>
+<h3 id="31-challenge-hpa-editing">3.1. CHALLENGE: HPA editing</h3>
+<p>Before you clean up, try the following operations:</p>
+<ul>
+<li>Adjust the deployment, HPA, or both so that the <code>web1</code> deployment scales when a pod reaches 50m of CPU</li>
+<li>Adjust the HPA so it can scale the <code>web1</code> deployment up to 3 replicas</li>
+<li>Adjust the HPA minimum count to 2 replicas
+<ul>
+<li>What happens to the deployment?</li>
+</ul>
+</li>
+</ul>
+<h3 id="5-clean-up">5. Clean up</h3>
+<p>Delete everything you created for this lab using <code>kubectl delete</code>:</p>
+<pre class="hljs"><code><div>~/hpa$ kubectl delete service/web1 deploy/web1 pod/driver hpa/web1
+
+service &quot;web1&quot; deleted
+deployment.apps &quot;web1&quot; deleted
+pod &quot;driver&quot; deleted
+horizontalpodautoscaler.autoscaling &quot;web1&quot; deleted
+
+~/hpa$
+</div></code></pre>
+<br>
+<p>Congratulations, you have completed the lab!</p>
+<br>
+<p><em>Copyright (c) 2023-2024 RX-M LLC, Cloud Native &amp; AI Training and Consulting, all rights reserved</em></p>
+
+</body>
+</html>

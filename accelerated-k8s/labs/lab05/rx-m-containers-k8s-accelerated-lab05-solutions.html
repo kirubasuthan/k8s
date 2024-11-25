@@ -1,0 +1,636 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>rx-m-containers-k8s-accelerated-lab05-solutions.md</title>
+<meta http-equiv="Content-type" content="text/html;charset=UTF-8">
+
+<style>
+/* https://github.com/microsoft/vscode/blob/master/extensions/markdown-language-features/media/markdown.css */
+/*---------------------------------------------------------------------------------------------
+ *  Copyright (c) Microsoft Corporation. All rights reserved.
+ *  Licensed under the MIT License. See License.txt in the project root for license information.
+ *--------------------------------------------------------------------------------------------*/
+
+body {
+	font-family: var(--vscode-markdown-font-family, -apple-system, BlinkMacSystemFont, "Segoe WPC", "Segoe UI", "Ubuntu", "Droid Sans", sans-serif);
+	font-size: var(--vscode-markdown-font-size, 14px);
+	padding: 0 26px;
+	line-height: var(--vscode-markdown-line-height, 22px);
+	word-wrap: break-word;
+}
+
+#code-csp-warning {
+	position: fixed;
+	top: 0;
+	right: 0;
+	color: white;
+	margin: 16px;
+	text-align: center;
+	font-size: 12px;
+	font-family: sans-serif;
+	background-color:#444444;
+	cursor: pointer;
+	padding: 6px;
+	box-shadow: 1px 1px 1px rgba(0,0,0,.25);
+}
+
+#code-csp-warning:hover {
+	text-decoration: none;
+	background-color:#007acc;
+	box-shadow: 2px 2px 2px rgba(0,0,0,.25);
+}
+
+body.scrollBeyondLastLine {
+	margin-bottom: calc(100vh - 22px);
+}
+
+body.showEditorSelection .code-line {
+	position: relative;
+}
+
+body.showEditorSelection .code-active-line:before,
+body.showEditorSelection .code-line:hover:before {
+	content: "";
+	display: block;
+	position: absolute;
+	top: 0;
+	left: -12px;
+	height: 100%;
+}
+
+body.showEditorSelection li.code-active-line:before,
+body.showEditorSelection li.code-line:hover:before {
+	left: -30px;
+}
+
+.vscode-light.showEditorSelection .code-active-line:before {
+	border-left: 3px solid rgba(0, 0, 0, 0.15);
+}
+
+.vscode-light.showEditorSelection .code-line:hover:before {
+	border-left: 3px solid rgba(0, 0, 0, 0.40);
+}
+
+.vscode-light.showEditorSelection .code-line .code-line:hover:before {
+	border-left: none;
+}
+
+.vscode-dark.showEditorSelection .code-active-line:before {
+	border-left: 3px solid rgba(255, 255, 255, 0.4);
+}
+
+.vscode-dark.showEditorSelection .code-line:hover:before {
+	border-left: 3px solid rgba(255, 255, 255, 0.60);
+}
+
+.vscode-dark.showEditorSelection .code-line .code-line:hover:before {
+	border-left: none;
+}
+
+.vscode-high-contrast.showEditorSelection .code-active-line:before {
+	border-left: 3px solid rgba(255, 160, 0, 0.7);
+}
+
+.vscode-high-contrast.showEditorSelection .code-line:hover:before {
+	border-left: 3px solid rgba(255, 160, 0, 1);
+}
+
+.vscode-high-contrast.showEditorSelection .code-line .code-line:hover:before {
+	border-left: none;
+}
+
+img {
+	max-width: 100%;
+	max-height: 100%;
+}
+
+a {
+	text-decoration: none;
+}
+
+a:hover {
+	text-decoration: underline;
+}
+
+a:focus,
+input:focus,
+select:focus,
+textarea:focus {
+	outline: 1px solid -webkit-focus-ring-color;
+	outline-offset: -1px;
+}
+
+hr {
+	border: 0;
+	height: 2px;
+	border-bottom: 2px solid;
+}
+
+h1 {
+	padding-bottom: 0.3em;
+	line-height: 1.2;
+	border-bottom-width: 1px;
+	border-bottom-style: solid;
+}
+
+h1, h2, h3 {
+	font-weight: normal;
+}
+
+table {
+	border-collapse: collapse;
+}
+
+table > thead > tr > th {
+	text-align: left;
+	border-bottom: 1px solid;
+}
+
+table > thead > tr > th,
+table > thead > tr > td,
+table > tbody > tr > th,
+table > tbody > tr > td {
+	padding: 5px 10px;
+}
+
+table > tbody > tr + tr > td {
+	border-top: 1px solid;
+}
+
+blockquote {
+	margin: 0 7px 0 5px;
+	padding: 0 16px 0 10px;
+	border-left-width: 5px;
+	border-left-style: solid;
+}
+
+code {
+	font-family: Menlo, Monaco, Consolas, "Droid Sans Mono", "Courier New", monospace, "Droid Sans Fallback";
+	font-size: 1em;
+	line-height: 1.357em;
+}
+
+body.wordWrap pre {
+	white-space: pre-wrap;
+}
+
+pre:not(.hljs),
+pre.hljs code > div {
+	padding: 16px;
+	border-radius: 3px;
+	overflow: auto;
+}
+
+pre code {
+	color: var(--vscode-editor-foreground);
+	tab-size: 4;
+}
+
+/** Theming */
+
+.vscode-light pre {
+	background-color: rgba(220, 220, 220, 0.4);
+}
+
+.vscode-dark pre {
+	background-color: rgba(10, 10, 10, 0.4);
+}
+
+.vscode-high-contrast pre {
+	background-color: rgb(0, 0, 0);
+}
+
+.vscode-high-contrast h1 {
+	border-color: rgb(0, 0, 0);
+}
+
+.vscode-light table > thead > tr > th {
+	border-color: rgba(0, 0, 0, 0.69);
+}
+
+.vscode-dark table > thead > tr > th {
+	border-color: rgba(255, 255, 255, 0.69);
+}
+
+.vscode-light h1,
+.vscode-light hr,
+.vscode-light table > tbody > tr + tr > td {
+	border-color: rgba(0, 0, 0, 0.18);
+}
+
+.vscode-dark h1,
+.vscode-dark hr,
+.vscode-dark table > tbody > tr + tr > td {
+	border-color: rgba(255, 255, 255, 0.18);
+}
+
+</style>
+
+<style>
+/* Tomorrow Theme */
+/* http://jmblog.github.com/color-themes-for-google-code-highlightjs */
+/* Original theme - https://github.com/chriskempson/tomorrow-theme */
+
+/* Tomorrow Comment */
+.hljs-comment,
+.hljs-quote {
+	color: #8e908c;
+}
+
+/* Tomorrow Red */
+.hljs-variable,
+.hljs-template-variable,
+.hljs-tag,
+.hljs-name,
+.hljs-selector-id,
+.hljs-selector-class,
+.hljs-regexp,
+.hljs-deletion {
+	color: #c82829;
+}
+
+/* Tomorrow Orange */
+.hljs-number,
+.hljs-built_in,
+.hljs-builtin-name,
+.hljs-literal,
+.hljs-type,
+.hljs-params,
+.hljs-meta,
+.hljs-link {
+	color: #f5871f;
+}
+
+/* Tomorrow Yellow */
+.hljs-attribute {
+	color: #eab700;
+}
+
+/* Tomorrow Green */
+.hljs-string,
+.hljs-symbol,
+.hljs-bullet,
+.hljs-addition {
+	color: #718c00;
+}
+
+/* Tomorrow Blue */
+.hljs-title,
+.hljs-section {
+	color: #4271ae;
+}
+
+/* Tomorrow Purple */
+.hljs-keyword,
+.hljs-selector-tag {
+	color: #8959a8;
+}
+
+.hljs {
+	display: block;
+	overflow-x: auto;
+	color: #4d4d4c;
+	padding: 0.5em;
+}
+
+.hljs-emphasis {
+	font-style: italic;
+}
+
+.hljs-strong {
+	font-weight: bold;
+}
+</style>
+
+<style>
+/*
+ * Markdown PDF CSS
+ */
+
+ body {
+	font-family: -apple-system, BlinkMacSystemFont, "Segoe WPC", "Segoe UI", "Ubuntu", "Droid Sans", sans-serif, "Meiryo";
+	padding: 0 12px;
+}
+
+pre {
+	background-color: #f8f8f8;
+	border: 1px solid #cccccc;
+	border-radius: 3px;
+	overflow-x: auto;
+	white-space: pre-wrap;
+	overflow-wrap: break-word;
+}
+
+pre:not(.hljs) {
+	padding: 23px;
+	line-height: 19px;
+}
+
+blockquote {
+	background: rgba(127, 127, 127, 0.1);
+	border-color: rgba(0, 122, 204, 0.5);
+}
+
+.emoji {
+	height: 1.4em;
+}
+
+code {
+	font-size: 14px;
+	line-height: 19px;
+}
+
+/* for inline code */
+:not(pre):not(.hljs) > code {
+	color: #C9AE75; /* Change the old color so it seems less like an error */
+	font-size: inherit;
+}
+
+/* Page Break : use <div class="page"/> to insert page break
+-------------------------------------------------------- */
+.page {
+	page-break-after: always;
+}
+
+</style>
+
+<script src="https://unpkg.com/mermaid/dist/mermaid.min.js"></script>
+</head>
+<body>
+  <script>
+    mermaid.initialize({
+      startOnLoad: true,
+      theme: document.body.classList.contains('vscode-dark') || document.body.classList.contains('vscode-high-contrast')
+          ? 'dark'
+          : 'default'
+    });
+  </script>
+<p><img src="https://rx-m.com/rxm-cnc.svg" alt="RX-M, llc."></p>
+<h1 id="kubernetes">Kubernetes</h1>
+<h2 id="secrets-configmaps-and-downward-api-challenge-solutions">Secrets, ConfigMaps, and Downward API Challenge Solutions</h2>
+<p>Try the following exercises on your own, using the class slides and the knowledge from this lab to guide you.</p>
+<p>First, recreate the <code>special-config</code> ConfigMap if you deleted it:</p>
+<pre class="hljs"><code><div>~/dapi$ cd ~/appconfig
+
+~/appconfig$ kubectl delete configmap special-config
+
+~/appconfig$ kubectl create configmap special-config \
+--from-literal=special.type=charm --from-literal=special.how=very
+
+configmap/special-config created
+
+~/appconfig$
+</div></code></pre>
+<h3 id="challenge-1">CHALLENGE 1</h3>
+<p>Mount the values of the <code>special-config</code> configmap as environment variables <code>SPECIAL_LEVEL_KEY</code> and <code>SPECIAL_TYPE_KEY</code>,
+and modify the <code>challenge-pod</code> to output the value of those variables to stdout</p>
+<ul>
+<li>Configure the pod with the command <code>/bin/sh -c &quot;echo $SPECIAL_LEVEL_KEY $SPECIAL_TYPE_KEY&quot;</code></li>
+</ul>
+<p>Using our existing ConfigMap called <code>special-config</code>.</p>
+<pre class="hljs"><code><div>~/appconfig$ kubectl get configmaps
+
+NAME               DATA   AGE
+kube-root-ca.crt   1      2d12h
+special-config     2      50s
+
+~/appconfig$
+</div></code></pre>
+<p>We are now going to use our ConfigMap as part of the container command.
+The first imperative command creates the base manifest file:</p>
+<pre class="hljs"><code><div>~/appconfig$ kubectl run challenge-pod --dry-run=client -o yaml  \
+--image busybox --restart Never \
+--env SPECIAL_LEVEL_KEY=changeMe --env SPECIAL_TYPE_KEY=changeMe \
+--command /bin/sh -- -c &quot;echo \$SPECIAL_LEVEL_KEY \$SPECIAL_TYPE_KEY&quot; &gt; cli-pod.yaml
+
+~/appconfig$
+</div></code></pre>
+<p>Make the necessary edits to the environment variables to use the ConfigMap as environment variables as follows.</p>
+<pre class="hljs"><code><div>~/appconfig$ nano cli-pod.yaml &amp;&amp; cat cli-pod.yaml
+</div></code></pre>
+<pre class="hljs"><code><div><span class="hljs-attr">apiVersion:</span> <span class="hljs-string">v1</span>
+<span class="hljs-attr">kind:</span> <span class="hljs-string">Pod</span>
+<span class="hljs-attr">metadata:</span>
+  <span class="hljs-attr">creationTimestamp:</span> <span class="hljs-literal">null</span>
+  <span class="hljs-attr">labels:</span>
+    <span class="hljs-attr">run:</span> <span class="hljs-string">challenge-pod</span>
+  <span class="hljs-attr">name:</span> <span class="hljs-string">challenge-pod</span>
+<span class="hljs-attr">spec:</span>
+  <span class="hljs-attr">containers:</span>
+  <span class="hljs-bullet">-</span> <span class="hljs-attr">command:</span>
+    <span class="hljs-bullet">-</span> <span class="hljs-string">/bin/sh</span>
+    <span class="hljs-bullet">-</span> <span class="hljs-string">-c</span>
+    <span class="hljs-bullet">-</span> <span class="hljs-string">echo</span> <span class="hljs-string">$SPECIAL_LEVEL_KEY</span> <span class="hljs-string">$SPECIAL_TYPE_KEY</span>
+    <span class="hljs-attr">env:</span>
+    <span class="hljs-bullet">-</span> <span class="hljs-attr">name:</span> <span class="hljs-string">SPECIAL_LEVEL_KEY</span>
+      <span class="hljs-attr">valueFrom:</span>                <span class="hljs-comment"># Change this</span>
+        <span class="hljs-attr">configMapKeyRef:</span>        <span class="hljs-comment"># Add this</span>
+          <span class="hljs-attr">name:</span> <span class="hljs-string">special-config</span>  <span class="hljs-comment"># Add this</span>
+          <span class="hljs-attr">key:</span> <span class="hljs-string">special.how</span>      <span class="hljs-comment"># Add this</span>
+    <span class="hljs-bullet">-</span> <span class="hljs-attr">name:</span> <span class="hljs-string">SPECIAL_TYPE_KEY</span>
+      <span class="hljs-attr">valueFrom:</span>                <span class="hljs-comment"># Change this</span>
+        <span class="hljs-attr">configMapKeyRef:</span>        <span class="hljs-comment"># Add this</span>
+          <span class="hljs-attr">name:</span> <span class="hljs-string">special-config</span>  <span class="hljs-comment"># Add this</span>
+          <span class="hljs-attr">key:</span> <span class="hljs-string">special.type</span>     <span class="hljs-comment"># Add this</span>
+    <span class="hljs-attr">image:</span> <span class="hljs-string">busybox</span>
+    <span class="hljs-attr">name:</span> <span class="hljs-string">challenge-pod</span>
+    <span class="hljs-attr">resources:</span> <span class="hljs-string">{}</span>
+  <span class="hljs-attr">dnsPolicy:</span> <span class="hljs-string">ClusterFirst</span>
+  <span class="hljs-attr">restartPolicy:</span> <span class="hljs-string">Never</span>
+<span class="hljs-attr">status:</span> <span class="hljs-string">{}</span>
+</div></code></pre>
+<pre class="hljs"><code><div>~/appconfig$
+</div></code></pre>
+<p>Like the challenge-pod from the previous step, the container will pull the values of SPECIAL_LEVEL_KEY and
+SPECIAL_TYPE_KEY from the configmap. This time, however, it will use the container's shell to dump the values of those
+environment variables.</p>
+<p>Create the cli-pod:</p>
+<pre class="hljs"><code><div>~/appconfig$ kubectl apply -f cli-pod.yaml
+
+pod/challenge-pod created
+
+~/appconfig$
+</div></code></pre>
+<pre class="hljs"><code><div>~/appconfig$ kubectl get pods
+
+NAME            READY   STATUS      RESTARTS   AGE
+challenge-pod   0/1     Completed   0          3s
+
+~/appconfig$
+</div></code></pre>
+<p>With the pod created (and completed), check its log to see if the cli command was run and that the environment variables
+were dumped to its STDOUT:</p>
+<pre class="hljs"><code><div>~/appconfig$ kubectl logs challenge-pod
+
+very charm
+
+~/appconfig$
+</div></code></pre>
+<p>Once configMap values are declared as variables, you will be able to consume them as you would any other environment
+variable inside any pod's container(s).</p>
+<p>Remove the challenge-pod again:</p>
+<pre class="hljs"><code><div>~/appconfig$ kubectl delete pod challenge-pod
+
+pod &quot;challenge-pod&quot; deleted
+
+~/appconfig$
+</div></code></pre>
+<h3 id="challenge-2">CHALLENGE 2</h3>
+<p>Modify the challenge-pod manifest to mount the <code>special-config</code> configmap as a volume</p>
+<ul>
+<li>Configure the pod with the command <code>/bin/sh -c &quot;cat /etc/config/special.how&quot;</code></li>
+<li>You should be able to use <code>kubectl logs challenge-pod</code> to verify that the contents of special.how are printed</li>
+</ul>
+<p>The following imperative command creates the base manifest file in yaml:</p>
+<pre class="hljs"><code><div>~/appconfig$ kubectl run --dry-run=client -o yaml challenge-pod \
+--image busybox --restart Never \
+--command /bin/sh -- -c &quot;cat /etc/config/special.how&quot; &gt; vol-cm.yaml
+
+~/appconfig$
+</div></code></pre>
+<p>To declare ConfigMaps as volumes, make sure you use the <code>.spec.volumes.name</code> and <code>.spec.containers.volumeMounts.name</code>
+keys to refer to the <code>special-config</code> ConfigMap. Edit the manifest to add the <code>volume</code> and <code>volumeMounts</code> configurations
+to mount the configMap to the container:</p>
+<pre class="hljs"><code><div>~/appconfig$ nano vol-cm.yaml &amp;&amp; cat vol-cm.yaml
+</div></code></pre>
+<pre class="hljs"><code><div><span class="hljs-attr">apiVersion:</span> <span class="hljs-string">v1</span>
+<span class="hljs-attr">kind:</span> <span class="hljs-string">Pod</span>
+<span class="hljs-attr">metadata:</span>
+  <span class="hljs-attr">creationTimestamp:</span> <span class="hljs-literal">null</span>
+  <span class="hljs-attr">labels:</span>
+    <span class="hljs-attr">run:</span> <span class="hljs-string">challenge-pod</span>
+  <span class="hljs-attr">name:</span> <span class="hljs-string">challenge-pod</span>
+<span class="hljs-attr">spec:</span>
+  <span class="hljs-attr">containers:</span>
+  <span class="hljs-bullet">-</span> <span class="hljs-attr">command:</span>
+    <span class="hljs-bullet">-</span> <span class="hljs-string">/bin/sh</span>
+    <span class="hljs-bullet">-</span> <span class="hljs-string">-c</span>
+    <span class="hljs-bullet">-</span> <span class="hljs-string">cat</span> <span class="hljs-string">/etc/config/special.how</span>
+    <span class="hljs-attr">image:</span> <span class="hljs-string">busybox</span>
+    <span class="hljs-attr">name:</span> <span class="hljs-string">challenge-pod</span>
+    <span class="hljs-attr">resources:</span> <span class="hljs-string">{}</span>
+    <span class="hljs-attr">volumeMounts:</span>                <span class="hljs-comment"># Add this</span>
+    <span class="hljs-bullet">-</span> <span class="hljs-attr">name:</span> <span class="hljs-string">config-volume</span>        <span class="hljs-comment"># Add this</span>
+      <span class="hljs-attr">mountPath:</span> <span class="hljs-string">/etc/config</span>     <span class="hljs-comment"># Add this</span>
+  <span class="hljs-attr">volumes:</span>                       <span class="hljs-comment"># Add this</span>
+  <span class="hljs-bullet">-</span> <span class="hljs-attr">name:</span> <span class="hljs-string">config-volume</span>          <span class="hljs-comment"># Add this</span>
+    <span class="hljs-attr">configMap:</span>                   <span class="hljs-comment"># Add this</span>
+      <span class="hljs-attr">name:</span> <span class="hljs-string">special-config</span>       <span class="hljs-comment"># Add this</span>
+  <span class="hljs-attr">dnsPolicy:</span> <span class="hljs-string">ClusterFirst</span>
+  <span class="hljs-attr">restartPolicy:</span> <span class="hljs-string">Never</span>
+<span class="hljs-attr">status:</span> <span class="hljs-string">{}</span>
+</div></code></pre>
+<pre class="hljs"><code><div>~/appconfig$
+</div></code></pre>
+<p>In this spec, the special-config ConfigMap is mounted as a volume on the pod. The volume is then mounted in the pod's
+container at /etc/config. The container's shell will then read the file special.how that should be mounted there:</p>
+<pre class="hljs"><code><div>~/appconfig$ kubectl apply -f vol-cm.yaml
+
+pod/challenge-pod created
+
+~/appconfig$ kubectl get pods
+
+NAME            READY   STATUS      RESTARTS   AGE
+challenge-pod   0/1     Completed   0          4s
+
+~/appconfig$
+</div></code></pre>
+<p>Check the logs to see if the command succeeded:</p>
+<pre class="hljs"><code><div>~/appconfig$ kubectl logs challenge-pod
+
+very
+
+~/appconfig$
+</div></code></pre>
+<p>That worked! When a ConfigMap is mounted in a volume, each key in the volume is treated as a new file that can be found
+where the ConfigMap was mounted in the pod's container filesystems.</p>
+<pre class="hljs"><code><div>~/appconfig$ kubectl delete pod challenge-pod
+
+pod &quot;challenge-pod&quot; deleted
+
+~/appconfig$ kubectl delete cm special-config
+
+configmap &quot;special-config&quot; deleted
+
+~/appconfig$
+</div></code></pre>
+<h3 id="challenge-3">CHALLENGE 3</h3>
+<p>Deploy a pod running the <code>httpd:2.4</code> image that uses the following <code>index.html</code> document:</p>
+<pre class="hljs"><code><div>~/appconfig$ nano index.html &amp;&amp; cat $_
+</div></code></pre>
+<pre class="hljs"><code><div>&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+    &lt;head&gt;
+        &lt;title&gt;Hello!&lt;/title&gt;
+    &lt;/head&gt;
+    &lt;body&gt;
+	&lt;p&gt;The page has loaded successfully!&lt;/p&gt;
+    &lt;/body&gt;
+&lt;/html&gt;
+</div></code></pre>
+<pre class="hljs"><code><div>~/appconfig$
+</div></code></pre>
+<ul>
+<li>The index.html should be stored in the API and supplied to the pod's container when the pod is created.</li>
+</ul>
+<p>Create the ConfigMap for <code>index.html</code>:</p>
+<pre class="hljs"><code><div>~/appconfig$ kubectl create configmap my-webpage --from-file index.html
+
+configmap/my-webpage created
+
+~/appconfig$
+</div></code></pre>
+<ul>
+<li>Webpages for Apache are placed in the <code>/usr/local/apache2/htdocs/</code> directory</li>
+</ul>
+<p>Prepare the pod spec that mounts the configMap at the specified directory:</p>
+<pre class="hljs"><code><div>~/appconfig$ nano my-websvr.yaml &amp;&amp; cat $_
+</div></code></pre>
+<pre class="hljs"><code><div><span class="hljs-attr">apiVersion:</span> <span class="hljs-string">v1</span>
+<span class="hljs-attr">kind:</span> <span class="hljs-string">Pod</span>
+<span class="hljs-attr">metadata:</span>
+  <span class="hljs-attr">labels:</span>
+    <span class="hljs-attr">run:</span> <span class="hljs-string">my-websvr</span>
+  <span class="hljs-attr">name:</span> <span class="hljs-string">my-websvr</span>
+<span class="hljs-attr">spec:</span>
+  <span class="hljs-attr">containers:</span>
+  <span class="hljs-bullet">-</span> <span class="hljs-attr">image:</span> <span class="hljs-string">httpd:2.4</span>
+    <span class="hljs-attr">name:</span> <span class="hljs-string">my-websvr</span>
+    <span class="hljs-attr">volumeMounts:</span>
+    <span class="hljs-bullet">-</span> <span class="hljs-attr">name:</span> <span class="hljs-string">webpage</span>
+      <span class="hljs-attr">mountPath:</span> <span class="hljs-string">/usr/local/apache2/htdocs/</span>
+  <span class="hljs-attr">volumes:</span>
+  <span class="hljs-bullet">-</span> <span class="hljs-attr">name:</span> <span class="hljs-string">webpage</span>
+    <span class="hljs-attr">configMap:</span>
+      <span class="hljs-attr">name:</span> <span class="hljs-string">my-webpage</span>
+</div></code></pre>
+<pre class="hljs"><code><div>~/appconfig$
+</div></code></pre>
+<p>Apply and test the page:</p>
+<pre class="hljs"><code><div>~/appconfig$ kubectl apply -f my-websvr.yaml
+
+pod/my-websvr created
+
+~/appconfig$ kubectl get pods my-websvr -o wide
+
+NAME        READY   STATUS    RESTARTS   AGE   IP          NODE              NOMINATED NODE   READINESS GATES
+my-websvr   1/1     Running   0          4s    10.32.0.4   ip-172-31-6-204   &lt;none&gt;           &lt;none&gt;
+
+~/appconfig$ curl 10.32.0.4
+
+&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+    &lt;head&gt;
+        &lt;title&gt;Hello!&lt;/title&gt;
+    &lt;/head&gt;
+    &lt;body&gt;
+	&lt;p&gt;The page has loaded successfully!&lt;/p&gt;
+    &lt;/body&gt;
+&lt;/html&gt;
+
+~/appconfig$
+</div></code></pre>
+<p><em>Copyright (c) 2023-2024 RX-M LLC, Cloud Native &amp; AI Training and Consulting, all rights reserved</em></p>
+
+</body>
+</html>

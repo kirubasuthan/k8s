@@ -1,0 +1,997 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>rx-m-containers-k8s-accelerated-lab07.md</title>
+<meta http-equiv="Content-type" content="text/html;charset=UTF-8">
+
+<style>
+/* https://github.com/microsoft/vscode/blob/master/extensions/markdown-language-features/media/markdown.css */
+/*---------------------------------------------------------------------------------------------
+ *  Copyright (c) Microsoft Corporation. All rights reserved.
+ *  Licensed under the MIT License. See License.txt in the project root for license information.
+ *--------------------------------------------------------------------------------------------*/
+
+body {
+	font-family: var(--vscode-markdown-font-family, -apple-system, BlinkMacSystemFont, "Segoe WPC", "Segoe UI", "Ubuntu", "Droid Sans", sans-serif);
+	font-size: var(--vscode-markdown-font-size, 14px);
+	padding: 0 26px;
+	line-height: var(--vscode-markdown-line-height, 22px);
+	word-wrap: break-word;
+}
+
+#code-csp-warning {
+	position: fixed;
+	top: 0;
+	right: 0;
+	color: white;
+	margin: 16px;
+	text-align: center;
+	font-size: 12px;
+	font-family: sans-serif;
+	background-color:#444444;
+	cursor: pointer;
+	padding: 6px;
+	box-shadow: 1px 1px 1px rgba(0,0,0,.25);
+}
+
+#code-csp-warning:hover {
+	text-decoration: none;
+	background-color:#007acc;
+	box-shadow: 2px 2px 2px rgba(0,0,0,.25);
+}
+
+body.scrollBeyondLastLine {
+	margin-bottom: calc(100vh - 22px);
+}
+
+body.showEditorSelection .code-line {
+	position: relative;
+}
+
+body.showEditorSelection .code-active-line:before,
+body.showEditorSelection .code-line:hover:before {
+	content: "";
+	display: block;
+	position: absolute;
+	top: 0;
+	left: -12px;
+	height: 100%;
+}
+
+body.showEditorSelection li.code-active-line:before,
+body.showEditorSelection li.code-line:hover:before {
+	left: -30px;
+}
+
+.vscode-light.showEditorSelection .code-active-line:before {
+	border-left: 3px solid rgba(0, 0, 0, 0.15);
+}
+
+.vscode-light.showEditorSelection .code-line:hover:before {
+	border-left: 3px solid rgba(0, 0, 0, 0.40);
+}
+
+.vscode-light.showEditorSelection .code-line .code-line:hover:before {
+	border-left: none;
+}
+
+.vscode-dark.showEditorSelection .code-active-line:before {
+	border-left: 3px solid rgba(255, 255, 255, 0.4);
+}
+
+.vscode-dark.showEditorSelection .code-line:hover:before {
+	border-left: 3px solid rgba(255, 255, 255, 0.60);
+}
+
+.vscode-dark.showEditorSelection .code-line .code-line:hover:before {
+	border-left: none;
+}
+
+.vscode-high-contrast.showEditorSelection .code-active-line:before {
+	border-left: 3px solid rgba(255, 160, 0, 0.7);
+}
+
+.vscode-high-contrast.showEditorSelection .code-line:hover:before {
+	border-left: 3px solid rgba(255, 160, 0, 1);
+}
+
+.vscode-high-contrast.showEditorSelection .code-line .code-line:hover:before {
+	border-left: none;
+}
+
+img {
+	max-width: 100%;
+	max-height: 100%;
+}
+
+a {
+	text-decoration: none;
+}
+
+a:hover {
+	text-decoration: underline;
+}
+
+a:focus,
+input:focus,
+select:focus,
+textarea:focus {
+	outline: 1px solid -webkit-focus-ring-color;
+	outline-offset: -1px;
+}
+
+hr {
+	border: 0;
+	height: 2px;
+	border-bottom: 2px solid;
+}
+
+h1 {
+	padding-bottom: 0.3em;
+	line-height: 1.2;
+	border-bottom-width: 1px;
+	border-bottom-style: solid;
+}
+
+h1, h2, h3 {
+	font-weight: normal;
+}
+
+table {
+	border-collapse: collapse;
+}
+
+table > thead > tr > th {
+	text-align: left;
+	border-bottom: 1px solid;
+}
+
+table > thead > tr > th,
+table > thead > tr > td,
+table > tbody > tr > th,
+table > tbody > tr > td {
+	padding: 5px 10px;
+}
+
+table > tbody > tr + tr > td {
+	border-top: 1px solid;
+}
+
+blockquote {
+	margin: 0 7px 0 5px;
+	padding: 0 16px 0 10px;
+	border-left-width: 5px;
+	border-left-style: solid;
+}
+
+code {
+	font-family: Menlo, Monaco, Consolas, "Droid Sans Mono", "Courier New", monospace, "Droid Sans Fallback";
+	font-size: 1em;
+	line-height: 1.357em;
+}
+
+body.wordWrap pre {
+	white-space: pre-wrap;
+}
+
+pre:not(.hljs),
+pre.hljs code > div {
+	padding: 16px;
+	border-radius: 3px;
+	overflow: auto;
+}
+
+pre code {
+	color: var(--vscode-editor-foreground);
+	tab-size: 4;
+}
+
+/** Theming */
+
+.vscode-light pre {
+	background-color: rgba(220, 220, 220, 0.4);
+}
+
+.vscode-dark pre {
+	background-color: rgba(10, 10, 10, 0.4);
+}
+
+.vscode-high-contrast pre {
+	background-color: rgb(0, 0, 0);
+}
+
+.vscode-high-contrast h1 {
+	border-color: rgb(0, 0, 0);
+}
+
+.vscode-light table > thead > tr > th {
+	border-color: rgba(0, 0, 0, 0.69);
+}
+
+.vscode-dark table > thead > tr > th {
+	border-color: rgba(255, 255, 255, 0.69);
+}
+
+.vscode-light h1,
+.vscode-light hr,
+.vscode-light table > tbody > tr + tr > td {
+	border-color: rgba(0, 0, 0, 0.18);
+}
+
+.vscode-dark h1,
+.vscode-dark hr,
+.vscode-dark table > tbody > tr + tr > td {
+	border-color: rgba(255, 255, 255, 0.18);
+}
+
+</style>
+
+<style>
+/* Tomorrow Theme */
+/* http://jmblog.github.com/color-themes-for-google-code-highlightjs */
+/* Original theme - https://github.com/chriskempson/tomorrow-theme */
+
+/* Tomorrow Comment */
+.hljs-comment,
+.hljs-quote {
+	color: #8e908c;
+}
+
+/* Tomorrow Red */
+.hljs-variable,
+.hljs-template-variable,
+.hljs-tag,
+.hljs-name,
+.hljs-selector-id,
+.hljs-selector-class,
+.hljs-regexp,
+.hljs-deletion {
+	color: #c82829;
+}
+
+/* Tomorrow Orange */
+.hljs-number,
+.hljs-built_in,
+.hljs-builtin-name,
+.hljs-literal,
+.hljs-type,
+.hljs-params,
+.hljs-meta,
+.hljs-link {
+	color: #f5871f;
+}
+
+/* Tomorrow Yellow */
+.hljs-attribute {
+	color: #eab700;
+}
+
+/* Tomorrow Green */
+.hljs-string,
+.hljs-symbol,
+.hljs-bullet,
+.hljs-addition {
+	color: #718c00;
+}
+
+/* Tomorrow Blue */
+.hljs-title,
+.hljs-section {
+	color: #4271ae;
+}
+
+/* Tomorrow Purple */
+.hljs-keyword,
+.hljs-selector-tag {
+	color: #8959a8;
+}
+
+.hljs {
+	display: block;
+	overflow-x: auto;
+	color: #4d4d4c;
+	padding: 0.5em;
+}
+
+.hljs-emphasis {
+	font-style: italic;
+}
+
+.hljs-strong {
+	font-weight: bold;
+}
+</style>
+
+<style>
+/*
+ * Markdown PDF CSS
+ */
+
+ body {
+	font-family: -apple-system, BlinkMacSystemFont, "Segoe WPC", "Segoe UI", "Ubuntu", "Droid Sans", sans-serif, "Meiryo";
+	padding: 0 12px;
+}
+
+pre {
+	background-color: #f8f8f8;
+	border: 1px solid #cccccc;
+	border-radius: 3px;
+	overflow-x: auto;
+	white-space: pre-wrap;
+	overflow-wrap: break-word;
+}
+
+pre:not(.hljs) {
+	padding: 23px;
+	line-height: 19px;
+}
+
+blockquote {
+	background: rgba(127, 127, 127, 0.1);
+	border-color: rgba(0, 122, 204, 0.5);
+}
+
+.emoji {
+	height: 1.4em;
+}
+
+code {
+	font-size: 14px;
+	line-height: 19px;
+}
+
+/* for inline code */
+:not(pre):not(.hljs) > code {
+	color: #C9AE75; /* Change the old color so it seems less like an error */
+	font-size: inherit;
+}
+
+/* Page Break : use <div class="page"/> to insert page break
+-------------------------------------------------------- */
+.page {
+	page-break-after: always;
+}
+
+</style>
+
+<script src="https://unpkg.com/mermaid/dist/mermaid.min.js"></script>
+</head>
+<body>
+  <script>
+    mermaid.initialize({
+      startOnLoad: true,
+      theme: document.body.classList.contains('vscode-dark') || document.body.classList.contains('vscode-high-contrast')
+          ? 'dark'
+          : 'default'
+    });
+  </script>
+<p><img src="https://rx-m.com/rxm-cnc.svg" alt="RX-M, llc."></p>
+<h1 id="kubernetes">Kubernetes</h1>
+<h2 id="services">Services</h2>
+<p>Kubernetes pods are mortal. They are born and they die, and they are not resurrected. ReplicaSets create and destroy
+Pods dynamically (e.g. when scaling up or down or when doing rolling updates). While each pod gets its own IP address,
+even those IP addresses cannot be relied upon to be stable over time. This leads to a problem; if some set of backend
+Pods provides functionality to other frontend Pods inside the Kubernetes cluster, how do the frontends find out and keep
+track of the backends?</p>
+<p>A Kubernetes Service is an abstraction which defines a logical set of pods and a policy by which to access them. The set
+of pods targeted by a Service is determined by a label selector. As an example, consider an image-processing backend
+which is running with 3 replicas. Those replicas are fungible, frontends do not care which backend they use. While the
+actual pods that compose the backend set may change, the frontend clients should not need to be aware of that or keep
+track of the list of backends themselves. The Service abstraction enables this decoupling.</p>
+<p>For applications integrated with the Kubernetes control plane, Kubernetes offers a simple Endpoints API that is updated
+whenever the set of pods in a Service changes. For Kubernetes hosted applications, Kubernetes offers a virtual-IP-based
+façade which redirects connections to the backend pods. For applications outside of the Kubernetes cluster, Kubernetes
+offers a cluster wide port forwarding feature that provides a way for external traffic to enter the pod network and
+reach a service's pods.</p>
+<p>In Kubernetes, a Service is just a JSON object in etcd, similar to a Pod. Like all of the &quot;REST&quot; objects, a Service
+definition can be POSTed to the kube-apiserver to create a new service instance. The service controller then acts on
+service specifications reserving Cluster IPs and Node Ports as needed. This in turn causes the KubeProxy agents and/or
+SDN implementations to take local action on each node (modifying iptables/ipvs/etc.).</p>
+<h3 id="1-a-simple-service">1. A simple Service</h3>
+<p>Let’s begin by creating a simple service using a service config file. Before you begin, delete any services (except
+the kubernetes service), resource controllers, pods or other resources you may have running.</p>
+<p>Now create a simple service called “testweb” with its own <em>ClusterIP</em> passing traffic on port 80 and configure the
+service to use the selector “<code>app=testweb</code>”.</p>
+<p>Create the service using <code>kubectl create</code>:</p>
+<pre class="hljs"><code><div>~$ mkdir ~/svc &amp;&amp; cd ~/svc
+
+~/svc$ kubectl create svc clusterip testweb --tcp 80 --dry-run=client -o yaml &gt; svc.yaml
+
+~/svc$
+</div></code></pre>
+<p>Examine the Service; you can remove the <code>status</code> and <code>creationTimestamp</code> keys from the svc.yaml you generated but
+leaving them in place will not be harmful:</p>
+<pre class="hljs"><code><div>~/svc$ cat svc.yaml
+</div></code></pre>
+<pre class="hljs"><code><div><span class="hljs-attr">apiVersion:</span> <span class="hljs-string">v1</span>
+<span class="hljs-attr">kind:</span> <span class="hljs-string">Service</span>
+<span class="hljs-attr">metadata:</span>
+  <span class="hljs-attr">creationTimestamp:</span> <span class="hljs-literal">null</span>
+  <span class="hljs-attr">labels:</span>
+    <span class="hljs-attr">app:</span> <span class="hljs-string">testweb</span>
+  <span class="hljs-attr">name:</span> <span class="hljs-string">testweb</span>
+<span class="hljs-attr">spec:</span>
+  <span class="hljs-attr">ports:</span>
+  <span class="hljs-bullet">-</span> <span class="hljs-attr">name:</span> <span class="hljs-string">"80"</span>
+    <span class="hljs-attr">port:</span> <span class="hljs-number">80</span>
+    <span class="hljs-attr">protocol:</span> <span class="hljs-string">TCP</span>
+    <span class="hljs-attr">targetPort:</span> <span class="hljs-number">80</span>
+  <span class="hljs-attr">selector:</span>
+    <span class="hljs-attr">app:</span> <span class="hljs-string">testweb</span>
+  <span class="hljs-attr">type:</span> <span class="hljs-string">ClusterIP</span>
+<span class="hljs-attr">status:</span>
+  <span class="hljs-attr">loadBalancer:</span> <span class="hljs-string">{}</span>
+</div></code></pre>
+<pre class="hljs"><code><div>~/svc$
+</div></code></pre>
+<p>Now create the service:</p>
+<pre class="hljs"><code><div>~/svc$ kubectl apply -f svc.yaml
+
+service/testweb created
+
+~/svc$
+</div></code></pre>
+<blockquote>
+<p>N.B. Your host, service and pod ip addresses will be different from those shown in the lab examples. Be sure to
+substitute the correct addresses from you lab system as you work through the lab!</p>
+</blockquote>
+<p>List the services in your namespace:</p>
+<pre class="hljs"><code><div>~/svc$ kubectl get svc
+
+NAME         TYPE        CLUSTER-IP      EXTERNAL-IP   PORT(S)   AGE
+kubernetes   ClusterIP   10.96.0.1       &lt;none&gt;        443/TCP   85m
+testweb      ClusterIP   10.111.174.45   &lt;none&gt;        80/TCP    5s
+
+~/svc$
+</div></code></pre>
+<p>Like other manifests, we can extract individual values from Services; extract the clusterIP value and register it as an
+environment variable:</p>
+<pre class="hljs"><code><div>~/svc$ SVC=$(kubectl get service testweb --template={{.spec.clusterIP}}) &amp;&amp; echo $SVC
+
+10.111.174.45
+
+~/svc$
+</div></code></pre>
+<p>Great we have a service running. Now what?</p>
+<p>Let's try to use it. To make use of services we need to be in the pod network. Some SDN solutions provide an onramp
+(route) on the nodes to the pod network but the ClusterIP is virtual so it is often not available outside of running
+pods. Services are always available inside pods though so we'll run a pod to use as a test client.</p>
+<p>Run a pod for testing the service, setting the <code>SVC</code> environment variable in the pod to the same variable on our host:</p>
+<pre class="hljs"><code><div>~/svc$ kubectl run -it testclient --image=busybox:1.27 --env SVC=$SVC
+
+If you don't see a command prompt, try pressing enter.
+
+/ #
+</div></code></pre>
+<p>Try to <code>wget</code> your service's Cluster IP from inside the pod:</p>
+<pre class="hljs"><code><div>/ # wget --timeout 5 -O - $SVC
+
+Connecting to 10.105.23.143 (10.105.23.143:80)
+wget: download timed out
+
+/ #
+</div></code></pre>
+<blockquote>
+<p>N.B. without the --timeout flag, wget will eventually return the message: &quot;wget: can't connect to remote host
+(...): Connection refused&quot;</p>
+</blockquote>
+<p>We have created a service and it has an IP but the IP is virtual and there’s no pod(s) for the proxy to send the traffic
+to. Services truly can outlive their implementations.</p>
+<p>To fix this lack of implementation we can create a pod with a label that matches the service selector.</p>
+<p>Exit your testclient pod:</p>
+<pre class="hljs"><code><div>/ # exit
+
+Session ended, resume using 'kubectl attach testclient -c testclient -i -t' command when the pod is running
+
+~/svc$
+</div></code></pre>
+<p>As before, we can re-attach to the testclient pod with the command mentioned after we exited.</p>
+<p>Dry-run the following pod:</p>
+<pre class="hljs"><code><div>~/svc$ kubectl run bigwebstuff --image nginx -l app=testweb --port 80 --dry-run=client -o yaml
+</div></code></pre>
+<pre class="hljs"><code><div><span class="hljs-attr">apiVersion:</span> <span class="hljs-string">v1</span>
+<span class="hljs-attr">kind:</span> <span class="hljs-string">Pod</span>
+<span class="hljs-attr">metadata:</span>
+  <span class="hljs-attr">creationTimestamp:</span> <span class="hljs-literal">null</span>
+  <span class="hljs-attr">labels:</span>
+    <span class="hljs-attr">app:</span> <span class="hljs-string">testweb</span>
+  <span class="hljs-attr">name:</span> <span class="hljs-string">bigwebstuff</span>
+<span class="hljs-attr">spec:</span>
+  <span class="hljs-attr">containers:</span>
+  <span class="hljs-bullet">-</span> <span class="hljs-attr">image:</span> <span class="hljs-string">nginx</span>
+    <span class="hljs-attr">name:</span> <span class="hljs-string">bigwebstuff</span>
+    <span class="hljs-attr">ports:</span>
+    <span class="hljs-bullet">-</span> <span class="hljs-attr">containerPort:</span> <span class="hljs-number">80</span>
+    <span class="hljs-attr">resources:</span> <span class="hljs-string">{}</span>
+  <span class="hljs-attr">dnsPolicy:</span> <span class="hljs-string">ClusterFirst</span>
+  <span class="hljs-attr">restartPolicy:</span> <span class="hljs-string">Always</span>
+<span class="hljs-attr">status:</span> <span class="hljs-string">{}</span>
+</div></code></pre>
+<pre class="hljs"><code><div>~/svc$
+</div></code></pre>
+<p>Using the <code>-l app=testweb</code> argument, we label the pod with the same key-value pair the Service is using in its selector.</p>
+<p>Now run the pod by removing the <code>--dry-run</code> and <code>-o yaml</code> arguments:</p>
+<pre class="hljs"><code><div>~/svc$ kubectl run bigwebstuff --image nginx -l app=testweb --port 80
+
+pod/bigwebstuff created
+
+~/svc$
+</div></code></pre>
+<p>With the pod up, retry the service IP from the test pod:</p>
+<pre class="hljs"><code><div>~/svc$ kubectl exec testclient -- wget --timeout 5 -O - $SVC
+
+Connecting to 10.111.174.45 (10.111.174.45:80)
+-                    100% |*******************************|   615   0:00:00 ETA
+
+&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+&lt;head&gt;
+&lt;title&gt;Welcome to nginx!&lt;/title&gt;
+&lt;style&gt;
+html { color-scheme: light dark; }
+body { width: 35em; margin: 0 auto;
+font-family: Tahoma, Verdana, Arial, sans-serif; }
+&lt;/style&gt;
+&lt;/head&gt;
+&lt;body&gt;
+&lt;h1&gt;Welcome to nginx!&lt;/h1&gt;
+&lt;p&gt;If you see this page, the nginx web server is successfully installed and
+working. Further configuration is required.&lt;/p&gt;
+
+&lt;p&gt;For online documentation and support please refer to
+&lt;a href=&quot;http://nginx.org/&quot;&gt;nginx.org&lt;/a&gt;.&lt;br/&gt;
+Commercial support is available at
+&lt;a href=&quot;http://nginx.com/&quot;&gt;nginx.com&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;&lt;em&gt;Thank you for using nginx.&lt;/em&gt;&lt;/p&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+
+~/svc$
+</div></code></pre>
+<p>On the host, describe your service to verify the wiring between the ClusterIP and the container in the pod:</p>
+<pre class="hljs"><code><div>~/svc$ kubectl describe service testweb
+</div></code></pre>
+<pre class="hljs"><code><div><span class="hljs-attr">Name:</span>              <span class="hljs-string">testweb</span>
+<span class="hljs-attr">Namespace:</span>         <span class="hljs-string">default</span>
+<span class="hljs-attr">Labels:</span>            <span class="hljs-string">app=testweb</span>
+<span class="hljs-attr">Annotations:</span>       <span class="hljs-string">&lt;none&gt;</span>
+<span class="hljs-attr">Selector:</span>          <span class="hljs-string">app=testweb</span>
+<span class="hljs-attr">Type:</span>              <span class="hljs-string">ClusterIP</span>
+<span class="hljs-attr">IP Family Policy:</span>  <span class="hljs-string">SingleStack</span>
+<span class="hljs-attr">IP Families:</span>       <span class="hljs-string">IPv4</span>
+<span class="hljs-attr">IP:</span>                <span class="hljs-number">10.111</span><span class="hljs-number">.174</span><span class="hljs-number">.45</span>
+<span class="hljs-attr">IPs:</span>               <span class="hljs-number">10.111</span><span class="hljs-number">.174</span><span class="hljs-number">.45</span>
+<span class="hljs-attr">Port:</span>              <span class="hljs-number">80</span>  <span class="hljs-number">80</span><span class="hljs-string">/TCP</span>
+<span class="hljs-attr">TargetPort:</span>        <span class="hljs-number">80</span><span class="hljs-string">/TCP</span>
+<span class="hljs-attr">Endpoints:</span>         <span class="hljs-number">10.32</span><span class="hljs-number">.0</span><span class="hljs-number">.5</span><span class="hljs-string">:80</span>
+<span class="hljs-attr">Session Affinity:</span>  <span class="hljs-string">None</span>
+<span class="hljs-attr">Events:</span>            <span class="hljs-string">&lt;none&gt;</span>
+</div></code></pre>
+<pre class="hljs"><code><div>~/svc$
+</div></code></pre>
+<p>So as you can see in the example, our nginx container must be listening on IP and Port combination listed next to
+<code>Endpoints</code>.</p>
+<p>Use kubectl to display the pod and host IPs:</p>
+<pre class="hljs"><code><div>~/svc$ sudo apt install jq -y
+
+...
+
+~/svc$ kubectl get po bigwebstuff -o json | jq -r '.status | .podIP, .hostIP'
+
+10.32.0.5
+172.31.4.161
+
+~/svc$
+</div></code></pre>
+<p>Try hitting the pod by its pod IP from the test container:</p>
+<pre class="hljs"><code><div>~/svc$ kubectl exec testclient -- wget -O - 10.32.0.5    # Make sure to use the pod IP from the command above
+
+Connecting to 10.32.0.5 (10.32.0.5:80)
+-                    100% |*******************************|   615   0:00:00 ETA
+
+&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+&lt;head&gt;
+&lt;title&gt;Welcome to nginx!&lt;/title&gt;
+&lt;style&gt;
+html { color-scheme: light dark; }
+body { width: 35em; margin: 0 auto;
+font-family: Tahoma, Verdana, Arial, sans-serif; }
+&lt;/style&gt;
+&lt;/head&gt;
+&lt;body&gt;
+&lt;h1&gt;Welcome to nginx!&lt;/h1&gt;
+&lt;p&gt;If you see this page, the nginx web server is successfully installed and
+working. Further configuration is required.&lt;/p&gt;
+
+&lt;p&gt;For online documentation and support please refer to
+&lt;a href=&quot;http://nginx.org/&quot;&gt;nginx.org&lt;/a&gt;.&lt;br/&gt;
+Commercial support is available at
+&lt;a href=&quot;http://nginx.com/&quot;&gt;nginx.com&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;&lt;em&gt;Thank you for using nginx.&lt;/em&gt;&lt;/p&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+
+~/svc$
+</div></code></pre>
+<p>All we needed to do to enable our Service was to create a pod with the right label. Note that if our pod container dies,
+no one will restart it as things now stand, but our Service will carry on.</p>
+<h3 id="2-add-a-resource-controller-to-your-service">2. Add a resource controller to your Service</h3>
+<p>To improve the robustness of our service implementation we can switch from a pod to a resource controller. Change your
+config to instantiate a deployment which creates 3 replicas and with a template just like the pod we launched
+in the last step.</p>
+<pre class="hljs"><code><div>~/svc$ kubectl create deploy bigwebstuff --image nginx:latest --replicas 3 --port 80 --dry-run=client -o yaml &gt; webd.yaml
+
+~/svc$
+</div></code></pre>
+<p>Edit the manifest:</p>
+<ul>
+<li>Change the value of all <code>app:</code> keys in the spec to <code>testweb</code>:</li>
+</ul>
+<pre class="hljs"><code><div>~/svc$ nano webd.yaml &amp;&amp; cat $_
+</div></code></pre>
+<pre class="hljs"><code><div><span class="hljs-attr">apiVersion:</span> <span class="hljs-string">apps/v1</span>
+<span class="hljs-attr">kind:</span> <span class="hljs-string">Deployment</span>
+<span class="hljs-attr">metadata:</span>
+  <span class="hljs-attr">creationTimestamp:</span> <span class="hljs-literal">null</span>
+  <span class="hljs-attr">labels:</span>
+    <span class="hljs-attr">app:</span> <span class="hljs-string">testweb</span>              <span class="hljs-comment"># Change this</span>
+  <span class="hljs-attr">name:</span> <span class="hljs-string">bigwebstuff</span>
+<span class="hljs-attr">spec:</span>
+  <span class="hljs-attr">replicas:</span> <span class="hljs-number">3</span>
+  <span class="hljs-attr">selector:</span>
+    <span class="hljs-attr">matchLabels:</span>
+      <span class="hljs-attr">app:</span> <span class="hljs-string">testweb</span>            <span class="hljs-comment"># Change this</span>
+  <span class="hljs-attr">strategy:</span> <span class="hljs-string">{}</span>
+  <span class="hljs-attr">template:</span>
+    <span class="hljs-attr">metadata:</span>
+      <span class="hljs-attr">creationTimestamp:</span> <span class="hljs-literal">null</span>
+      <span class="hljs-attr">labels:</span>
+        <span class="hljs-attr">app:</span> <span class="hljs-string">testweb</span>          <span class="hljs-comment"># Change this</span>
+    <span class="hljs-attr">spec:</span>
+      <span class="hljs-attr">containers:</span>
+      <span class="hljs-bullet">-</span> <span class="hljs-attr">image:</span> <span class="hljs-string">nginx:latest</span>
+        <span class="hljs-attr">name:</span> <span class="hljs-string">nginx</span>
+        <span class="hljs-attr">ports:</span>
+        <span class="hljs-bullet">-</span> <span class="hljs-attr">containerPort:</span> <span class="hljs-number">80</span>
+        <span class="hljs-attr">resources:</span> <span class="hljs-string">{}</span>
+<span class="hljs-attr">status:</span> <span class="hljs-string">{}</span>
+</div></code></pre>
+<pre class="hljs"><code><div>~/svc$
+</div></code></pre>
+<p>Now create the deployment:</p>
+<pre class="hljs"><code><div>~/svc$ kubectl apply -f webd.yaml
+
+deployment.apps/bigwebstuff created
+
+~/svc$
+</div></code></pre>
+<p>Now let’s see what happened to our pods and our service:</p>
+<pre class="hljs"><code><div>~/svc$ kubectl describe service testweb
+</div></code></pre>
+<pre class="hljs"><code><div><span class="hljs-attr">Name:</span>              <span class="hljs-string">testweb</span>
+<span class="hljs-attr">Namespace:</span>         <span class="hljs-string">default</span>
+<span class="hljs-attr">Labels:</span>            <span class="hljs-string">app=testweb</span>
+<span class="hljs-attr">Annotations:</span>       <span class="hljs-string">&lt;none&gt;</span>
+<span class="hljs-attr">Selector:</span>          <span class="hljs-string">app=testweb</span>
+<span class="hljs-attr">Type:</span>              <span class="hljs-string">ClusterIP</span>
+<span class="hljs-attr">IP Family Policy:</span>  <span class="hljs-string">SingleStack</span>
+<span class="hljs-attr">IP Families:</span>       <span class="hljs-string">IPv4</span>
+<span class="hljs-attr">IP:</span>                <span class="hljs-number">10.111</span><span class="hljs-number">.174</span><span class="hljs-number">.45</span>
+<span class="hljs-attr">IPs:</span>               <span class="hljs-number">10.111</span><span class="hljs-number">.174</span><span class="hljs-number">.45</span>
+<span class="hljs-attr">Port:</span>              <span class="hljs-number">80</span>  <span class="hljs-number">80</span><span class="hljs-string">/TCP</span>
+<span class="hljs-attr">TargetPort:</span>        <span class="hljs-number">80</span><span class="hljs-string">/TCP</span>
+<span class="hljs-attr">Endpoints:</span>         <span class="hljs-number">10.32</span><span class="hljs-number">.0</span><span class="hljs-number">.5</span><span class="hljs-string">:80,10.32.0.6:80,10.32.0.7:80</span> <span class="hljs-string">+</span> <span class="hljs-number">1</span> <span class="hljs-string">more...</span>
+<span class="hljs-attr">Session Affinity:</span>  <span class="hljs-string">None</span>
+<span class="hljs-attr">Events:</span>            <span class="hljs-string">&lt;none&gt;</span>
+</div></code></pre>
+<pre class="hljs"><code><div>~/svc$
+</div></code></pre>
+<p>List the running Pods:</p>
+<pre class="hljs"><code><div>~/svc$ kubectl get po
+
+NAME                          READY   STATUS    RESTARTS       AGE
+bigwebstuff                   1/1     Running   0              106s
+bigwebstuff-cb98f5c6c-4tjqt   1/1     Running   0              19s
+bigwebstuff-cb98f5c6c-blh7m   1/1     Running   0              19s
+bigwebstuff-cb98f5c6c-vdcpr   1/1     Running   0              19s
+testclient                    1/1     Running   1 (119s ago)   2m13s
+
+~/svc$
+</div></code></pre>
+<ul>
+<li>What happened to our old pod?</li>
+<li>How many pods did the RS create?</li>
+<li>What does the age output in the get pods command tell you?</li>
+<li>What are the pods names with the suffixes from?</li>
+</ul>
+<p>Service selector and ReplicaSet selector behavior differ in subtle ways. You will notice the Service routes traffic to 4
+pods, while the ReplicaSet controls only 3 pods.</p>
+<h3 id="3-challenge---service-selectors">3. CHALLENGE - Service selectors</h3>
+<p>Without changing any of the running resources, create a new deployment that runs the <code>httpd</code> image with 2 replicas
+such that the service will send traffic to it as well.</p>
+<p>Test your service to verify proper operation using curl in the test container.</p>
+<blockquote>
+<p>N.B. Apache httpd returns a different response than that returned by nginx</p>
+</blockquote>
+<ul>
+<li>Clean up the challenge resources once finished, and then clean up the rest</li>
+</ul>
+<pre class="hljs"><code><div>~/svc$ kubectl delete deploy/bigwebstuff po/bigwebstuff svc/testweb
+
+deployment.apps &quot;bigwebstuff&quot; deleted
+pod &quot;bigwebstuff&quot; deleted
+service &quot;testweb&quot; deleted
+
+~/svc$
+</div></code></pre>
+<h3 id="4-blue-green-deployments">4. Blue-Green Deployments</h3>
+<p>Blue-Green deployments are useful when you want to replace one version of a microservice with a new or different one,
+but you want to check that it's working correctly before you turn traffic from the old (blue) one to the new (green)
+one, or if you want the entire deployment to swap over at once instead of performing a rolling update.</p>
+<p>Since we <em>do not</em> want to use the rolling update feature, we will use ReplicaSets instead of Deployments. First, make an
+RS to serve as your blue deployment:</p>
+<pre class="hljs"><code><div>~/svc$ nano blue.yaml &amp;&amp; cat $_
+</div></code></pre>
+<pre class="hljs"><code><div><span class="hljs-attr">apiVersion:</span> <span class="hljs-string">apps/v1</span>
+<span class="hljs-attr">kind:</span> <span class="hljs-string">ReplicaSet</span>
+<span class="hljs-attr">metadata:</span>
+  <span class="hljs-attr">name:</span> <span class="hljs-string">blue-rs</span>
+  <span class="hljs-attr">labels:</span>
+    <span class="hljs-attr">demo:</span> <span class="hljs-string">blue-rs</span>
+<span class="hljs-attr">spec:</span>
+  <span class="hljs-attr">replicas:</span> <span class="hljs-number">3</span>
+  <span class="hljs-attr">selector:</span>
+    <span class="hljs-attr">matchLabels:</span>
+      <span class="hljs-attr">demo:</span> <span class="hljs-string">blue-rs</span>
+  <span class="hljs-attr">template:</span>
+    <span class="hljs-attr">metadata:</span>
+      <span class="hljs-attr">labels:</span>
+        <span class="hljs-attr">demo:</span> <span class="hljs-string">blue-rs</span>
+    <span class="hljs-attr">spec:</span>
+      <span class="hljs-attr">containers:</span>
+      <span class="hljs-bullet">-</span> <span class="hljs-attr">name:</span> <span class="hljs-string">blue-containers</span>
+        <span class="hljs-attr">image:</span> <span class="hljs-string">rxmllc/hostinfo:alpine</span>
+        <span class="hljs-attr">ports:</span>
+        <span class="hljs-bullet">-</span> <span class="hljs-attr">containerPort:</span> <span class="hljs-number">9898</span>
+</div></code></pre>
+<pre class="hljs"><code><div>~/svc$ kubectl apply -f blue.yaml
+
+replicaset.apps/blue-rs created
+
+~/svc$
+</div></code></pre>
+<p>Now make a service which exposes pods on the cluster using one of the labels: <code>method=blue-green</code>:</p>
+<pre class="hljs"><code><div>~/svc$ nano bgsvc.yaml &amp;&amp; cat $_
+</div></code></pre>
+<pre class="hljs"><code><div><span class="hljs-attr">apiVersion:</span> <span class="hljs-string">v1</span>
+<span class="hljs-attr">kind:</span> <span class="hljs-string">Service</span>
+<span class="hljs-attr">metadata:</span>
+  <span class="hljs-attr">name:</span> <span class="hljs-string">blue-green-svc</span>
+<span class="hljs-attr">spec:</span>
+  <span class="hljs-attr">ports:</span>
+  <span class="hljs-bullet">-</span> <span class="hljs-attr">port:</span> <span class="hljs-number">80</span>
+    <span class="hljs-attr">targetPort:</span> <span class="hljs-number">9898</span>
+  <span class="hljs-attr">selector:</span>
+    <span class="hljs-attr">method:</span> <span class="hljs-string">blue-green</span>
+</div></code></pre>
+<pre class="hljs"><code><div>~/svc$ kubectl apply -f bgsvc.yaml
+
+service/blue-green-svc created
+
+~/svc$ kubectl get svc
+
+NAME             TYPE        CLUSTER-IP      EXTERNAL-IP   PORT(S)   AGE
+blue-green-svc   ClusterIP   10.103.212.79   &lt;none&gt;        80/TCP    2s
+kubernetes       ClusterIP   10.96.0.1       &lt;none&gt;        443/TCP   90m
+testweb          ClusterIP   10.111.174.45   &lt;none&gt;        80/TCP    5m16s
+
+~/svc$
+</div></code></pre>
+<p>List your service's endpoints:</p>
+<pre class="hljs"><code><div>~/svc$ kubectl get ep blue-green-svc
+
+NAME             ENDPOINTS   AGE
+blue-green-svc   &lt;none&gt;      6s
+
+~/svc$
+</div></code></pre>
+<p>None of our pods currently fulfill our service's selector.</p>
+<p>To add our blue pods to the service's load balancing we can imperatively update pod labels using <code>kubectl label</code>. This
+is why we use RSes! If we used a Deployment, a config change to the pods could trigger a rolling update--which we <em>do
+not</em> want; using RSes eliminates any potential for a rolling update to trigger since only the Deployment controller has
+the rolling update feature.</p>
+<p>The following command finds all pods with the <code>demo=blue-rs</code> label and feeds their names to the <code>label</code> command, adding
+the service selector's label: &quot;<code>method=blue-green</code>&quot;:</p>
+<pre class="hljs"><code><div>~/svc$ kubectl label $(kubectl get po -l demo=blue-rs -o name) method=blue-green
+
+pod/blue-rs-656j5 labeled
+pod/blue-rs-ntn57 labeled
+pod/blue-rs-z5zth labeled
+
+~/svc$
+</div></code></pre>
+<p>List your service's endpoints; <em>there should be 3</em>:</p>
+<pre class="hljs"><code><div>~/svc$ kubectl get ep blue-green-svc
+
+NAME             ENDPOINTS                                        AGE
+blue-green-svc   10.32.0.10:9898,10.32.0.11:9898,10.32.0.9:9898   31s
+
+~/svc$
+</div></code></pre>
+<p>Perfect! Store the service's clusterIP in an environment variable <code>BGSVC</code>:</p>
+<pre class="hljs"><code><div>~/svc$ BGSVC=$(kubectl get service blue-green-svc --template={{.spec.clusterIP}}) &amp;&amp; echo $BGSVC
+
+10.108.63.65
+
+~/svc$
+</div></code></pre>
+<p>Run a pod for testing the service, setting the <code>BGSVC</code> environment variable in the pod to the same variable on our host:</p>
+<pre class="hljs"><code><div>~/svc$ kubectl run -it bgtest --image=busybox:1.27 --env BGSVC=$BGSVC
+
+If you don't see a command prompt, try pressing enter.
+
+/ #
+</div></code></pre>
+<p>Try to <code>wget</code> your service's Cluster IP from inside the pod:</p>
+<pre class="hljs"><code><div>/ # wget -qO - $BGSVC
+
+blue-rs-z5zth 10.34.0.2
+
+/ #
+</div></code></pre>
+<p>We can see from the hostname that one of our blue pods answered (as expected).</p>
+<pre class="hljs"><code><div>/ # exit
+
+Session ended, resume using 'kubectl attach bgtest -c bgtest -i -t' command when the pod is running
+
+~/svc$
+</div></code></pre>
+<p>Now create the green RS, using the &quot;<code>latest</code>&quot; tag for the <code>rxmllc/hostinfo</code> image:</p>
+<pre class="hljs"><code><div>~/svc$ nano green.yaml &amp;&amp; cat $_
+</div></code></pre>
+<pre class="hljs"><code><div><span class="hljs-attr">apiVersion:</span> <span class="hljs-string">apps/v1</span>
+<span class="hljs-attr">kind:</span> <span class="hljs-string">ReplicaSet</span>
+<span class="hljs-attr">metadata:</span>
+  <span class="hljs-attr">name:</span> <span class="hljs-string">green-rs</span>
+  <span class="hljs-attr">labels:</span>
+    <span class="hljs-attr">demo:</span> <span class="hljs-string">green-rs</span>
+<span class="hljs-attr">spec:</span>
+  <span class="hljs-attr">replicas:</span> <span class="hljs-number">3</span>
+  <span class="hljs-attr">selector:</span>
+    <span class="hljs-attr">matchLabels:</span>
+      <span class="hljs-attr">demo:</span> <span class="hljs-string">green-rs</span>
+  <span class="hljs-attr">template:</span>
+    <span class="hljs-attr">metadata:</span>
+      <span class="hljs-attr">labels:</span>
+        <span class="hljs-attr">demo:</span> <span class="hljs-string">green-rs</span>
+    <span class="hljs-attr">spec:</span>
+      <span class="hljs-attr">containers:</span>
+      <span class="hljs-bullet">-</span> <span class="hljs-attr">name:</span> <span class="hljs-string">green-containers</span>
+        <span class="hljs-attr">image:</span> <span class="hljs-string">rxmllc/hostinfo:latest</span>
+        <span class="hljs-attr">ports:</span>
+        <span class="hljs-bullet">-</span> <span class="hljs-attr">containerPort:</span> <span class="hljs-number">9898</span>
+</div></code></pre>
+<pre class="hljs"><code><div>~/svc$ kubectl apply -f green.yaml
+
+replicaset.apps/green-rs created
+
+~/svc$ kubectl get po -l demo=green-rs
+
+NAME             READY   STATUS    RESTARTS   AGE
+green-rs-l2mgh   1/1     Running   0          12s
+green-rs-ss4rc   1/1     Running   0          12s
+green-rs-tl5rc   1/1     Running   0          12s
+
+~/svc$
+</div></code></pre>
+<p>The new green pods are up and ready and there don't appear to be any errors.</p>
+<p>List your service's endpoints; <em>there should still only be 3</em>:</p>
+<pre class="hljs"><code><div>~/svc$ kubectl get ep blue-green-svc
+
+NAME             ENDPOINTS                                        AGE
+blue-green-svc   10.32.0.10:9898,10.32.0.11:9898,10.32.0.9:9898   75s
+
+~/svc$
+</div></code></pre>
+<p>Because Kubernetes has an eventual consistency model, we will need to add the green pods to the service while the blue
+pods are still present so that the endpoints list will never be empty. We will also want to wait <em>before</em> removing the
+blue pods to give time for kube-proxy to implement the new endpoints in iptables / ipvs tables. This means there will be
+a slight overlap when both blue and green pods answer as backends for our service.</p>
+<p>To add our green pods to the service's load balancing we imperatively update pod labels using <code>kubectl label</code> once
+again:</p>
+<pre class="hljs"><code><div>~/svc$ kubectl label $(kubectl get po -l demo=green-rs -o name) method=blue-green
+
+pod/green-rs-l2mgh labeled
+pod/green-rs-ss4rc labeled
+pod/green-rs-tl5rc labeled
+
+~/svc$
+</div></code></pre>
+<p>List your service's endpoints; <em>there should now be 6</em>:</p>
+<pre class="hljs"><code><div>~/svc$ kubectl get ep blue-green-svc
+
+NAME             ENDPOINTS                                                     AGE
+blue-green-svc   10.32.0.10:9898,10.32.0.11:9898,10.32.0.13:9898 + 3 more...   92s
+
+~/svc$
+</div></code></pre>
+<p>Now reattach to your test pod and <code>wget</code> the cluster IP again.</p>
+<pre class="hljs"><code><div>~/svc$ kubectl exec bgtest -- wget -qO - $BGSVC
+
+green-rs-zzxlf 10.32.0.14
+
+~/svc$
+</div></code></pre>
+<p>What happened?</p>
+<p>Load balancing is random so in the above example we were load balanced to one of the blue pods (you may have gotten a
+green pod). Try the <code>wget</code> several times to view the load balancing in action:</p>
+<pre class="hljs"><code><div>~/svc$ kubectl exec bgtest -- wget -qO - $BGSVC
+
+blue-rs-jjf2v 10.32.0.9
+
+~/svc$ kubectl exec bgtest -- wget -qO - $BGSVC
+
+green-rs-2mdg7 10.32.0.15
+
+~/svc$
+</div></code></pre>
+<p>In its current state, we now have 6 pods serving as endpoints to the service, with an even split of probably of 50% of
+traffic going to each of the service. Each individual pod has a 16% probability of receiving the traffic from the
+service.</p>
+<p>To remove the blue pods from the load balancing we can either delete the blue RS (this technique is also known as
+&quot;highlander&quot;) or simply remove the service selector label from the blue pods. We will do the latter using the <code>label</code>
+command once more removing the <code>method</code> label key from the pods with the label <code>demo=blue-rs</code>:</p>
+<pre class="hljs"><code><div>~/svc$ kubectl label $(kubectl get po -l demo=blue-rs -o name) method-
+
+pod/blue-rs-84d9r unlabeled
+pod/blue-rs-j2lf6 unlabeled
+pod/blue-rs-jjf2v unlabeled
+
+~/svc$
+</div></code></pre>
+<p>List your service's endpoints; <em>there should be 3 again</em>:</p>
+<pre class="hljs"><code><div>~/svc$ kubectl get ep blue-green-svc
+
+NAME             ENDPOINTS                                         AGE
+blue-green-svc   10.32.0.13:9898,10.32.0.14:9898,10.32.0.15:9898   2m34s
+
+~/svc$
+</div></code></pre>
+<p>You have successfully performed a blue-green deployment! 100% of all of the traffic the service is receiving is now
+being routed to your new (green) service.</p>
+<h3 id="5-clean-up">5. Clean up</h3>
+<p>Delete the RSes, pods and service created in this lab using <code>kubectl delete</code>:</p>
+<pre class="hljs"><code><div>~/svc$ kubectl delete -f blue.yaml -f green.yaml -f bgsvc.yaml
+
+replicaset.apps &quot;blue-rs&quot; deleted
+replicaset.apps &quot;green-rs&quot; deleted
+service &quot;blue-green-svc&quot; deleted
+
+~/svc$ kubectl delete pod testclient bgtest
+
+pod &quot;testclient&quot; deleted
+pod &quot;bgtest&quot; deleted
+
+~/svc$ cd ~
+
+~$
+</div></code></pre>
+<p>Use <code>kubectl get all</code> to list all the remaining resources in the default namespace:</p>
+<pre class="hljs"><code><div>~$ kubectl get all
+
+NAME                 TYPE        CLUSTER-IP   EXTERNAL-IP   PORT(S)   AGE
+service/kubernetes   ClusterIP   10.96.0.1    &lt;none&gt;        443/TCP   135m
+
+~$
+</div></code></pre>
+<p>All that should remain is the kubernetes service.</p>
+<br>
+<p>Congratulations you have completed the lab!</p>
+<br>
+<p><em>Copyright (c) 2023-2024 RX-M LLC, Cloud Native &amp; AI Training and Consulting, all rights reserved</em></p>
+
+</body>
+</html>
