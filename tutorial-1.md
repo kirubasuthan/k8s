@@ -1,28 +1,35 @@
-# Create a Nginx Pod, Serice and Port forward to locahost port 
+## Create a Nginx Pod, Serice and Port forward to locahost port 
 
-# Ensure Docker Desktop is installed and Kubernetes is gnabled 
-kubectl get nodes
+Ensure Docker Desktop is installed and Kubernetes is gnabled 
 
-# Create Nginx Pod
-kubectl run nginx --image nginx --labels="run=nginx"
+```kubectl get nodes```
 
-# See events
-kubectl get events 
+### Create Nginx Pod
+```kubectl run nginx --image nginx --labels="run=nginx"```
 
-# Connect to nginx pod
-kubectl exec -it nginx -- bash
+### See events
+```kubectl get events ```
 
-# Display Resource (CPU/Mem usage)
+### Connect to nginx pod
+```kubectl exec -it nginx -- bash```
+
+### Display Resource (CPU/Mem usage)
+```
 kubectl top nodes
 kubectl top pods 
+```
 
-# Create Node Port Service
+### Create Service
+```
 kubectl expose pod nginx --port=88 --target-port=80 --name=nginx-service
 kubectl get pod,svc -l run=nginx
+```
 
-kubectl port-forward svc/nginx-service 88:88
+### Port Forwarding
+```kubectl port-forward svc/nginx-service 88:88```
 
-# Delete pod and svc
-
+### Delete pod and svc
+```
 kubectl delete pods/nginx
 kubectl delete svc/nginx-service
+```
